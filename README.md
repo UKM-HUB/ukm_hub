@@ -1,5 +1,5 @@
 # UKM HUB
-![](images\UKMHUB_ICON_2.png?raw=true)
+![UKMHUB](https://github.com/UKM-HUB/ukm_hub/blob/master/images/UKM%20HUB%20ICON%20TEXT%202.png)
 
 connect all corporate with the same category, for better future
 
