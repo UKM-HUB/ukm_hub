@@ -4,8 +4,7 @@ connect all corporate with the same category, for better future
 
 # END POINT
 
-
-## Perusahaan
+## Corporate
 
 | END POINT                 | METHOD | DESC                                             |
 |---------------------------|--------|--------------------------------------------------|
