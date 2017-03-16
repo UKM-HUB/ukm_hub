@@ -11,7 +11,6 @@ connect all corporate with the same category, for better future
 | /auth/register            | POST   | Add new company email & password with validation |
 | /auth/login               | POST   | Company login with JWT Token                     |
 | /api/company/:id          | PUT    | Complete company profile                         |
-| /api/company/:id          | PUT    | Delete company                                   |
 | /api/company/:id/buy      | POST   | create new buy request ( corp only )             |
 | /api/company/:id/sale     | POST   | create new sell request ( ukm only )             |
 | /api/company/:id/buy      | PUT    | change status buy request ( corp only )          |
@@ -30,6 +29,7 @@ connect all corporate with the same category, for better future
 | /api/coop/logout          | POST   | destroy jwt                                      |
 | /api/coop/verify/:id      | PUT    | update company verify to true                    |
 | /api/company/             | GET    | get all company list fill verify at front end    |
+| /api/coop/unverify/:id    | PUT    | Set Status company to unverified                  |
 
 
 # User Stories
