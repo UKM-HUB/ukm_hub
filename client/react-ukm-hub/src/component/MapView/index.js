@@ -15,11 +15,18 @@ export default class MapView extends Component {
   }
 
   componentDidMount () {
-    new GMaps({
+    var map = new GMaps({
       el: '#map',
       lat: -12.043333,
       lng: -77.028333
     });
+
+    map.addMarkers([
+      {
+        lat: -12.043333,
+        lng: -77.028333
+      }
+    ])
   }
 
   render () {
