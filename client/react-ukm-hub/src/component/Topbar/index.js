@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Topbar = () => {
+const Topbar = (props) => {
   return (
     <nav className="navbar navbar-default navbar-fixed">
       <div className="container-fluid">
@@ -11,7 +11,7 @@ const Topbar = () => {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
           </button>
-          <a className="navbar-brand" href="#">Maps</a>
+          <a className="navbar-brand" href="#">{props.title}</a>
         </div>
         <div className="collapse navbar-collapse">
           <ul className="nav navbar-nav navbar-left">

@@ -27,7 +27,9 @@ function GetClock () {
   if (nmin <= 9) nmin = '0' + nmin
   if (nsec <= 9) nsec = '0' + nsec
 
-  document.getElementById('clockbox').innerHTML = '' + tday[nday] + ', ' + ndate + date + ' ' + tmonth[nmonth] + ' ' + nyear + ', ' + nhour + ':' + nmin + ':' + nsec + ap + ''
+  if(document.getElementById('clockbox')){
+    document.getElementById('clockbox').innerHTML = '' + tday[nday] + ', ' + ndate + date + ' ' + tmonth[nmonth] + ' ' + nyear + ', ' + nhour + ':' + nmin + ':' + nsec + ap + ''
+  }
 }
 
 window.onload = function () {
