@@ -1,4 +1,5 @@
 var express = require('express');
+var multer  = require('multer')
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -7,11 +8,50 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var cors = require('cors')
 
+// add pack for login
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const passwordHash = require('password-hash');
+const jwt = require('jsonwebtoken');
+
+// import router
 var index = require('./routes/index');
 var users = require('./routes/users');
-var companies = require('./routes/companies')
+var companies = require('./routes/companies');
+var coops = require('./routes/coops')
 
 var app = express();
+
+// load model coop
+const modelCoop = require('./models/model_coop');
+
+// setup passport, passport-local ( middleware for login )
+passport.use('coop-login', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+},function(emailInput, passwordInput, done){
+  modelCoop.findOne({ email: emailInput }, function(err, data){
+    if (!data) {
+      // data not found, call done function
+      done(null, false, {message: 'incorect username'})
+    }else{
+      if (passwordHash.verify(passwordInput, data.password)) {
+        // data found
+        done(null, data)
+      }else{
+        // err password salah | engak ada res juga adi engak bisa lempar, jadi pake done aja
+        done(null, false, {message: 'incorect password'})
+      }
+    }
+  })
+}))
+
+passport.serializeUser(function(user, callback){
+  callback(null, user)
+})
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 // setup database target
 mongoose.connect('mongodb://localhost/ukmhub');
@@ -31,9 +71,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// use router
 app.use('/', index);
 app.use('/users', users);
-app.use('/api/company',companies)
+app.use('/api/company',companies);
+app.use('/api/coop',coops);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
