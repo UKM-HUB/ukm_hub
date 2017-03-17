@@ -12,6 +12,28 @@ describe('tes routing company',function(){
     done()
     })
   })
-  
-
+  it('should return updated company profile json when put api/company/:id',function(done){
+    chai.request('http://localhost:3000').put(`/api/company/${tampung}`).send({
+    name:'PT.SENTOSA',
+    type:'corporate',
+    category:'["sepatu","baju"]',
+    lat:'-999',
+    lng:'-999',
+    website:'timocodex.com',
+    address:'taman bukit indah raya',
+    phone:'081276861447',
+    description:'ini adalah toko',
+    })
+    .end(function (err, res) {
+    res.body.should.have.deep.property('name','PT.SENTOSA')
+    done()
+    })
+  })
+  it('should delete all company when delete api/company/',function(done){
+    chai.request('http://localhost:3000').delete(`/api/company`)
+    .end(function (err, res) {
+    res.text.should.equal('data berhasil dihapus')
+    done()
+    })
+  })
 })
