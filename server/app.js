@@ -22,15 +22,37 @@ var coops = require('./routes/coops')
 
 var app = express();
 
-// load model coop
+// load model coop & company
 const modelCoop = require('./models/model_coop');
-
+const modelCompany = require('./models/model_company')
 // setup passport, passport-local ( middleware for login )
 passport.use('coop-login', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
 },function(emailInput, passwordInput, done){
   modelCoop.findOne({ email: emailInput }, function(err, data){
+    if (!data) {
+      // data not found, call done function
+      done(null, false, {message: 'incorect username'})
+    }else{
+      if (passwordHash.verify(passwordInput, data.password)) {
+        // data found
+        done(null, data)
+      }else{
+        // err password salah | engak ada res juga adi engak bisa lempar, jadi pake done aja
+        done(null, false, {message: 'incorect password'})
+      }
+    }
+  })
+}))
+
+passport.use('company-login', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+},function(emailInput, passwordInput, done){
+  console.log(emailInput);
+  console.log(passwordInput);
+  modelCompany.findOne({ email: emailInput }, function(err, data){
     if (!data) {
       // data not found, call done function
       done(null, false, {message: 'incorect username'})
