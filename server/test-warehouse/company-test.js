@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 
 describe('tes routing company',function(){
   it('should return email of the registered company when post api/company/auth/register',function(done){
-    chai.request('http://localhost:3000').post('/api/company/auth/register').send({email:'timogio99@gmail.com'}).end(function (err, res) {
+    chai.request('http://localhost:3000').post('/api/company/auth/register').send({email:'timogio99@gmail.com',password:'yes123'}).end(function (err, res) {
     res.body.should.have.deep.property('email','timogio99@gmail.com')
     tampung = res.body._id
     done()
@@ -36,4 +36,5 @@ describe('tes routing company',function(){
     done()
     })
   })
+
 })

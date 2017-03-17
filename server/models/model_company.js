@@ -7,13 +7,18 @@ var companySchema =  new Schema({
   name: String,
   email: { type: String, required: true, unique: true },
   password: String,
-  category: Schema.Types.Mixed,
+  category: [],
   type: String,
   location:{
     lat:String,
     lng:String
   },
-  request: Schema.Types.Mixed,
+  request: [{
+    type:String,
+    price:String,
+    description: String,
+    images:String
+  }],
   description: String,
   website: String,
   address: String,
