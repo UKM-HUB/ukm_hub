@@ -26,11 +26,10 @@ var app = express();
 const modelCoop = require('./models/model_coop');
 
 // setup passport, passport-local ( middleware for login )
-passport.use('test-login', new LocalStrategy({
+passport.use('coop-login', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
 },function(emailInput, passwordInput, done){
-  // find coop in database
   modelCoop.findOne({ email: emailInput }, function(err, data){
     if (!data) {
       // data not found, call done function
