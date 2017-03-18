@@ -13,11 +13,13 @@ var companySchema =  new Schema({
     lat:String,
     lng:String
   },
-  request: [{
-    type:String,
-    price:String,
-    description: String,
-    images:String
+  request:[{
+    types:String,
+    title:String,
+    price:Number,
+    description:String,
+    images:String,
+    open:Boolean
   }],
   description: String,
   website: String,
