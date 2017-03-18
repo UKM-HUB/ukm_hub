@@ -13,20 +13,36 @@ var companySchema =  new Schema({
     lat:String,
     lng:String
   },
-  request: [{
-    type:String,
-    price:String,
-    description: String,
-    images:String
+  request:[{
+    types:String,
+    title:String,
+    price:Number,
+    description:String,
+    images:String,
+    open:Boolean
   }],
   description: String,
   website: String,
-  address: String,
-  phone: String,
-  verified: Boolean,
   created_at: Date,
   images: String,
-  updated_at: Date
+  updated_at: Date,
+  letter:[
+    {
+      to:String,
+      from:String,
+      title:String,
+      date: Date,
+      status:String,
+      message:String
+    }
+  ],
+  acceptedMessages:[
+    {
+      companyId:String,
+      letterId:String,
+    }
+  ]
+
 });
 
 // the schema is useless so far
