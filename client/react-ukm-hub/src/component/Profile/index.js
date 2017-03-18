@@ -16,25 +16,30 @@ export default class Profile extends Component {
       updateButtonDisplay: 'inline-block',
       submitUpdateButtonDisplay: 'none',
       name: '',
-      type: ''
+      type: '',
+      email: '',
+      category: [],
+      lat:'-12.043333',
+      lng:'-77.028333',
+      editlat: '',
+      editlng: ''
     }
   }
 
   componentDidMount(){
-    var lat = '-12.043333'
-    var lng = '-77.028333'
+
     var editlat = ''
     var editlng = ''
 
     var updateMap = new GMaps({
       el: '#map',
-      lat: lat,
-      lng: lng
+      lat: this.state.lat,
+      lng: this.state.lng
     });
 
     updateMap.addMarker({
-      lat: lat,
-      lng: lng,
+      lat: this.state.lat,
+      lng: this.state.lng,
       click: function(e) {
         alert('You clicked in this marker');
       }
@@ -42,61 +47,72 @@ export default class Profile extends Component {
 
     GMaps.on('click', updateMap.map, function(event) {
        alert('Cannot Update Profile')
-     })
+    })
   }
 
-  componentDidUpdate(){
-    var lat = '-12.043333'
-    var lng = '-77.028333'
+
+  addMarker(){
+
+    console.log("masuk");
     var editlat = ''
     var editlng = ''
 
     var updateMap = new GMaps({
       el: '#map',
-      lat: lat,
-      lng: lng
+      lat: this.state.lat,
+      lng: this.state.lng
     });
 
     updateMap.addMarker({
-      lat: lat,
-      lng: lng,
+      lat: this.state.lat,
+      lng: this.state.lng,
       click: function(e) {
         alert('You clicked in this marker');
       }
     });
 
-    if(this.state.disableForm === 'disabled') {
-      GMaps.on('click', updateMap.map, function(event) {
-         alert('Cannot Update Profile')
-       })
-    } else {
-      GMaps.on('click', updateMap.map, function(event) {
-         var index = updateMap.markers.length;
-         editlat = event.latLng.lat();
-         editlng = event.latLng.lng();
-         console.log(editlat, editlng);
-         updateMap.removeMarkers()
-         updateMap.addMarker({
-           lat: editlat,
-           lng: editlng,
-           infoWindow: {
-             content: '<p>Your company location</p>'
-           }
-         });
-       })
+    GMaps.on('click', updateMap.map, function(event) {
+       var index = updateMap.markers.length;
+
+       editlat = event.latLng.lat();
+       editlng = event.latLng.lng()
+
+
+       console.log(editlat, editlng);
+       updateMap.removeMarkers()
+       updateMap.addMarker({
+         lat: editlat,
+         lng: editlng,
+         infoWindow: {
+           content: '<p>Your company location</p>'
+         }
+       });
+     })
+
+     this.setState({
+       editlat: editlat,
+       editlng: editlng
+     })
+  }
+
+  onHandleChange(e){
+    let newState = {}
+    let array = []
+    if(e.target.name == 'category'){
+      if(this.state.category.includes(e.target.value)===false){
+        newState[e.target.name] = this.state.category.concat([e.target.value])
+      }
+      else{
+        let index = this.state.category.indexOf(e.target.value)
+        console.log(index);
+        newState[e.target.name] = this.state.category.filter((x)=> x!==e.target.value)
+      }
+
     }
-  }
-
-  onChangeName(e){
-    this.setState({
-      name: e.target.value
-    })
-  }
-
-  onChangeType(e){
-    this.setState({
-      type: e.target.value
-    })
+    else {
+      newState[e.target.name] = e.target.value
+    }
+    this.setState(newState)
   }
 
   render(){
@@ -124,17 +140,22 @@ export default class Profile extends Component {
                           <div className="col-md-5">
                             <div className="form-group">
                               <label>Company Name</label>
-                              <input type="text" className="form-control" style={{cursor:'pointer'}} disabled={this.state.disableForm}
+                              <input type="text" className="form-control" name="name" style={{cursor:'pointer'}} disabled={this.state.disableForm}
                                 value={this.state.name}
                                 placeholder="Company"
-                                onChange={this.onChangeName.bind(this)}
+                                onChange={this.onHandleChange.bind(this)}
                               />
                             </div>
                           </div>
                           <div className="col-md-3">
                             <div className="form-group">
                               <label>Type</label>
-                                <select className="form-control" style={{cursor:'pointer'}} disabled={this.state.disableForm} onChange={this.onChangeType.bind(this)}>
+                                <select
+                                  className="form-control"
+                                  style={{cursor:'pointer'}}
+                                  disabled={this.state.disableForm}
+                                  name="type"
+                                  onChange={this.onHandleChange.bind(this)}>
                                 <option value='ukm'>UKM</option>
                                 <option value='corporate'>Corporate</option>
                               </select>
@@ -143,7 +164,15 @@ export default class Profile extends Component {
                           <div className="col-md-4">
                             <div className="form-group">
                               <label htmlFor="exampleInputEmail1">Email</label>
-                              <input type="email" className="form-control" style={{cursor:'pointer'}} onClick={ () => this.setState({disableForm:''}) } disabled={this.state.disableForm} value="maju_mundur@gmail.com" placeholder="Company email" />
+                              <input
+                                type="email"
+                                name= "email"
+                                className="form-control"
+                                style={{cursor:'pointer'}}
+                                disabled={this.state.disableForm}
+                                value={this.state.email}
+                                placeholder="Company email"
+                                onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>
                         </div>
@@ -155,46 +184,123 @@ export default class Profile extends Component {
                             </div>
                             <div className="col-md-3">
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="fashion" style={checkboxStyle} disabled={this.state.disableForm} />Fashion</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="fashion"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)}/>Fashion
+                                </label>
                               </div>
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="food" style={checkboxStyle} disabled={this.state.disableForm} />Food & Beverages</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="food"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)}/>Food & Beverages
+                                  </label>
                               </div>
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="healthcare" style={checkboxStyle}  disabled={this.state.disableForm} />Healthcare</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="healthcare"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm} />Healthcare</label>
                               </div>
                             </div>
                             <div className="col-md-3">
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="furniture" style={checkboxStyle} disabled={this.state.disableForm} />Furniture</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="furniture"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm} />Furniture</label>
                               </div>
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="electronic" style={checkboxStyle} disabled={this.state.disableForm} />Electronic</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="electronic"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm} />Electronic</label>
                               </div>
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="sport" style={checkboxStyle} disabled={this.state.disableForm} />Sport</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="sport"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm} />Sport</label>
                               </div>
                             </div>
                             <div className="col-md-3">
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="office" style={checkboxStyle} disabled={this.state.disableForm} />Office & Stationery</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="office"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm} />Office & Stationery</label>
                               </div>
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="games" style={checkboxStyle} disabled={this.state.disableForm} />Games</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="games"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm} />Games</label>
                               </div>
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="books" style={checkboxStyle} disabled={this.state.disableForm} />Books</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="books"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm} />Books</label>
                               </div>
                             </div>
                             <div className="col-md-3">
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="souvenir" style={checkboxStyle} disabled={this.state.disableForm} />Souvenir</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="souvenir"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm} />Souvenir</label>
                               </div>
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="automotive" style={checkboxStyle} disabled={this.state.disableForm} />Automotive</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="automotive"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm} />Automotive</label>
                               </div>
                               <div className="form-group">
-                                <label style={{cursor:'pointer'}}><input type="checkbox" value="beauty"  style={checkboxStyle} disabled={this.state.disableForm} />Beauty</label>
+                                <label style={{cursor:'pointer'}}>
+                                  <input
+                                    type="checkbox"
+                                    name="category"
+                                    value="beauty"
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm} />Beauty
+                                </label>
                               </div>
                             </div>
                           </div>
@@ -203,7 +309,8 @@ export default class Profile extends Component {
                         <div className="row">
                           <div className="col-md-12" style={{height:500}}>
                             <label style={{marginBottom:25}}>Location</label>
-                            <div id="map" style={{width:'100%', height:'85%' }}></div>
+                            <div id="map" onClick={
+                                this.addMarker.bind(this)} style={{width:'100%', height:'85%' }}></div>
                           </div>
                         </div>
 
