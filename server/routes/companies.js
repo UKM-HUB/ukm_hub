@@ -9,8 +9,12 @@ var verifyToken = require('../helpers/verifyToken');
 router.post('/auth/register',company.register)
 router.post('/auth/login', passport.authenticate('company-login'),company.login)
 router.put('/:id',multer({ dest: './uploads/' }).single('uploads'),company.editProfile)
+router.put('/:id/buyRequest',company.checkCorporate,multer({ dest: './uploads/' }).single('uploads'),company.createBuyRequest)
+router.put('/:id/sellRequest',company.checkUkm,multer({ dest: './uploads/' }).single('uploads'),company.createSellRequest)
+router.get('/:id/searchRequest',company.showRequest)
 router.get('/:id/searchByCategory',company.showByCategories)
 router.get('/:id',company.showOne)
 router.get('/',company.showAll)
 router.delete('/',company.deleteAll)
+
 module.exports = router;
