@@ -37,7 +37,7 @@ class Sidebar extends Component {
             </li>
 
             {
-              ( this.state.CompanyType == 'corporate' ) ?
+              ( this.state.CompanyType === 'corporate' ) ?
 
                 <div>
                   <li className={this.props.activeNavigation[2]}>

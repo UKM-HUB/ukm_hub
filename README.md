@@ -24,7 +24,7 @@ better future
 | /api/company/:id/quotation                | POST   | create new offering ( ukm only )                 
 
 
-## Coop
+## Cooperation
 
 | END POINT                 | METHOD | DESCRIPTION                                             
 |---------------------------|--------|-----------------------------------------------

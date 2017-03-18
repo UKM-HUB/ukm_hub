@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
-import $ from 'jquery'
+// import $ from 'jquery'
 import GMaps from '../../../public/assets/js/gmaps.min.js'
 
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 
 export default class Profile extends Component {
-  constructor(){
+  constructor () {
     super()
     this.state = {
       topbarTitle: 'Company Profile',
-      activeNavigation: ['',''],
+      activeNavigation: ['', ''],
       disableForm: 'disabled',
       profileTitle: 'Profile',
       updateButtonDisplay: 'inline-block',
@@ -19,95 +19,64 @@ export default class Profile extends Component {
       type: '',
       email: '',
       category: [],
-      lat:'-12.043333',
-      lng:'-77.028333',
-      editlat: '',
-      editlng: ''
+      currentlat: '-12.043333',
+      currentlng: '-77.028333',
+      updatedlat: '',
+      updatedlng: '',
+      address: '',
+      description: '',
+      website: '',
+      phone: '',
+      profilePicture: ''
     }
   }
 
-  componentDidMount(){
+  componentDidMount () {
+    let that = this
 
-    var editlat = ''
-    var editlng = ''
+    console.log("MASUK DID MOUNT CUMA SEKALI");
 
-    var updateMap = new GMaps({
+    let map = new GMaps({
       el: '#map',
-      lat: this.state.lat,
-      lng: this.state.lng
-    });
+      lat: this.state.currentlat,
+      lng: this.state.currentlng
+    })
 
-    updateMap.addMarker({
-      lat: this.state.lat,
-      lng: this.state.lng,
-      click: function(e) {
-        alert('You clicked in this marker');
+    map.addMarker({
+      lat: this.state.currentlat,
+      lng: this.state.currentlng,
+      click: function (e) {
+        alert('You clicked in this marker')
       }
-    });
+    })
 
-    GMaps.on('click', updateMap.map, function(event) {
-       alert('Cannot Update Profile')
+    GMaps.on('click', map.map, function (event) {
+      that.setState({
+        updatedlat: event.latLng.lat(),
+        updatedlng: event.latLng.lng()
+      })
+
+      map.removeMarkers()
+      map.addMarker({
+        lat: that.state.updatedlat,
+        lng: that.state.updatedlng,
+        infoWindow: {
+          content: '<p>Your company location</p>'
+        }
+      })
     })
   }
 
-
-  addMarker(){
-
-    console.log("masuk");
-    var editlat = ''
-    var editlng = ''
-
-    var updateMap = new GMaps({
-      el: '#map',
-      lat: this.state.lat,
-      lng: this.state.lng
-    });
-
-    updateMap.addMarker({
-      lat: this.state.lat,
-      lng: this.state.lng,
-      click: function(e) {
-        alert('You clicked in this marker');
-      }
-    });
-
-    GMaps.on('click', updateMap.map, function(event) {
-       var index = updateMap.markers.length;
-
-       editlat = event.latLng.lat();
-       editlng = event.latLng.lng()
-
-
-       console.log(editlat, editlng);
-       updateMap.removeMarkers()
-       updateMap.addMarker({
-         lat: editlat,
-         lng: editlng,
-         infoWindow: {
-           content: '<p>Your company location</p>'
-         }
-       });
-     })
-
-     this.setState({
-       editlat: editlat,
-       editlng: editlng
-     })
-  }
-
-  onHandleChange(e){
+  onHandleChange (e) {
     let newState = {}
-    let array = []
-    if(e.target.name == 'category'){
-      if(this.state.category.includes(e.target.value)===false){
+
+    if (e.target.name === 'category') {
+      if (this.state.category.includes(e.target.value) === false) {
         newState[e.target.name] = this.state.category.concat([e.target.value])
       }
-      else{
-        let index = this.state.category.indexOf(e.target.value)
-        console.log(index);
-        newState[e.target.name] = this.state.category.filter((x)=> x!==e.target.value)
+      else {
+        newState[e.target.name] = this.state.category.filter((x) => x !== e.target.value)
       }
-
     }
     else {
       newState[e.target.name] = e.target.value
@@ -115,287 +84,376 @@ export default class Profile extends Component {
     this.setState(newState)
   }
 
-  render(){
+  render () {
     const checkboxStyle = {
       marginRight: 20,
       cursor: 'pointer'
     }
-    console.log($('#tes').serialize().split('='));
+
     return (
-      <div className="wrapper">
+      <div className='wrapper'>
         <Sidebar activeNavigation={this.state.activeNavigation} />
-        <div className="main-panel">
+        <div className='main-panel'>
           <Topbar title={this.state.topbarTitle} />
-          <div className="content">
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-md-8">
-                  <div className="card">
-                    <div className="header">
-                      <h4 className="title">{this.state.profileTitle}</h4>
+          <div className='content'>
+            <div className='container-fluid'>
+              <div className='row'>
+                <div className='col-md-8'>
+                  <div className='card'>
+                    <div className='header'>
+                      <h4 className='title'>{this.state.profileTitle}</h4>
                     </div>
-                    <div className="content">
-                      <form id="tes">
-                        <div className="row">
-                          <div className="col-md-5">
-                            <div className="form-group">
-                              <label>Company Name</label>
-                              <input type="text" className="form-control" name="name" style={{cursor:'pointer'}} disabled={this.state.disableForm}
+                    <div className='content'>
+                      <form>
+                        <div className='row'>
+                          <div className='col-md-5'>
+                            <div className='form-group'>
+                              <label>
+                                Company Name
+                              </label>
+                              <input
+                                type='text'
+                                className='form-control'
+                                name='name'
+                                style={{cursor: 'pointer'}}
+                                disabled={this.state.disableForm}
                                 value={this.state.name}
-                                placeholder="Company"
-                                onChange={this.onHandleChange.bind(this)}
-                              />
+                                placeholder='Company'
+                                onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>
-                          <div className="col-md-3">
-                            <div className="form-group">
-                              <label>Type</label>
-                                <select
-                                  className="form-control"
-                                  style={{cursor:'pointer'}}
-                                  disabled={this.state.disableForm}
-                                  name="type"
-                                  onChange={this.onHandleChange.bind(this)}>
-                                <option value='ukm'>UKM</option>
-                                <option value='corporate'>Corporate</option>
+                          <div className='col-md-3'>
+                            <div className='form-group'>
+                              <label>
+                                Type
+                              </label>
+                              <select
+                                className='form-control'
+                                style={{cursor: 'pointer'}}
+                                disabled={this.state.disableForm}
+                                name='type'
+                                onChange={this.onHandleChange.bind(this)}>
+                                <option value='ukm'>
+                                  UKM
+                                </option>
+                                <option value='corporate'>
+                                  Corporate
+                                </option>
                               </select>
                             </div>
                           </div>
-                          <div className="col-md-4">
-                            <div className="form-group">
-                              <label htmlFor="exampleInputEmail1">Email</label>
+                          <div className='col-md-4'>
+                            <div className='form-group'>
+                              <label htmlFor='exampleInputEmail1'>
+                                Email
+                              </label>
                               <input
-                                type="email"
-                                name= "email"
-                                className="form-control"
-                                style={{cursor:'pointer'}}
+                                type='email'
+                                name='email'
+                                className='form-control'
+                                style={{cursor: 'pointer'}}
                                 disabled={this.state.disableForm}
                                 value={this.state.email}
-                                placeholder="Company email"
+                                placeholder='Company email'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>
                         </div>
-
-                        <div className="row">
-                          <div className="col-md-12">
-                            <div className="form-group">
-                              <label>Category</label>
+                        <div className='row'>
+                          <div className='col-md-12'>
+                            <div className='form-group'>
+                              <label>
+                                Category
+                              </label>
                             </div>
-                            <div className="col-md-3">
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
+                            <div className='col-md-3'>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
                                   <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="fashion"
+                                    type='checkbox'
+                                    name='category'
+                                    value='fashion'
                                     style={checkboxStyle}
                                     disabled={this.state.disableForm}
-                                    onChange={this.onHandleChange.bind(this)}/>Fashion
+                                    onChange={this.onHandleChange.bind(this)} />Fashion
                                 </label>
                               </div>
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
                                   <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="food"
+                                    type='checkbox'
+                                    name='category'
+                                    value='food'
                                     style={checkboxStyle}
                                     disabled={this.state.disableForm}
-                                    onChange={this.onHandleChange.bind(this)}/>Food & Beverages
-                                  </label>
+                                    onChange={this.onHandleChange.bind(this)} />Food & Beverages
+                                </label>
                               </div>
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
                                   <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="healthcare"
+                                    type='checkbox'
+                                    name='category'
+                                    value='healthcare'
                                     style={checkboxStyle}
-                                    disabled={this.state.disableForm} />Healthcare</label>
-                              </div>
-                            </div>
-                            <div className="col-md-3">
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
-                                  <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="furniture"
-                                    style={checkboxStyle}
-                                    disabled={this.state.disableForm} />Furniture</label>
-                              </div>
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
-                                  <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="electronic"
-                                    style={checkboxStyle}
-                                    disabled={this.state.disableForm} />Electronic</label>
-                              </div>
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
-                                  <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="sport"
-                                    style={checkboxStyle}
-                                    disabled={this.state.disableForm} />Sport</label>
-                              </div>
-                            </div>
-                            <div className="col-md-3">
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
-                                  <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="office"
-                                    style={checkboxStyle}
-                                    disabled={this.state.disableForm} />Office & Stationery</label>
-                              </div>
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
-                                  <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="games"
-                                    style={checkboxStyle}
-                                    disabled={this.state.disableForm} />Games</label>
-                              </div>
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
-                                  <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="books"
-                                    style={checkboxStyle}
-                                    disabled={this.state.disableForm} />Books</label>
-                              </div>
-                            </div>
-                            <div className="col-md-3">
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
-                                  <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="souvenir"
-                                    style={checkboxStyle}
-                                    disabled={this.state.disableForm} />Souvenir</label>
-                              </div>
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
-                                  <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="automotive"
-                                    style={checkboxStyle}
-                                    disabled={this.state.disableForm} />Automotive</label>
-                              </div>
-                              <div className="form-group">
-                                <label style={{cursor:'pointer'}}>
-                                  <input
-                                    type="checkbox"
-                                    name="category"
-                                    value="beauty"
-                                    style={checkboxStyle}
-                                    disabled={this.state.disableForm} />Beauty
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)} />Healthcare
                                 </label>
                               </div>
                             </div>
-                          </div>
-                        </div>
-
-                        <div className="row">
-                          <div className="col-md-12" style={{height:500}}>
-                            <label style={{marginBottom:25}}>Location</label>
-                            <div id="map" onClick={
-                                this.addMarker.bind(this)} style={{width:'100%', height:'85%' }}></div>
-                          </div>
-                        </div>
-
-
-                        <div className="row">
-                          <div className="col-md-6">
-                            <div className="form-group">
-                              <label>Address</label>
-                              <textarea rows="3" className="form-control" style={{cursor:'pointer'}} disabled={this.state.disableForm} value='Jl. Sudirman No.2 Jakarta Pusat 18290' placeholder="Company address" />
+                            <div className='col-md-3'>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
+                                  <input
+                                    type='checkbox'
+                                    name='category'
+                                    value='furniture'
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)} />Furniture
+                                </label>
+                              </div>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
+                                  <input
+                                    type='checkbox'
+                                    name='category'
+                                    value='electronic'
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)} />Electronic
+                                </label>
+                              </div>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
+                                  <input
+                                    type='checkbox'
+                                    name='category'
+                                    value='sport'
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)} />Sport
+                                </label>
+                              </div>
+                            </div>
+                            <div className='col-md-3'>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
+                                  <input
+                                    type='checkbox'
+                                    name='category'
+                                    value='office'
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)} />Office & Stationery
+                                </label>
+                              </div>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
+                                  <input
+                                    type='checkbox'
+                                    name='category'
+                                    value='games'
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)} />Games
+                                </label>
+                              </div>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
+                                  <input
+                                    type='checkbox'
+                                    name='category'
+                                    value='books'
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)} />Books
+                                </label>
+                              </div>
+                            </div>
+                            <div className='col-md-3'>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
+                                  <input
+                                    type='checkbox'
+                                    name='category'
+                                    value='souvenir'
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)} />Souvenir
+                                </label>
+                              </div>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
+                                  <input
+                                    type='checkbox'
+                                    name='category'
+                                    value='automotive'
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)} />Automotive
+                                </label>
+                              </div>
+                              <div className='form-group'>
+                                <label style={{cursor: 'pointer'}}>
+                                  <input
+                                    type='checkbox'
+                                    name='category'
+                                    value='beauty'
+                                    style={checkboxStyle}
+                                    disabled={this.state.disableForm}
+                                    onChange={this.onHandleChange.bind(this)} />Beauty
+                                </label>
+                              </div>
                             </div>
                           </div>
-                          <div className="col-md-6">
-                            <div className="form-group">
-                              <label>Description</label>
-                              <textarea rows="3" className="form-control" style={{cursor:'pointer'}} disabled={this.state.disableForm} value='Jl. Sudirman No.2 Jakarta Pusat 18290' placeholder="Company address" />
+                        </div>
+                        <div className='row'>
+                          <div className='col-md-12' style={{height: 500}}>
+                            <label style={{marginBottom: 25}}>
+                              Location
+                            </label>
+                            <div id='map' style={{width: '100%', height: '85%' }}></div>
+                          </div>
+                        </div>
+                        <div className='row'>
+                          <div className='col-md-6'>
+                            <div className='form-group'>
+                              <label>
+                                Address
+                              </label>
+                              <textarea
+                                rows='3'
+                                name='address'
+                                className='form-control'
+                                style={{cursor: 'pointer'}}
+                                disabled={this.state.disableForm}
+                                value={this.state.address}
+                                placeholder='Company address'
+                                onChange={this.onHandleChange.bind(this)} />
+                            </div>
+                          </div>
+                          <div className='col-md-6'>
+                            <div className='form-group'>
+                              <label>
+                                Description
+                              </label>
+                              <textarea
+                                rows='3'
+                                name='description'
+                                className='form-control'
+                                style={{cursor: 'pointer'}}
+                                disabled={this.state.disableForm}
+                                value={this.state.description}
+                                placeholder='Describe your company'
+                                onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>
                         </div>
-
-                        <div className="row">
-                          <div className="col-md-6">
-                            <div className="form-group">
-                              <label>Description</label>
-                              <input type="text" className="form-control" style={{cursor:'pointer'}} disabled={this.state.disableForm} value='https://facebook.github.io/react/' placeholder="Company" />
+                        <div className='row'>
+                          <div className='col-md-6'>
+                            <div className='form-group'>
+                              <label>
+                                Website
+                              </label>
+                              <input
+                                type='text'
+                                name='website'
+                                className='form-control'
+                                style={{cursor: 'pointer'}}
+                                disabled={this.state.disableForm}
+                                value={this.state.website}
+                                placeholder='Company'
+                                onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>
-                          <div className="col-md-6">
-                            <div className="form-group">
-                              <label>Phone</label>
-                              <input type="text" className="form-control" style={{cursor:'pointer'}} disabled={this.state.disableForm} placeholder="Company phone number" value='021-555-9999' />
+                          <div className='col-md-6'>
+                            <div className='form-group'>
+                              <label>
+                                Phone
+                              </label>
+                              <input
+                                type='text'
+                                name='phone'
+                                className='form-control'
+                                style={{cursor: 'pointer'}}
+                                disabled={this.state.disableForm}
+                                placeholder='Company phone number'
+                                value={this.state.phone}
+                                onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>
                         </div>
-
-                        <div className="row">
-                          <div className="col-md-12">
-                            <div className="form-group">
-                              <label>Profile picture</label>
-                              <input type="file" className='form-control' style={{cursor:'pointer'}} disabled={this.state.disableForm} />
+                        <div className='row'>
+                          <div className='col-md-12'>
+                            <div className='form-group'>
+                              <label>
+                                Profile picture
+                              </label>
+                              <input
+                                type='text'
+                                name='profilePicture'
+                                className='form-control'
+                                value={this.state.profilePicture}
+                                style={{cursor: 'pointer'}}
+                                disabled={this.state.disableForm}
+                                placeholder='Input your photo URL'
+                                onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>
                         </div>
-
                         <hr />
-
-                        <button type="submit" className="btn btn-warning btn-fill" style={{marginRight:20, display:this.state.updateButtonDisplay}}
-                          onClick={(e)=> {
-                            e.preventDefault()
-                            this.setState({disableForm:'', profileTitle:'Edit Profile', submitUpdateButtonDisplay:'inline-block', updateButtonDisplay:'none'})}}>Update Profile
+                        <button
+                          type='submit'
+                          className='btn btn-warning btn-fill'
+                          style={{marginRight: 20, display: this.state.updateButtonDisplay}}
+                          onClick={(e) => {
+                                     e.preventDefault()
+                                     this.setState({disableForm: '', profileTitle: 'Edit Profile', submitUpdateButtonDisplay: 'inline-block', updateButtonDisplay: 'none'})}}>
+                          Update Profile
                         </button>
-
-                        <button type="submit" className="btn btn-primary btn-fill" style={{marginRight:20, display:this.state.submitUpdateButtonDisplay}}
-                          onClick={(e)=> {
-                            e.preventDefault()
-                            this.setState({disableForm:'disabled', profileTitle:'Profile', updateButtonDisplay:'inline-block', submitUpdateButtonDisplay:'none'})}}>Submit Update
+                        <button
+                          type='submit'
+                          className='btn btn-primary btn-fill'
+                          style={{marginRight: 20, display: this.state.submitUpdateButtonDisplay}}
+                          onClick={(e) => {
+                                     e.preventDefault()
+                                     this.setState({disableForm: 'disabled', profileTitle: 'Profile', updateButtonDisplay: 'inline-block', submitUpdateButtonDisplay: 'none'})}}>
+                          Submit Update
                         </button>
-                        <div className="clearfix"></div>
+                        <div className='clearfix'></div>
                       </form>
                     </div>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="card card-user">
-                  <div className="image">
-                    <img style={{filter:'grayscale(.7) opacity(.7)'}} src="http://maulik-kamdar.com/wp-content/uploads/2016/08/pathvisualization.jpg" alt="..."/>
                   </div>
-                  <div className="content">
-                    <div className="author">
-                      <a href="#">
-                        <img className="avatar border-gray" src="http://lorempixel.com/100/100/food" alt="Company image profile"/>
-                        <h4 className="title">PT. MAJU MUNDUR<br />
-                           <small></small>
-                        </h4>
-                      </a>
+                </div>
+                <div className='col-md-4'>
+                  <div className='card card-user'>
+                    <div className='image'>
+                      <img style={{filter: 'grayscale(.7) opacity(.7)'}} src='http://maulik-kamdar.com/wp-content/uploads/2016/08/pathvisualization.jpg' alt='...' />
                     </div>
-                    <br />
-                    <p className="description text-center" style={{padding:'0px 35px', textAlign:'justify'}}>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                  </div>
-                  <hr />
-                  <div className="text-center">
-                    <button href="#" className="btn btn-simple"><i className="fa fa-institution"></i></button>
-                    <button href="#" className="btn btn-simple"><i className="fa fa-facebook"></i></button>
+                    <div className='content'>
+                      <div className='author'>
+                        <a href='#'><img className='avatar border-gray' src='http://lorempixel.com/100/100/food' alt='Company profile' />
+                          <h4 className='title'>PT. MAJU MUNDUR<br /> <small></small></h4></a>
+                      </div>
+                      <br />
+                      <p className='description text-center' style={{padding: '0px 35px', textAlign: 'justify'}}>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                        eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                      </p>
+                    </div>
+                    <hr />
+                    <div className='text-center'>
+                      <button href='#' className='btn btn-simple'>
+                        <i className='fa fa-institution'></i>
+                      </button>
+                      <button href='#' className='btn btn-simple'>
+                        <i className='fa fa-facebook'></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
               </div>
             </div>
           </div>
@@ -403,6 +461,5 @@ export default class Profile extends Component {
       </div>
 
     )
-
   }
 }
