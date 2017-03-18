@@ -3,6 +3,7 @@ var should = chai.should()
 var chaiHttp = require('chai-http');
 var tampung ='';
 var tampung2 ='';
+var tampung3 ='';
 chai.use(chaiHttp);
 
 describe('tes routing company',function(){
@@ -109,6 +110,14 @@ describe('tes routing company',function(){
     })
     .end(function (err, res) {
     res.body.request.should.lengthOf(1)
+    tampung3 = res.body.request[0]._id
+    done()
+    })
+  })
+  it('change status of request(buy or sell) when put api/company/:companyId/:requestId',function(done){
+    chai.request('http://localhost:3000').put(`/api/company/${tampung2}/${tampung3}`)
+    .end(function (err, res) {
+    res.body.request[0].should.have.deep.property('open',false)
     done()
     })
   })
