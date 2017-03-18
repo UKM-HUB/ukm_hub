@@ -12,6 +12,7 @@ router.put('/:id',multer({ dest: './uploads/' }).single('uploads'),company.editP
 router.put('/:id/buyRequest',company.checkCorporate,multer({ dest: './uploads/' }).single('uploads'),company.createBuyRequest)
 router.put('/:id/sellRequest',company.checkUkm,multer({ dest: './uploads/' }).single('uploads'),company.createSellRequest)
 router.put('/:companyId/:requestId',company.changeReqStatus)
+router.put('/:id/:otherId/:requestId/message',company.createLetter)
 router.get('/:id/searchRequest',company.showRequest)
 router.get('/:id/searchByCategory',company.showByCategories)
 router.get('/:id',company.showOne)
