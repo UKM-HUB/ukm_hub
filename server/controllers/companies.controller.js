@@ -179,4 +179,34 @@ module.exports={
       }
     })
   },
+  changeReqStatus: function(req,res){
+    Company.findOne({_id:req.params.companyId}).then(function(result){
+      result.request.forEach(function(data){
+        if(data.id === req.params.requestId){
+          if(data.open === true){
+            data.open = false
+            result.save(function(err){
+              if(err){
+                res.send(err)
+              }
+              else{
+                res.json(result)
+              }
+            })
+          }
+          else{
+            data.open = true
+            result.save(function(err){
+              if(err){
+                res.send(err)
+              }
+              else{
+                res.json(result)
+              }
+            })
+          }
+        }
+      })
+    })
+  }
 }
