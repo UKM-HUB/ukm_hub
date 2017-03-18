@@ -1,20 +1,19 @@
 import React, { Component } from 'react'
-import logo from '../../../public/assets/logo/ukmhub.png'
+import logo from '../../../public/assets/logo/ukmhub_sidebar.png'
 import { Link } from 'react-router-dom'
 
 class Sidebar extends Component {
-  constructor(props){
-    console.log(props);
-    super(props)
-  }
+
   render(){
     return (
       <div className="sidebar">
       	<div className="sidebar-wrapper" style={{background:'rgb(125,125,125)'}}>
-          <div className="logo">
-            <a href="https://github.com/UKM-HUB/ukm_hub" className="simple-text">
-              <img src={logo} style={{width:'100%'}} alt='ukmhub logo'></img>
-            </a>
+          <div className="logo" style={{textAlign:'center'}}>
+            <Link to='/map'>
+
+                <img src={logo} style={{width:'75%', padding:'1px 15px'}} alt='ukmhub logo'></img>
+
+            </Link>
           </div>
 
           <ul className="nav">
