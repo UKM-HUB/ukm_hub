@@ -23,12 +23,24 @@ var companySchema =  new Schema({
   }],
   description: String,
   website: String,
-  address: String,
-  phone: String,
-  verified: Boolean,
   created_at: Date,
   images: String,
-  updated_at: Date
+  updated_at: Date,
+  letter:[
+    {
+      types:String,
+      to:String,
+      from:String,
+      table:[{
+        item:String,
+        price:String,
+        quantity:String
+      }],
+      date: Date,
+      valid:Boolean,
+      description:String
+    }
+  ]
 });
 
 // the schema is useless so far
