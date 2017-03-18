@@ -28,19 +28,21 @@ var companySchema =  new Schema({
   updated_at: Date,
   letter:[
     {
-      types:String,
       to:String,
       from:String,
-      table:[{
-        item:String,
-        price:String,
-        quantity:String
-      }],
+      title:String,
       date: Date,
-      valid:Boolean,
-      description:String
+      status:String,
+      message:String
+    }
+  ],
+  acceptedMessages:[
+    {
+      companyId:String,
+      letterId:String,
     }
   ]
+
 });
 
 // the schema is useless so far

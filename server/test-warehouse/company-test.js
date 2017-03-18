@@ -121,12 +121,6 @@ describe('tes routing company',function(){
     done()
     })
   })
-  it('should delete all company when delete api/company/',function(done){
-    chai.request('http://localhost:3000').delete(`/api/company`)
-    .end(function (err, res) {
-    res.text.should.equal('data berhasil dihapus')
-    done()
-    })
-  })
+
 
 })

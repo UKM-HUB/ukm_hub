@@ -11,7 +11,7 @@ module.exports={
       password: passwordHash.generate(req.body.password),
       verified:false,
       created_at:new Date(),
-      updated_at:new Date()
+      updated_at:new Date(),
     })
     newCompany.save(function(err){
       if(err) throw err
@@ -208,5 +208,46 @@ module.exports={
         }
       })
     })
-  }
+  },
+  createLetter:function(req,res){
+    Company.findByIdAndUpdate(req.params.id,{
+      $push:{
+            'letter':{
+              to:req.params.otherId,
+              from:req.params.id,
+              requestId:req.params.requestId,
+              title:req.body.title,
+              date: new Date(),
+              status:'waiting',
+              message:req.body.message
+            },
+          }
+      },{
+        new:true
+      }, (err,data)=>{
+        if(err){
+          res.send(err)
+        }
+        else{
+          Company.findByIdAndUpdate(req.params.otherId,{
+            $push:{
+                  'acceptedMessages':{
+                    letterId: data.letter[data.letter.length-1]._id
+                  },
+                }
+            },{
+              new:true
+            }, (err,datas)=>{
+              if(err){
+                res.send(err)
+              }
+              else{
+                res.json(data)
+              }
+            }
+          )
+        }
+      }
+    )
+  },
 }
