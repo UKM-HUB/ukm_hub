@@ -33,7 +33,7 @@ export default class MapView extends Component {
     return (
       <div className="wrapper">
         <Sidebar activeNavigation={this.state.activeNavigation} />
-        <div className="main-panel">
+        <div className="main-panel" style={{overflow:'hidden'}}>
           <Topbar title={this.state.topbarTitle} />
           <div id="map" style={{width:'100%', height:'100%' }}></div>
         </div>

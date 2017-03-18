@@ -24,14 +24,14 @@ const CompanyList = () => {
     display:'inline-block',
     paddingLeft: 16
   }
-  
+
   return (
     <div>
       <div className="panel panel-default" style={panelStyle}>
         <div className="panel-body" style={{position:'relative'}}>
           <div className="media">
             <div className="media-left media-middle">
-              <img className="media-object" src="http://lorempixel.com/200/200/business" alt="Test" />
+              <img className="media-object" src="http://lorempixel.com/200/201/food" alt="Test" />
             </div>
             <div className="media-body">
               <h4 className="media-heading">PT. UKM 1</h4>
@@ -73,7 +73,7 @@ const CompanyList = () => {
         <div className="panel-body" style={{position:'relative'}}>
           <div className="media">
             <div className="media-left media-middle">
-              <img className="media-object" src="http://lorempixel.com/200/201/business" alt="Test" />
+              <img className="media-object" src="http://lorempixel.com/200/200/food" alt="Test" />
 
             </div>
             <div className="media-body">

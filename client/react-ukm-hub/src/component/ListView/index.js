@@ -18,7 +18,7 @@ export default class ListView extends Component {
     return (
       <div className="wrapper">
         <Sidebar activeNavigation={this.state.activeNavigation} />
-        <div className="main-panel">
+        <div className="main-panel" style={{overflow:'hidden'}}>
           <Topbar title={this.state.topbarTitle} />
           <CompanyList />
         </div>

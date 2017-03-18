@@ -9,8 +9,8 @@ class Sidebar extends Component {
   }
   render(){
     return (
-      <div className="sidebar" data-color="black">
-      	<div className="sidebar-wrapper">
+      <div className="sidebar">
+      	<div className="sidebar-wrapper" style={{background:'rgb(125,125,125)'}}>
           <div className="logo">
             <a href="https://github.com/UKM-HUB/ukm_hub" className="simple-text">
               <img src={logo} style={{width:'100%'}} alt='ukmhub logo'></img>

@@ -1,36 +1,38 @@
 # UKM HUB
 ![UKMHUB](https://github.com/UKM-HUB/ukm_hub/blob/master/ukmhub.png)
 
-connect all corporate with the same category, for better future
+UKMHUB web app create a bridge between corporate and UKM (Small & Medium Companies) with the same category in google map view.
+Corporate can see the details of UKM and vice versa. Create buy request and sell request to integrate both of them for Indonesia's UKM
+better future
 
 # END POINT
 
 ## Corporate
 
-| END POINT                 | METHOD | DESC                                             |
-|---------------------------|--------|--------------------------------------------------|
-| /auth/register            | POST   | Add new company email & password with validation |
-| /auth/login               | POST   | Company login with JWT Token                     |
-| /api/company/:id          | PUT    | Complete company profile                         |
-| /api/company/:id/buy      | POST   | create new buy request ( corp only )             |
-| /api/company/:id/sale     | POST   | create new sell request ( ukm only )             |
-| /api/company/:id/buy      | PUT    | change status buy request ( corp only )          |
-| /api/company/:id/sale     | PUT    | change status sale request ( ukm only )          |
-| /api/company/:id/po       | POST   | create new po ( corp only )                      |
-| /api/company/:id          | GET    | get detail one company                           |
-| /api/company/:type/?category=exmp1,exmp2 | GET    | get all company by type           |
-| /api/company/:id/offering | POST   | create new offering ( ukm only )                 |
+| END POINT                                 | METHOD | DESCRIPTION                                             
+|-------------------------------------------|--------|--------------------------------------------------
+| /auth/register                            | POST   | Add new company email & password with validation
+| /auth/login                               | POST   | Company login with JWT Token                     
+| /api/company/:id                          | PUT    | Complete company profile                         
+| /api/company/:id/buy                      | POST   | create new buy request ( corp only )             
+| /api/company/:id/sale                     | POST   | create new sell request ( ukm only )             
+| /api/company/:id/buy                      | PUT    | change status buy request ( corp only )          
+| /api/company/:id/sale                     | PUT    | change status sale request ( ukm only )          
+| /api/company/:id/po                       | POST   | create new po ( corp only )                      
+| /api/company/:id                          | GET    | get detail one company                           
+| /api/company/:type/?category=exmp1,exmp2  | GET    | get all company by type           
+| /api/company/:id/quotation                | POST   | create new offering ( ukm only )                 
 
 
 ## Coop
 
-| END POINT                 | METHOD | DESC                                             |
-|---------------------------|--------|--------------------------------------------------|
-| /api/coop/login           | POST   | login coop to generate jwt                       |
-| /api/coop/logout          | POST   | destroy jwt                                      |
-| /api/coop/verify/:id      | PUT    | update company verify to true                    |
-| /api/company/             | GET    | get all company list fill verify at front end    |
-| /api/coop/unverify/:id    | PUT    | Set Status company to unverified                  |
+| END POINT                 | METHOD | DESCRIPTION                                             
+|---------------------------|--------|-----------------------------------------------
+| /api/coop/login           | POST   | login coop to generate jwt                       
+| /api/coop/logout          | POST   | destroy jwt                                      
+| /api/coop/verify/:id      | PUT    | update company verify to true                    
+| /api/company/             | GET    | get all company list fill verify at front end    
+| /api/coop/unverify/:id    | PUT    | Set Status company to unverified                  
 
 
 # User Stories
