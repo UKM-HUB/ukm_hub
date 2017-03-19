@@ -31,7 +31,6 @@ export default class ListOfRequest extends Component {
       textAlign: 'center'
     }
     return (
-
       <div className='content'>
         <div className='container-fluid'>
         <table id="requestTable" className="table table-striped table-bordered" cellSpacing="0" width="100%">

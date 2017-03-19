@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
+import MessageList from './MessageList'
 
 export default class Message extends Component {
   constructor(){
@@ -18,6 +19,7 @@ export default class Message extends Component {
         <Sidebar activeNavigation={this.state.activeNavigation} />
         <div className="main-panel">
           <Topbar title={this.state.topbarTitle} />
+          <MessageList />
         </div>
       </div>
     )
