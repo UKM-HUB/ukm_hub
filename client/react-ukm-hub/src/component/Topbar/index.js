@@ -28,7 +28,7 @@ const Topbar = (props) => {
           </ul>
           <ul className="nav navbar-nav navbar-right">
             <li style={{margin:'15px 60px'}}>
-                <h4 style={{display: 'inline'}}>Server Time : </h4><span style={{marginLeft:15, position:'relative', bottom:2}} id="clockbox"></span>
+                <h4 style={{display: 'inline', fontSize:20}}>Server Time : </h4><span style={{marginLeft:15, position:'relative', bottom:2, fontFamily:'peddana', fontSize: 24}} id="clockbox"></span>
             </li>
             <li className="dropdown">
               <a href="#" className="dropdown-toggle" data-toggle="dropdown">

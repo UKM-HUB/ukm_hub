@@ -24,12 +24,12 @@ class Sidebar extends Component {
 
   					<li className={this.props.activeNavigation[0]}>
               <Link to='/map'>
-                <i className="pe-7s-map-marker"></i>
+                <i className="pe-7s-share"></i>
                 <p>Map View</p>
               </Link>
   					</li>
 
-            <li className={this.props.activeNavigation[1]} style={{marginBottom: 50}}>
+            <li className={this.props.activeNavigation[1]} style={{marginBottom: 20}}>
               <Link to='/list'>
                 <i className="pe-7s-menu"></i>
                 <p>List View</p>
@@ -40,37 +40,44 @@ class Sidebar extends Component {
               ( this.state.CompanyType === 'corporate' ) ?
 
                 <div>
-                  <li className={this.props.activeNavigation[2]}>
-                    <Link to='/list-buy-request' style={{padding:'10px 15px'}}>
-                      <i className="pe-7s-menu"></i>
+                  <li className={this.props.activeNavigation[2]} style={{borderTop:'1px solid rgba(255,255,255,0.1)', paddingTop: 8}}>
+                    <Link to='/create-request' style={{padding:'10px 15px'}}>
+                      <i className="pe-7s-note"></i>
                       <p>Create Request</p>
                     </Link>
                   </li>
 
-                  <li className={this.props.activeNavigation[3]}>
-                    <Link to='/list-buy-request' style={{padding:'10px 15px'}}>
-                      <i className="pe-7s-menu"></i>
+                  <li className={this.props.activeNavigation[3]} style={{marginBottom: 20, borderBottom:'1px solid rgba(255,255,255,0.1)', paddingBottom: 20}}>
+                    <Link to='/request-list' style={{padding:'10px 15px'}}>
+                      <i className="pe-7s-notebook"></i>
                       <p>List of Sell Request</p>
                     </Link>
                   </li>
                 </div>
               :
                 <div>
-                  <li className={this.props.activeNavigation[2]}>
-                    <Link to='/list-buy-request' style={{padding:'10px 15px'}}>
-                      <i className="pe-7s-menu"></i>
+                  <li className={this.props.activeNavigation[2]} style={{borderTop:'1px solid rgba(255,255,255,0.1)', paddingTop: 8}}>
+                    <Link to='/create-request' style={{padding:'10px 15px'}}>
+                      <i className="pe-7s-note"></i>
                       <p>Create Request</p>
                     </Link>
                   </li>
 
-                  <li className={this.props.activeNavigation[3]}>
-                    <Link to='/list-buy-request' style={{padding:'10px 15px'}}>
-                      <i className="pe-7s-menu"></i>
+                  <li className={this.props.activeNavigation[3]} style={{marginBottom: 20, borderBottom:'1px solid rgba(255,255,255,0.1)', paddingBottom: 20}}>
+                    <Link to='/request-list' style={{padding:'10px 15px'}}>
+                      <i className="pe-7s-notebook"></i>
                       <p>Corporate Request List</p>
                     </Link>
                   </li>
                 </div>
             }
+
+            <li className={this.props.activeNavigation[4]}>
+              <Link to='/message'>
+                <i className="pe-7s-comment"></i>
+                <p>Message</p>
+              </Link>
+            </li>
 
           </ul>
       	</div>

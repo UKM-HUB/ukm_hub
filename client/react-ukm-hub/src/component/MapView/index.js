@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import '../../App.css'
 import GMaps from '../../../public/assets/js/gmaps.min.js'
 
 import Sidebar from '../Sidebar'
@@ -18,9 +17,6 @@ export default class MapView extends Component {
           lat: -6.260697,
           lng: 106.781391,
           details: 'ukm keyboard',
-          mouseover: function(e){
-            alert('hallo')
-          },
           infoWindow: {
             content: `
             <div class='ukmtooltip'>

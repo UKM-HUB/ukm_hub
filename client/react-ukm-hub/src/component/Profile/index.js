@@ -15,6 +15,7 @@ export default class Profile extends Component {
       profileTitle: 'Profile',
       updateButtonDisplay: 'inline-block',
       submitUpdateButtonDisplay: 'none',
+      cursor: 'text',
       name: '',
       type: '',
       email: '',
@@ -73,12 +74,10 @@ export default class Profile extends Component {
     if (e.target.name === 'category') {
       if (this.state.category.includes(e.target.value) === false) {
         newState[e.target.name] = this.state.category.concat([e.target.value])
-      }
-      else {
+      } else {
         newState[e.target.name] = this.state.category.filter((x) => x !== e.target.value)
       }
-    }
-    else {
+    } else {
       newState[e.target.name] = e.target.value
     }
     this.setState(newState)
@@ -115,7 +114,7 @@ export default class Profile extends Component {
                                 type='text'
                                 className='form-control'
                                 name='name'
-                                style={{cursor: 'pointer'}}
+                                style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
                                 value={this.state.name}
                                 placeholder='Company'
@@ -151,7 +150,7 @@ export default class Profile extends Component {
                                 type='email'
                                 name='email'
                                 className='form-control'
-                                style={{cursor: 'pointer'}}
+                                style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
                                 value={this.state.email}
                                 placeholder='Company email'
@@ -326,7 +325,7 @@ export default class Profile extends Component {
                                 rows='3'
                                 name='address'
                                 className='form-control'
-                                style={{cursor: 'pointer'}}
+                                style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
                                 value={this.state.address}
                                 placeholder='Company address'
@@ -342,7 +341,7 @@ export default class Profile extends Component {
                                 rows='3'
                                 name='description'
                                 className='form-control'
-                                style={{cursor: 'pointer'}}
+                                style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
                                 value={this.state.description}
                                 placeholder='Describe your company'
@@ -360,7 +359,7 @@ export default class Profile extends Component {
                                 type='text'
                                 name='website'
                                 className='form-control'
-                                style={{cursor: 'pointer'}}
+                                style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
                                 value={this.state.website}
                                 placeholder='Company'
@@ -376,7 +375,7 @@ export default class Profile extends Component {
                                 type='text'
                                 name='phone'
                                 className='form-control'
-                                style={{cursor: 'pointer'}}
+                                style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
                                 placeholder='Company phone number'
                                 value={this.state.phone}
@@ -395,7 +394,7 @@ export default class Profile extends Component {
                                 name='profilePicture'
                                 className='form-control'
                                 value={this.state.profilePicture}
-                                style={{cursor: 'pointer'}}
+                                style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
                                 placeholder='Input your photo URL'
                                 onChange={this.onHandleChange.bind(this)} />

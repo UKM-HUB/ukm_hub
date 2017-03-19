@@ -14,7 +14,9 @@ import '../public/assets/js/bootstrap.min.js'
 
 import MapView from './component/MapView'
 import ListView from './component/ListView'
-import ListBuyRequest from './component/ListBuyRequest'
+import RequestList from './component/RequestList'
+import CreateRequest from './component/CreateRequest'
+import Message from './component/Message'
 import Login from './component/Login'
 import Profile from './component/Profile'
 
@@ -23,7 +25,9 @@ const App = () => (
     <div>
       <Route exact path='/map' component={MapView} />
       <Route exact path='/list' component={ListView} />
-      <Route exact path='/list-buy-request' component={ListBuyRequest} />
+      <Route exact path='/create-request' component={CreateRequest} />
+      <Route exact path='/request-list' component={RequestList} />
+      <Route exact path='/message' component={Message} />
       <Route exact path='/profile' component={Profile} />
       <Route exact path='/' component={Login} />
     </div>

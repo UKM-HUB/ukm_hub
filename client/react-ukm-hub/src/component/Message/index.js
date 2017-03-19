@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
-import '../../App.css'
 
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
-import BuyList from './BuyList'
 
-export default class ListBuyRequest extends Component {
+export default class Message extends Component {
   constructor(){
     super()
     this.state = {
-      topbarTitle: 'Buy Request',
-      activeNavigation: ['','','active','']
+      topbarTitle: 'Message',
+      activeNavigation: ['','','','','active']
     }
   }
 
@@ -18,9 +16,8 @@ export default class ListBuyRequest extends Component {
     return (
       <div className="wrapper">
         <Sidebar activeNavigation={this.state.activeNavigation} />
-        <div className="main-panel" style={{overflow:'hidden'}}>
+        <div className="main-panel">
           <Topbar title={this.state.topbarTitle} />
-          <BuyList />
         </div>
       </div>
     )

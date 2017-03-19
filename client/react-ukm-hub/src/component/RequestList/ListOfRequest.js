@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BuyList = () => {
+const ListOfRequest = () => {
   const panelStyle = {
     margin: 20,
   }
@@ -118,4 +118,4 @@ const BuyList = () => {
   )
 }
 
-export default BuyList
+export default ListOfRequest

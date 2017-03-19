@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
+import '../../App.css'
 
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
-import CompanyList from './CompanyList'
+import ListOfRequest from './ListOfRequest'
 
-export default class ListView extends Component {
+export default class RequestList extends Component {
   constructor(){
     super()
     this.state = {
-      topbarTitle: 'List View',
-      activeNavigation: ['','active']
+      topbarTitle: 'Request List',
+      activeNavigation: ['','','','active']
     }
   }
 
@@ -19,7 +20,7 @@ export default class ListView extends Component {
         <Sidebar activeNavigation={this.state.activeNavigation} />
         <div className="main-panel">
           <Topbar title={this.state.topbarTitle} />
-          <CompanyList />
+          <ListOfRequest />
         </div>
       </div>
     )
