@@ -26,7 +26,6 @@ class Login extends Component {
   }
 
   handleRegister(){
-
     this.props.registerCompanyFetch(this.state.emailRegister,this.state.passwordRegister)
     this.setState({
       emailRegister: '',
@@ -35,7 +34,6 @@ class Login extends Component {
   }
 
   handleLogin(){
-
     this.props.loginCompanyFetch(this.state.emailLogin,this.state.passwordLogin)
     this.setState({
       emailLogin: '',
@@ -45,9 +43,7 @@ class Login extends Component {
 
   handleChange(e){
     let newState = {}
-
     newState[e.target.name] = e.target.value
-
     this.setState(newState)
   }
 

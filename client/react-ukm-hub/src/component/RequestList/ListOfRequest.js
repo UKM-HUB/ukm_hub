@@ -4,6 +4,20 @@ import '../../../public/assets/js/jquery.dataTables.min.js'
 import '../../../public/assets/js/dataTables.bootstrap.min.js'
 
 export default class ListOfRequest extends Component {
+  constructor(){
+    super()
+    this.state = {
+      title: '',
+      message: ''
+    }
+  }
+
+  handleChange(e){
+    let newState = {}
+    newState[e.target.name] = e.target.value
+    this.setState(newState)
+  }
+
   componentDidMount(){
     $(document).ready(function() {
         $('#requestTable').DataTable();
@@ -33,7 +47,7 @@ export default class ListOfRequest extends Component {
           </thead>
           <tbody style={tableDataStyle}>
             <tr>
-              <td>PT. SINARMAS</td>
+              <td>PT. MEDIA TEKNOLOGI</td>
               <td>Request teamwork</td>
               <td style={{textAlign:'justify'}}>Our UKM need to collaborate with nearby corporate for brick distribution</td>
               <td>100000</td>
@@ -111,7 +125,10 @@ export default class ListOfRequest extends Component {
                         </label>
                         <input
                           type='text'
-                          className='form-control'/>
+                          name='title'
+                          className='form-control'
+                          value={this.state.title}
+                          onChange={this.handleChange.bind(this)}/>
                       </div>
                     </div>
                   </div>
@@ -124,15 +141,21 @@ export default class ListOfRequest extends Component {
                         </label>
                         <textarea
                           rows='3'
-                          name='request'
-                          className='form-control'/>
+                          name='message'
+                          className='form-control'
+                          value={this.state.message}
+                          onChange={this.handleChange.bind(this)}/>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" className="btn btn-primary">Save changes</button>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={()=>alert('Masukin ke reducer isi statenya')}>Save changes
+                  </button>
                 </div>
               </div>
             </div>
