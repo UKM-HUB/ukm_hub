@@ -6,6 +6,7 @@ var tampung2 ='';
 var tampung3 ='';
 chai.use(chaiHttp);
 
+
 describe('tes routing company',function(){
   it('should return email of the registered company when post api/company/auth/register',function(done){
     chai.request('http://localhost:3001').post('/api/company/auth/register').send({email:'timogio99@gmail.com',password:'yes123'}).end(function (err, res) {
