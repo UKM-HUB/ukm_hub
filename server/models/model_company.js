@@ -8,6 +8,8 @@ var companySchema =  new Schema({
   email: { type: String, required: true, unique: true },
   password: String,
   category: [],
+  verified:Boolean,
+  edited:Boolean,
   type: String,
   location:{
     lat:String,

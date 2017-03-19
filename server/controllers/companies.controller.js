@@ -5,21 +5,23 @@ var jwt = require('jsonwebtoken');
 var passwordHash = require('password-hash');
 
 module.exports={
-  register: function(req,res){
+  register: function(req,res,next){
     var newCompany = new Company({
       email: req.body.email,
       password: passwordHash.generate(req.body.password),
       verified:false,
+      edited:false,
       created_at:new Date(),
       updated_at:new Date(),
     })
     newCompany.save(function(err){
       if(err) throw err
-      res.json(newCompany)
+      let token = jwt.sign({ email: newCompany.email }, 'ukmhub');
+      res.send({ token: token, companyId: newCompany._id ,verified: newCompany.verified,edited: newCompany.edited})
     })
   },
   login: function(req, res, next){
-    var token = jwt.sign({ email: req.body.email }, 'ukmhub');
+    let token = jwt.sign({ email: req.body.email }, 'ukmhub');
     res.send({ token: token })
   },
   editProfile: function(req,res){
@@ -39,6 +41,7 @@ module.exports={
         company.description = req.body.description
         company.images = req.file
         company.updated_at = new Date()
+        edited = true
         company.save(function(err){
           if(err){
             res.send(err)
