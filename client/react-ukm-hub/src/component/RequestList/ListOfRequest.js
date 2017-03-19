@@ -3,6 +3,7 @@ import React from 'react'
 const ListOfRequest = () => {
   const panelStyle = {
     margin: 20,
+    padding: 15
   }
 
   const distanceStyle = {
@@ -14,7 +15,7 @@ const ListOfRequest = () => {
 
   const companyDetailStyle = {
     display: 'inline-block',
-    width: 95,
+    width: 105,
     float: 'left',
     fontSize: 15,
     fontStyle: 'italic'
@@ -23,6 +24,16 @@ const ListOfRequest = () => {
   const requestDetailStyle = {
     display:'inline-block',
     paddingLeft: 16
+  }
+
+  const companyTitleFontStyle = {
+    fontFamily: 'open sans',
+    textDecoration: 'underline',
+    marginBottom: 15
+  }
+
+  const panelBodyStyle = {
+    padding: '0px 15px'
   }
 
   return (
@@ -34,10 +45,8 @@ const ListOfRequest = () => {
               <img className="media-object" src="http://lorempixel.com/200/201/food" alt="Test" />
             </div>
             <div className="media-body">
-              <h4 className="media-heading">PT. UKM 1</h4>
-              <p style={{textAlign:'justify'}}>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              <h4 className="media-heading" style={companyTitleFontStyle}>PT. MAJU JAYA</h4>
+              <p style={{textAlign:'justify'}}>Want to buy 100 pounds of leather reply ASAP
               </p>
               <strong style={distanceStyle}>
                 1 KM away from your location
@@ -45,13 +54,13 @@ const ListOfRequest = () => {
             </div>
           </div>
         </div>
-        <div className="panel-body" style={{padding:'0px 25px'}}>
+        <div className="panel-body" style={panelBodyStyle}>
           <h4>Company Detail</h4>
             <ul className="list-group">
               <li className="list-group-item"><span style={companyDetailStyle}>Email</span>
-                <span>ukm1@gmail.com</span>
+                <span>majujaya@gmail.com</span>
               </li>
-              <li className="list-group-item"><span style={companyDetailStyle}>Request</span>
+              <li className="list-group-item"><span style={companyDetailStyle}>Request List</span>
                   <ul style={requestDetailStyle}>
                     <li><a href='http://google.com'>Request 1</a></li>
                     <li><a href='http://facebook.com'>Request 2</a></li>
@@ -77,10 +86,8 @@ const ListOfRequest = () => {
 
             </div>
             <div className="media-body">
-              <h4 className="media-heading">PT. UKM 2</h4>
-              <p style={{textAlign:'justify'}}>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              <h4 className="media-heading" style={companyTitleFontStyle}>PT. SINARMAS</h4>
+              <p style={{textAlign:'justify'}}>Seek collaboration in construction especially in cement for 5 years contract
               </p>
               <strong style={distanceStyle}>
                 1.9 KM away from your location
@@ -89,13 +96,13 @@ const ListOfRequest = () => {
             </div>
           </div>
         </div>
-        <div className="panel-body" style={{padding:'0px 25px'}}>
+        <div className="panel-body" style={panelBodyStyle}>
           <h4>Company Detail</h4>
           <ul className="list-group">
             <li className="list-group-item"><span style={companyDetailStyle}>Email</span>
-              <span>ukm2@gmail.com</span>
+              <span>sinarmas@gmail.com</span>
             </li>
-            <li className="list-group-item"><span style={companyDetailStyle}>Request</span>
+            <li className="list-group-item"><span style={companyDetailStyle}>Request List</span>
                 <ul style={requestDetailStyle}>
                   <li><a href='http://google.com'>Request 1</a></li>
                   <li><a href='http://facebook.com'>Request 2</a></li>
@@ -105,7 +112,7 @@ const ListOfRequest = () => {
             </li>
             <li className="list-group-item"><span style={companyDetailStyle}>Website</span>
               <span>
-                <a href='https://facebook.github.io/react/'>UKM 2 Website</a>
+                <a href='https://facebook.github.io/react/'>Sinarmas Website</a>
               </span>
             </li>
             <li className="list-group-item"><span style={companyDetailStyle}>Address</span>
