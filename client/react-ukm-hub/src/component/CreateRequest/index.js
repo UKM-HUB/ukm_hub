@@ -10,7 +10,8 @@ export default class Message extends Component {
       topbarTitle: 'Create Request',
       activeNavigation: ['','','active',''],
       request: '',
-      title: ''
+      title: '',
+      price: ''
     }
   }
 
@@ -65,6 +66,23 @@ export default class Message extends Component {
                                 className='form-control'
                                 value={this.state.request}
                                 placeholder='Request message goes in here. Post a message to all companies within your category'
+                                onChange={this.onHandleChange.bind(this)} />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className='row'>
+                          <div className='col-md-12'>
+                            <div className='form-group'>
+                              <label>
+                                Price
+                              </label>
+                              <input
+                                type='text'
+                                className='form-control'
+                                name='price'
+                                value={this.state.price}
+                                placeholder='Price Range'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>
