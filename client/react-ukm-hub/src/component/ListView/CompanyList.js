@@ -15,10 +15,11 @@ const CompanyList = () => {
 
   const companyDetailStyle = {
     display: 'inline-block',
-    width: 105,
+    width: 120,
     float: 'left',
-    fontSize: 15,
-    fontStyle: 'italic'
+    fontSize: 22,
+    fontStyle: 'italic',
+    fontFamily: 'Peddana'
   }
 
   const requestDetailStyle = {
@@ -36,15 +37,21 @@ const CompanyList = () => {
     padding: '0px 15px'
   }
 
+  const imageStyle = {
+    borderRadius: 100,
+    filter: 'grayscale(0.2) opacity(0.8)',
+    width: 150
+  }
+
   return (
     <div>
       <div className="panel panel-default" style={panelStyle}>
         <div className="panel-body" style={{position:'relative'}}>
           <div className="media">
             <div className="media-left media-middle">
-              <img className="media-object" src="http://lorempixel.com/200/201/food" alt="Test" />
+              <img className="media-object" style={imageStyle} src="http://lorempixel.com/200/201/food" alt="Test" />
             </div>
-            <div className="media-body">
+            <div className="media-body" style={{paddingLeft:15}}>
               <h4 className="media-heading" style={companyTitleFontStyle}>PT. MAJU JAYA</h4>
               <p style={{textAlign:'justify'}}>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
                 magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
@@ -85,10 +92,10 @@ const CompanyList = () => {
         <div className="panel-body" style={{position:'relative'}}>
           <div className="media">
             <div className="media-left media-middle">
-              <img className="media-object" src="http://lorempixel.com/200/200/food" alt="Test" />
+              <img className="media-object" style={imageStyle} src="http://lorempixel.com/200/200/food" alt="Test" />
 
             </div>
-            <div className="media-body">
+            <div className="media-body" style={{paddingLeft:15}}>
               <h4 className="media-heading" style={companyTitleFontStyle}>PT. SINARMAS</h4>
               <p style={{textAlign:'justify'}}>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
                 magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor

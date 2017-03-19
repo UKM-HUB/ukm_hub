@@ -73,27 +73,10 @@ export default class Message extends Component {
                         </div>
 
                         <div className='row'>
-                          <div className='col-md-12'>
+                          <div className='col-md-6'>
                             <div className='form-group'>
                               <label>
-                                Price
-                              </label>
-                              <input
-                                type='text'
-                                className='form-control'
-                                name='price'
-                                value={this.state.price}
-                                placeholder='Price Range'
-                                onChange={this.onHandleChange.bind(this)} />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className='row'>
-                          <div className='col-md-12'>
-                            <div className='form-group'>
-                              <label>
-                                Image
+                                Image (Optional)
                               </label>
                               <input
                                 type='text'
@@ -101,6 +84,20 @@ export default class Message extends Component {
                                 name='image'
                                 value={this.state.image}
                                 placeholder='Request image URL'
+                                onChange={this.onHandleChange.bind(this)} />
+                            </div>
+                          </div>
+                          <div className='col-md-6'>
+                            <div className='form-group'>
+                              <label>
+                                Price (Optional)
+                              </label>
+                              <input
+                                type='text'
+                                className='form-control'
+                                name='price'
+                                value={this.state.price}
+                                placeholder='Price Range'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>

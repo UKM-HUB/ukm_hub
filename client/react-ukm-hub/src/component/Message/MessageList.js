@@ -50,7 +50,8 @@ export default class MessageList extends Component {
                   style={{marginRight: 20}}
                   onClick={(e) => {
                     e.preventDefault()
-                    this.setState({})}}>
+                    this.setState({})
+                    alert('Accept masukin ke reducer')}}>
                   Accept
                 </button>
                 <button
@@ -59,7 +60,8 @@ export default class MessageList extends Component {
                   style={{marginRight: 20}}
                   onClick={(e) => {
                     e.preventDefault()
-                    this.setState({})}}>
+                    this.setState({})
+                    alert('Accept masukin ke reducer')}}>
                   Decline
                 </button>
               </td>
@@ -76,7 +78,8 @@ export default class MessageList extends Component {
                   style={{marginRight: 20}}
                   onClick={(e) => {
                     e.preventDefault()
-                    this.setState({})}}>
+                    this.setState({})
+                    alert('Accept masukin ke reducer')}}>
                   Accept
                 </button>
                 <button
@@ -85,7 +88,8 @@ export default class MessageList extends Component {
                   style={{marginRight: 20}}
                   onClick={(e) => {
                     e.preventDefault()
-                    this.setState({})}}>
+                    this.setState({})
+                    alert('Accept masukin ke reducer')}}>
                   Decline
                 </button>
               </td>
