@@ -12,6 +12,8 @@ export default class MapView extends Component {
       activeNavigation: ['active',''],
       companyLoginLat: 0,
       companyLoginLng: 0,
+      corporateIcon: 'https://s21.postimg.org/8hrapdesn/building.png',
+      ukmIcon: 'https://s4.postimg.org/jlidgjun1/store.png',
       dataMapCompany: []
     }
   }
@@ -23,7 +25,7 @@ export default class MapView extends Component {
       dataMapCompany: [
         {
           title: 'UKM KEYBOARD',
-          icon: 'https://s4.postimg.org/jlidgjun1/store.png',
+          icon: this.state.ukmIcon,
           lat: -6.278097,
           lng: 106.781391,
           details: 'ukm keyboard',
@@ -40,7 +42,7 @@ export default class MapView extends Component {
             }
         },
         {
-          icon: 'https://s4.postimg.org/jlidgjun1/store.png',
+          icon: this.state.ukmIcon,
           lat: -6.270697,
           lng: 106.791391,
           infoWindow: {
@@ -69,9 +71,9 @@ export default class MapView extends Component {
                     <p><b>Request : </b>
                       <div class="card">
                         <ul class="list-group list-group-flush">
-                          <li class="list-group-item">Request 1</li>
-                          <li class="list-group-item">Request 2</li>
-                          <li class="list-group-item">Request 3</li>
+                          <li class="list-group-item"><a href="https://www.google.com">Request 1<a></li>
+                          <li class="list-group-item"><a href="https://www.google.com">Request 2</a></li>
+                          <li class="list-group-item"><a href="https://www.google.com">Request 3</a></li>
                         </ul>
                       </div>
                     </p>
@@ -83,7 +85,7 @@ export default class MapView extends Component {
           }
         },
         {
-          icon: 'https://s4.postimg.org/jlidgjun1/store.png',
+          icon: this.state.ukmIcon,
           lat: 1.106431,
           lng: 104.024560,
           infoWindow: {
@@ -116,10 +118,10 @@ export default class MapView extends Component {
       lng: this.state.companyLoginLng
     });
 
-    // add company marker who login on maps(it maybe corporate or ukm)
+    // add login marker, on maps(it maybe corporate or ukm)
     map.addMarkers([{
       title: 'PT. Maju Jaya',
-      icon: 'https://s21.postimg.org/8hrapdesn/building.png',
+      icon: this.state.corporateIcon,
       lat: this.state.companyLoginLat,
       lng: this.state.companyLoginLng,
       details: 'ukm keyboard'
