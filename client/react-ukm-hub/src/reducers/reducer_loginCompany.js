@@ -1,14 +1,14 @@
 
-export default (state=[] , action) => {
+export default (state='' , action) => {
   console.log(state);
   switch(action.type){
 
     case 'LOGIN_COMPANY' :
-      return [...state, action.payload]
+      return action.payload
 
     // case 'DELETE_TODO' :
     //   return state.filter((x)=> x.id !== action.payload)
-    // 
+    //
     // case 'DONE_TODO' :
     //   return state.map((todo) => todo.id !== action.payload.id ? todo : {...todo, done:!todo.done})
     //

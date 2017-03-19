@@ -8,8 +8,8 @@ export const loginCompany = (token) => {
 
 export const registerCompanyFetch = (email,password) => {
   return (dispatch) => {
-    setTimeout(()=> {
-      fetch('http://localhost:3001/auth/register',
+
+      fetch('http://localhost:3001/api/company/auth/register/',
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -19,8 +19,8 @@ export const registerCompanyFetch = (email,password) => {
         })
       })
       .then(res => res.json())
-      .then(registered => dispatch(login(registered)))
-    },1000)
+      .then(registered => dispatch(loginCompany(registered)))
+
   }
 }
 
@@ -37,7 +37,7 @@ export const loginCompanyFetch = (email,password) => {
         })
       })
       .then(res => res.json())
-      .then(registered => dispatch(login(registered)))
+      .then(registered => dispatch(loginCompany(registered)))
     },1000)
   }
 }
