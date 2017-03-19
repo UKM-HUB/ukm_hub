@@ -5,9 +5,6 @@ import '../../../public/assets/js/dataTables.bootstrap.min.js'
 
 export default class ListOfRequest extends Component {
   componentDidMount(){
-    $(this.getDOMNode()).modal('show');
-    $(this.getDOMNode()).on('hidden.bs.modal', this.props.handleHideModal);
-    
     $(document).ready(function() {
         $('#requestTable').DataTable();
     });
@@ -98,26 +95,50 @@ export default class ListOfRequest extends Component {
           </tbody>
           </table>
 
-          <div className="modal fade" id="myModal" role="dialog">
-            <div className="modal-dialog">
+          <div className="modal fade" id="myModal">
+            <div className="modal-dialog modal-lg">
               <div className="modal-content">
                 <div className="modal-header">
-                  <button type="button" className="close" data-dismiss="modal">&times;</button>
-                  <h4 className="modal-title">Modal Header</h4>
+                  <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 className="modal-title">Send Message</h4>
                 </div>
                 <div className="modal-body">
-                  <p>Some text in the modal.</p>
+                  <div className='row'>
+                    <div className='col-md-12'>
+                      <div className='form-group'>
+                        <label>
+                          Title
+                        </label>
+                        <input
+                          type='text'
+                          className='form-control'/>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className='row'>
+                    <div className='col-md-12'>
+                      <div className='form-group'>
+                        <label>
+                          Message
+                        </label>
+                        <textarea
+                          rows='3'
+                          name='request'
+                          className='form-control'/>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" className="btn btn-primary">Save changes</button>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
-
 
     )
   }

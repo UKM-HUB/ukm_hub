@@ -11,7 +11,8 @@ export default class Message extends Component {
       activeNavigation: ['','','active',''],
       request: '',
       title: '',
-      price: ''
+      price: '',
+      image: ''
     }
   }
 
@@ -83,6 +84,23 @@ export default class Message extends Component {
                                 name='price'
                                 value={this.state.price}
                                 placeholder='Price Range'
+                                onChange={this.onHandleChange.bind(this)} />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className='row'>
+                          <div className='col-md-12'>
+                            <div className='form-group'>
+                              <label>
+                                Image
+                              </label>
+                              <input
+                                type='text'
+                                className='form-control'
+                                name='image'
+                                value={this.state.image}
+                                placeholder='Request image URL'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>

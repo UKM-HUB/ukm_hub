@@ -14,6 +14,18 @@
 
  */
 /*      light colors         */
+
+/* My Style */
+
+.modal-backdrop.in {
+  opacity: 0
+}
+
+.modal-backdrop {
+  z-index:-1
+}
+/* ================================= */
+
 @keyframes spin {
   from {
     transform: rotate(0deg); }
