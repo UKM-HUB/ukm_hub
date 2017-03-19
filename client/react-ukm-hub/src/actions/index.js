@@ -6,6 +6,15 @@ export const loginCompany = (token) => {
   }
 }
 
+export const fetchingCompanyProfile = (data) => {
+  return {
+    type: 'FETCH_COMPANY_PROFILE',
+    payload:data,
+
+  }
+}
+
+
 export const registerCompanyFetch = (email,password) => {
   return (dispatch) => {
 
@@ -27,7 +36,7 @@ export const registerCompanyFetch = (email,password) => {
 export const loginCompanyFetch = (email,password) => {
   return (dispatch) => {
     setTimeout(()=> {
-      fetch('http://localhost:3001/auth/login',
+      fetch('http://localhost:3001/api/company/auth/login/',
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -41,6 +50,43 @@ export const loginCompanyFetch = (email,password) => {
     },1000)
   }
 }
+
+export const fetchProfile = (id) => {
+  return (dispatch) => {
+    setTimeout(()=> {
+      fetch('http://localhost:3001/api/company/'+id)
+      .then(res => res.json())
+      .then(todos => dispatch(fetchingCompanyProfile(todos)))
+    },1000)
+  }
+}
+
+export const upadateCompanyProfileFetch = (data,id) => {
+  return (dispatch) => {
+    setTimeout(()=> {
+      fetch('http://localhost:3001/api/company/'+id,
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          name : data.name,
+          type : data.type,
+          category : data.category,
+          lat : data.updatedlat,
+          lng : data.updatedlng,
+          website : data.website,
+          address : data.address,
+          phone : data.phone,
+          description : data.description,
+          images : data.profilePicture,
+        })
+      })
+      .then(res => res.json())
+      .then(edited => dispatch(loginCompany(edited)))
+    },1000)
+  }
+}
+
 // export const addTodox = (todo) => {
 //
 //   return (dispatch) => {

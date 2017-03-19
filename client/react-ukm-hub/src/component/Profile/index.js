@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 // import $ from 'jquery'
 import GMaps from '../../../public/assets/js/gmaps.min.js'
-
+import {connect} from 'react-redux'
+import {upadateCompanyProfileFetch,fetchProfile} from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 
-export default class Profile extends Component {
-  constructor () {
-    super()
+class Profile extends Component {
+  constructor (props) {
+    super(props)
     this.state = {
       topbarTitle: 'Company Profile',
       activeNavigation: ['', ''],
@@ -16,36 +17,38 @@ export default class Profile extends Component {
       updateButtonDisplay: 'inline-block',
       submitUpdateButtonDisplay: 'none',
       cursor: 'text',
-      name: '',
-      type: '',
-      email: '',
-      category: [],
-      currentlat: '-12.043333',
-      currentlng: '-77.028333',
-      updatedlat: '',
-      updatedlng: '',
-      address: '',
-      description: '',
-      website: '',
-      phone: '',
-      profilePicture: ''
+      data:{
+        name: 'a',
+        type: 'a',
+        email: 'a',
+        category: [],
+        currentlat: '-12.043333',
+        currentlng: '-77.028333',
+        updatedlat: 'a',
+        updatedlng: 'a',
+        address: 'a',
+        description: 'a',
+        website: 'a',
+        phone: 'a',
+        profilePicture: 'a'
+      }
     }
   }
 
   componentDidMount () {
+    this.props.fetchProfile('58ce962b1083cd44b0c731a9')
     let that = this
 
-    console.log("MASUK DID MOUNT CUMA SEKALI");
 
     let map = new GMaps({
       el: '#map',
-      lat: this.state.currentlat,
-      lng: this.state.currentlng
+      lat: this.state.data.currentlat,
+      lng: this.state.data.currentlng
     })
 
     map.addMarker({
-      lat: this.state.currentlat,
-      lng: this.state.currentlng,
+      lat: this.state.data.currentlat,
+      lng: this.state.data.currentlng,
       click: function (e) {
         alert('You clicked in this marker')
       }
@@ -59,8 +62,8 @@ export default class Profile extends Component {
 
       map.removeMarkers()
       map.addMarker({
-        lat: that.state.updatedlat,
-        lng: that.state.updatedlng,
+        lat: that.state.data.updatedlat,
+        lng: that.state.data.updatedlng,
         infoWindow: {
           content: '<p>Your company location</p>'
         }
@@ -80,10 +83,11 @@ export default class Profile extends Component {
     } else {
       newState[e.target.name] = e.target.value
     }
-    this.setState(newState)
+    this.setState({data:{newState}})
   }
 
   render () {
+    console.log(this.props.profile);
     const checkboxStyle = {
       marginRight: 20,
       cursor: 'pointer'
@@ -116,7 +120,7 @@ export default class Profile extends Component {
                                 name='name'
                                 style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
-                                value={this.state.name}
+                                value={this.state.data.name}
                                 placeholder='Company'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
@@ -152,7 +156,7 @@ export default class Profile extends Component {
                                 className='form-control'
                                 style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
-                                value={this.state.email}
+                                value={this.state.data.email}
                                 placeholder='Company email'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
@@ -327,7 +331,7 @@ export default class Profile extends Component {
                                 className='form-control'
                                 style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
-                                value={this.state.address}
+                                value={this.state.data.address}
                                 placeholder='Company address'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
@@ -343,7 +347,7 @@ export default class Profile extends Component {
                                 className='form-control'
                                 style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
-                                value={this.state.description}
+                                value={this.state.data.description}
                                 placeholder='Describe your company'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
@@ -361,7 +365,7 @@ export default class Profile extends Component {
                                 className='form-control'
                                 style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
-                                value={this.state.website}
+                                value={this.state.data.website}
                                 placeholder='Company'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
@@ -378,7 +382,7 @@ export default class Profile extends Component {
                                 style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
                                 placeholder='Company phone number'
-                                value={this.state.phone}
+                                value={this.state.data.phone}
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>
@@ -393,7 +397,7 @@ export default class Profile extends Component {
                                 type='text'
                                 name='profilePicture'
                                 className='form-control'
-                                value={this.state.profilePicture}
+                                value={this.state.data.profilePicture}
                                 style={{cursor: this.state.cursor}}
                                 disabled={this.state.disableForm}
                                 placeholder='Input your photo URL'
@@ -462,3 +466,21 @@ export default class Profile extends Component {
     )
   }
 }
+
+const mapStateToProp = (state) => {
+  return {
+    profile : state.profiles,
+    loggedInCompany: state.loggedInCompany
+  }
+}
+
+const mapDispatchToProp = (dispatch) => {
+  return {
+    fetchProfile: (id) => dispatch(fetchProfile(id)),
+    upadateCompanyProfileFetch: (data,id) => dispatch(upadateCompanyProfileFetch(data,id))
+  }
+  //return bindActionCreators({addTodo},dispatch)
+}
+
+
+export default connect(mapStateToProp,mapDispatchToProp)(Profile)

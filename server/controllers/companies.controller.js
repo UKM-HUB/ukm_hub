@@ -17,7 +17,7 @@ module.exports={
     newCompany.save(function(err){
       if(err) throw err
       let token = jwt.sign({ email: newCompany.email }, 'ukmhub');
-      res.send({ token: token, companyId: newCompany._id ,verified: newCompany.verified,edited: newCompany.edited})
+      res.send({ token: token, companyId: newCompany._id ,verified: newCompany.verified,edited: newCompany.edited,email:newCompany.email})
     })
   },
   login: function(req, res, next){
@@ -43,7 +43,7 @@ module.exports={
         company.address = req.body.address
         company.phone = req.body.phone
         company.description = req.body.description
-        company.images = req.file
+        company.images = req.body.image
         company.updated_at = new Date()
         edited = true
         company.save(function(err){
@@ -73,7 +73,7 @@ module.exports={
     })
   },
   showOne: function(req,res){
-    Company.findOne({_id:req.params.id}).then(function(result){
+    Company.findOne({_id:req.params.id},{password:0}).then(function(result){
       res.json(result)
     })
   },

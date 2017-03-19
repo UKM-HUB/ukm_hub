@@ -8,21 +8,21 @@ chai.use(chaiHttp);
 
 describe('tes routing company',function(){
   it('should return email of the registered company when post api/company/auth/register',function(done){
-    chai.request('http://localhost:3000').post('/api/company/auth/register').send({email:'timogio99@gmail.com',password:'yes123'}).end(function (err, res) {
+    chai.request('http://localhost:3001').post('/api/company/auth/register').send({email:'timogio99@gmail.com',password:'yes123'}).end(function (err, res) {
     res.body.should.have.deep.property('email','timogio99@gmail.com')
-    tampung = res.body._id
+    tampung = res.body.companyId
     done()
     })
   })
   it('should return email of the second registered company when post api/company/auth/register',function(done){
-    chai.request('http://localhost:3000').post('/api/company/auth/register').send({email:'alex@gmail.com',password:'yes123'}).end(function (err, res) {
+    chai.request('http://localhost:3001').post('/api/company/auth/register').send({email:'alex@gmail.com',password:'yes123'}).end(function (err, res) {
     res.body.should.have.deep.property('email','alex@gmail.com')
-    tampung2 = res.body._id
+    tampung2 = res.body.companyId
     done()
     })
   })
   it('should update first registered company type to corporate when put api/company/:id',function(done){
-    chai.request('http://localhost:3000').put(`/api/company/${tampung}`).send({
+    chai.request('http://localhost:3001').put(`/api/company/${tampung}`).send({
     name:'PT.SENTOSA',
     type:'corporate',
     category:'["sepatu","baju"]',
@@ -39,7 +39,7 @@ describe('tes routing company',function(){
     })
   })
   it('should update second registered company type to ukm when put api/company/:id',function(done){
-    chai.request('http://localhost:3000').put(`/api/company/${tampung2}`).send({
+    chai.request('http://localhost:3001').put(`/api/company/${tampung2}`).send({
     name:'SANTOSA jaya',
     type:'ukm',
     category:'["sepatu"]',
@@ -56,21 +56,21 @@ describe('tes routing company',function(){
     })
   })
   it('should return all company with type ukm with same category when corporate search By Category with get api/company/:id/searchByCategory',function(done){
-    chai.request('http://localhost:3000').get(`/api/company/${tampung}/searchByCategory`)
+    chai.request('http://localhost:3001').get(`/api/company/${tampung}/searchByCategory`)
     .end(function (err, res) {
     res.body[0].should.have.deep.property('type','ukm')
     done()
     })
   })
   it('should return all company with type corporate with same category when ukm search By Category with get api/company/:id/searchByCategory',function(done){
-    chai.request('http://localhost:3000').get(`/api/company/${tampung2}/searchByCategory`)
+    chai.request('http://localhost:3001').get(`/api/company/${tampung2}/searchByCategory`)
     .end(function (err, res) {
     res.body[0].should.have.deep.property('type','corporate')
     done()
     })
   })
   it('ukm should not create buy request when  put api/company/:id/buyRequest',function(done){
-    chai.request('http://localhost:3000').put(`/api/company/${tampung2}/buyRequest`).send({
+    chai.request('http://localhost:3001').put(`/api/company/${tampung2}/buyRequest`).send({
       title:"coba coba",
       price:500000,
       description:"nyoba terus",
@@ -81,7 +81,7 @@ describe('tes routing company',function(){
     })
   })
   it('corporate should not create sell request when  put api/company/:id/sellRequest',function(done){
-    chai.request('http://localhost:3000').put(`/api/company/${tampung}/sellRequest`).send({
+    chai.request('http://localhost:3001').put(`/api/company/${tampung}/sellRequest`).send({
       title:"coba coba",
       price:500000,
       description:"nyoba terus",
@@ -92,7 +92,7 @@ describe('tes routing company',function(){
     })
   })
   it('corporate should create buy Request when put api/company/:id/buyRequest',function(done){
-    chai.request('http://localhost:3000').put(`/api/company/${tampung}/buyRequest`).send({
+    chai.request('http://localhost:3001').put(`/api/company/${tampung}/buyRequest`).send({
       title:"dicari bahan kulit murah",
       price:500000,
       description:"dibutuhkan bahan kulit murah berkualitas internasional",
@@ -103,7 +103,7 @@ describe('tes routing company',function(){
     })
   })
   it('ukm should create sell Request when put api/company/:id/sellRequest',function(done){
-    chai.request('http://localhost:3000').put(`/api/company/${tampung2}/sellRequest`).send({
+    chai.request('http://localhost:3001').put(`/api/company/${tampung2}/sellRequest`).send({
       title:"dijual bahan kulit murah",
       price:500000,
       description:"dijual bahan kulit murah berkualitas internasional",
@@ -115,7 +115,7 @@ describe('tes routing company',function(){
     })
   })
   it('change status of request(buy or sell) when put api/company/:companyId/:requestId',function(done){
-    chai.request('http://localhost:3000').put(`/api/company/${tampung2}/${tampung3}`)
+    chai.request('http://localhost:3001').put(`/api/company/${tampung2}/${tampung3}`)
     .end(function (err, res) {
     res.body.request[0].should.have.deep.property('open',false)
     done()
