@@ -103,3 +103,45 @@ export const fetchCompanyByCategory = (id) => {
       .then(company => dispatch(searchCompanyByCategory(company)))
   }
 }
+
+export const createBuyRequestFetch = (data,id) => {
+
+  return (dispatch) => {
+
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/buyRequest',
+      {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          title:data.title,
+          price:data.price,
+          description:data.request,
+          // images:req.file,//ganti dlu di backend nya
+        })
+      })
+      .then(res => res.json())
+      // .then(edited => dispatch(loginCompany(edited)))
+
+  }
+}
+
+export const createSellRequestFetch = (data,id) => {
+
+  return (dispatch) => {
+
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/sellRequest',
+      {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          title:data.title,
+          price:data.price,
+          description:data.request,
+          // images:req.file,//ganti dlu di backend nya
+        })
+      })
+      .then(res => res.json())
+      // .then(edited => dispatch(loginCompany(edited)))
+
+  }
+}
