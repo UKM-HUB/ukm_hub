@@ -11,7 +11,6 @@ class CreateRequest extends Component {
     this.state = {
       topbarTitle: 'Create Request',
       activeNavigation: ['','','active',''],
-      companyType:'',
       requestData:{
         request: '',
         title: '',
@@ -25,23 +24,25 @@ class CreateRequest extends Component {
     this.props.fetchProfile(compId)
   }
 
-  componentWillReceiveProps(){
-    this.setState({
-      companyType:this.props.profile.type
-    })
-  }
 
-  onHandleSubmitRequest(data,id){
-    console.log(this.state.companyType);
-    if(this.state.companyType === 'ukm'){
+  onHandleSubmitRequest(data,id,companyType){
+    if(companyType === 'ukm'){
       this.props.createSellRequestFetch(data,id)
     }
-    else if(this.state.companyType === 'corporate'){
+    else if(companyType === 'corporate'){
       this.props.createBuyRequestFetch(data,id)
     }
     else{
       alert('you are not completed your profile yet, please complete your profile in company profile menu')
     }
+    this.setState({
+      requestData:{
+        request: '',
+        title: '',
+        price: '',
+        image: ''
+      }
+    })
   }
 
   onHandleChange (e) {
@@ -139,7 +140,7 @@ class CreateRequest extends Component {
                           style={{marginRight: 20}}
                           onClick={(e) => {
                                      e.preventDefault()
-                                     this.onHandleSubmitRequest(this.state.requestData,compId)}}>
+                                     this.onHandleSubmitRequest(this.state.requestData,compId,this.props.profile.type)}}>
                           Submit Request
                         </button>
                         <div className='clearfix'></div>
