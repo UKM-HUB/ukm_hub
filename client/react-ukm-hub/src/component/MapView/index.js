@@ -22,16 +22,18 @@ class MapView extends Component {
 
   componentWillMount(){
 
+    // for (var i = 0; i < array.length; i++) {
+    //   array[i]
+    // }
+
     this.setState({
       companyLoginLat: -6.260697,
       companyLoginLng: 106.781391,
       dataMapCompany: [
         {
-          title: 'UKM KEYBOARD',
           icon: this.state.ukmIcon,
           lat: -6.278097,
           lng: 106.781391,
-          details: 'ukm keyboard',
           infoWindow: {
             content: `
             <div style='padding:25px'>
@@ -165,9 +167,10 @@ class MapView extends Component {
   componentDidMount () {
     // create obj map to display map window
     const that = this
-    setTimeout(function(){
-      that.props.fetchCompanyByCategory(compId)
-    },3000)
+
+      this.props.fetchCompanyByCategory(compId)
+      this.props.fetchProfile(compId)
+
 
 
     var map = new GMaps({
@@ -186,7 +189,23 @@ class MapView extends Component {
     }])
 
     // add company markers on maps (it maybe corporate or ukm)
-    map.addMarkers(this.state.dataMapCompany)
+
+    const renderedDataMapCompany = this.state.dataMapCompany
+    // 1. Bikin infoWindowArr = []
+    /* 2.
+      loop this.props.otherCompanies, push infoWindowArr sesuai dengan isi yang dinamis
+      contoh: infoWindowArr = [
+        { content: `... ${...}` },
+        { content: `...` },
+        { content: `...` },
+      ]
+    */
+    /* 3.
+      renderedDataMapCompany = this.props.dataMapCompany.map( (companyData, index) =>
+        Object.assign({}, companyData, { infoWindow: infoWindowArr[index] } );
+        );
+      */
+      map.addMarkers(renderedDataMapCompany)
 
     // add network line to map
     var path = [
@@ -208,7 +227,7 @@ class MapView extends Component {
   }
 
   render () {
-    console.log(this.props.otherCompany);
+    console.log(this.props.otherCompany, this.props.profile);
     return (
       <div className="wrapper">
         <Sidebar activeNavigation={this.state.activeNavigation} />
