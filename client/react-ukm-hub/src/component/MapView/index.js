@@ -164,14 +164,17 @@ class MapView extends Component {
     })
   }
 
+
+
+  componentWillReceiveProps(){
+    console.log(this.props.otherCompany, this.props.profile);
+  }
+
   componentDidMount () {
-    // create obj map to display map window
     const that = this
 
-      this.props.fetchCompanyByCategory(compId)
-      this.props.fetchProfile(compId)
-
-
+    this.props.fetchCompanyByCategory(compId)
+    this.props.fetchProfile(compId)
 
     var map = new GMaps({
       el: '#map',

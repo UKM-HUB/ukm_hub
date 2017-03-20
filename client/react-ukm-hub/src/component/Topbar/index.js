@@ -1,11 +1,22 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import {connect} from 'react-redux'
+import {fetchProfile} from '../../actions/index.js'
+const compId = localStorage.getItem('companyId')
 
 function logout(){
   localStorage.clear()
   location.reload()
 }
-const Topbar = (props) => {
+
+class Topbar extends React.Component{
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.profile.name);
+  }
+
+  render() {
+
   const logoutTextStyle = {
     height: 40,
     paddingLeft: 15,
@@ -15,7 +26,10 @@ const Topbar = (props) => {
   const marginTop = {
     marginTop: 5
   }
+  console.log(this.props.profile)
+
   return (
+
     <nav className="navbar navbar-default navbar-fixed">
       <div className="container-fluid" style={{height:70}}>
         <div className="navbar-header" style={marginTop}>
@@ -25,7 +39,7 @@ const Topbar = (props) => {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
           </button>
-          <a className="navbar-brand" href="#">{props.title}</a>
+          <a className="navbar-brand" href="#">{this.props.title}</a>
         </div>
         <div className="collapse navbar-collapse" style={marginTop}>
           <ul className="nav navbar-nav navbar-left">
@@ -36,7 +50,7 @@ const Topbar = (props) => {
             </li>
             <li className="dropdown">
               <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-                <p>PT. MAJU MUNDUR<b className="caret"></b></p>
+                <p>{this.props.profile.name}<b className="caret"></b></p>
               </a>
               <ul className="dropdown-menu" style={{width:200}}>
                   <Link to='/profile'>
@@ -53,7 +67,22 @@ const Topbar = (props) => {
         </div>
       </div>
     </nav>
-  )
+    )
+  }
 }
 
-export default Topbar
+const mapStateToProp = (state) => {
+  return {
+    profile : state.profiles,
+  }
+}
+
+const mapDispatchToProp = (dispatch) => {
+  return {
+    //fetchProfile: (id) => dispatch(fetchProfile(id))
+  }
+  //return bindActionCreators({addTodo},dispatch)
+}
+
+
+export default connect(mapStateToProp,mapDispatchToProp)(Topbar)

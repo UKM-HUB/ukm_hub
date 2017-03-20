@@ -153,7 +153,8 @@ class Profile extends Component {
                 <div className='col-md-8'>
                   <div className='card'>
                     <div className='header'>
-                      <h4 className='title'>{this.state.profileTitle}</h4>
+                      <h2 className='title'>{this.props.profile.name}</h2>
+                      <h4 className='title'>Edit Company Profile</h4>
                     </div>
                     <div className='content'>
                       <form>
@@ -193,21 +194,6 @@ class Profile extends Component {
                               </select>
                             </div>
                           </div>
-                          <div className='col-md-4'>
-                            <div className='form-group'>
-                              <label htmlFor='exampleInputEmail1'>
-                                Email
-                              </label>
-                              <input
-                                type='email'
-                                name='email'
-                                className='form-control'
-                                value={this.state.data.email}
-                                placeholder='Company email'
-                                onChange={this.onHandleChange.bind(this)}
-                              />
-                            </div>
-                          </div>
                         </div>
                         <div className='row'>
                           <div className='col-md-12'>
@@ -216,7 +202,6 @@ class Profile extends Component {
                                 Category
                               </label>
                             </div>
-
                               { ['fashion', 'food', 'beauty', 'office', 'souvenir', 'electronic', 'book', 'automotive', 'entertainment', 'furniture', 'gadget', 'game'].map((category,index) => (
                                 <div className='col-md-2' key={index}>
                                   <div className='form-group' style={{marginTop: -20}}>

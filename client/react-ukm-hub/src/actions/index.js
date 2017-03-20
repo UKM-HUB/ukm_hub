@@ -6,6 +6,13 @@ export const loginCompany = (token) => {
   }
 }
 
+export const updateCompanyProfileSuccess = data => {
+  return {
+    type: 'UPDATE_COMPANY_PROFILE_SUCCESS',
+    payload: data,
+  }
+}
+
 export const fetchingCompanyProfile = (data) => {
   return {
     type: 'FETCH_COMPANY_PROFILE',
@@ -97,7 +104,7 @@ export const upadateCompanyProfileFetch = (data,id) => {
         })
       })
       .then(res => res.json())
-      .then(edited => dispatch(loginCompany(edited)))
+      .then(edited => dispatch(updateCompanyProfileSuccess(edited)))
     },1000)
   }
 }
