@@ -5,12 +5,12 @@ var modelCompany =require('../models/model_company.js')
 
 modelCompany.remove({}, function(err, data){
   if (err) console.log(err);
-  console.log(data);
+  
 })
 
 modelCoop.remove({}, function(err, data){
   if (err) console.log(err);
-  console.log(data);
+
 })
 
 require('../test-warehouse/company-test.js');
