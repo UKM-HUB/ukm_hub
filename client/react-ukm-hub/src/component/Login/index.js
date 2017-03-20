@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import {connect} from 'react-redux'
 import logo from '../../../public/assets/logo/ukmhub.png'
 import '../../../public/assets/js/login'
-import {registerCompanyFetch,loginCompanyFetch} from '../../actions/index.js'
+import {registerCompanyFetch, loginCompanyFetch} from '../../actions/index.js'
 import $ from 'jquery'
 
 class Login extends Component {
@@ -32,7 +32,6 @@ class Login extends Component {
       passwordRegister: ''
     })
     setTimeout(function(){
-      console.log('masuk');
       location.reload()
     },1000)
 
@@ -45,7 +44,6 @@ class Login extends Component {
       passwordLogin: ''
     })
     setTimeout(function(){
-      console.log('masuk');
       location.reload()
     },1000)
   }
@@ -99,13 +97,13 @@ class Login extends Component {
   }
 }
 
-const mapStateToProp = (state) => {
+const mapStateToProps = (state) => {
   return {
     loggedInCompany: state.loggedInCompany
   }
 }
 
-const mapDispatchToProp = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     registerCompanyFetch: (email,password) => dispatch(registerCompanyFetch(email,password)),
     loginCompanyFetch: (email,password) => dispatch(loginCompanyFetch(email,password))
@@ -114,4 +112,4 @@ const mapDispatchToProp = (dispatch) => {
 }
 
 
-export default connect(mapStateToProp,mapDispatchToProp)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

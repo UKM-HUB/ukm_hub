@@ -1,25 +1,55 @@
 import React, { Component } from 'react'
-
+import {connect} from 'react-redux'
+import {fetchProfile,createBuyRequestFetch,createSellRequestFetch} from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
+const compId = localStorage.getItem('companyId')
 
-export default class Message extends Component {
+class CreateRequest extends Component {
   constructor(){
     super()
     this.state = {
       topbarTitle: 'Create Request',
       activeNavigation: ['','','active',''],
-      request: '',
-      title: '',
-      price: '',
-      image: ''
+      requestData:{
+        request: '',
+        title: '',
+        price: '',
+        image: ''
+      }
     }
+  }
+
+  componentDidMount(){
+    this.props.fetchProfile(compId)
+  }
+
+
+  onHandleSubmitRequest(data,id,companyType){
+    if(companyType === 'ukm'){
+      this.props.createSellRequestFetch(data,id)
+    }
+    else if(companyType === 'corporate'){
+      this.props.createBuyRequestFetch(data,id)
+    }
+    else{
+      alert('you are not completed your profile yet, please complete your profile in company profile menu')
+    }
+    this.setState({
+      requestData:{
+        request: '',
+        title: '',
+        price: '',
+        image: ''
+      }
+    })
   }
 
   onHandleChange (e) {
     let newState = {}
     newState[e.target.name] = e.target.value
-    this.setState(newState)
+    const newData = Object.assign({}, this.state.requestData, newState);
+    this.setState({requestData: newData})
   }
 
   render () {
@@ -48,7 +78,7 @@ export default class Message extends Component {
                                 type='text'
                                 className='form-control'
                                 name='title'
-                                value={this.state.title}
+                                value={this.state.requestData.title}
                                 placeholder='Request title'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
@@ -65,7 +95,7 @@ export default class Message extends Component {
                                 rows='3'
                                 name='request'
                                 className='form-control'
-                                value={this.state.request}
+                                value={this.state.requestData.request}
                                 placeholder='Request message goes in here. Post a message to all companies within your category'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
@@ -82,7 +112,7 @@ export default class Message extends Component {
                                 type='text'
                                 className='form-control'
                                 name='image'
-                                value={this.state.image}
+                                value={this.state.requestData.image}
                                 placeholder='Request image URL'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
@@ -96,7 +126,7 @@ export default class Message extends Component {
                                 type='text'
                                 className='form-control'
                                 name='price'
-                                value={this.state.price}
+                                value={this.state.requestData.price}
                                 placeholder='Price Range'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
@@ -110,7 +140,7 @@ export default class Message extends Component {
                           style={{marginRight: 20}}
                           onClick={(e) => {
                                      e.preventDefault()
-                                     this.setState({ })}}>
+                                     this.onHandleSubmitRequest(this.state.requestData,compId,this.props.profile.type)}}>
                           Submit Request
                         </button>
                         <div className='clearfix'></div>
@@ -127,3 +157,20 @@ export default class Message extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    profile: state.profile
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchProfile: (id) => dispatch(fetchProfile(id)),
+    createBuyRequestFetch: (data,id) => dispatch(createBuyRequestFetch(data,id)),
+    createSellRequestFetch: (data,id) => dispatch(createSellRequestFetch(data,id)),
+  }
+}
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(CreateRequest)

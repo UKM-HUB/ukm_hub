@@ -20,33 +20,23 @@ import Message from './component/Message'
 import Login from './component/Login'
 import Profile from './component/Profile'
 
-const profile= ()=>{
-  var key = localStorage.getItem('token')
-  console.log('masuk');
-  // if(key !== null){
-  //   alert('sukses')
-  // }
-  // else{
-  //   alert('gagal')
-  // }
-}
 var key = localStorage.getItem('token')
-function authen(){
-  if(key!==null){
+
+function authentication(){
+  if(key !== null){
     return true
   }
-  else{
+  else {
     return false
   }
 }
 
 const auth = {
-  isAuthenticated: authen(),
+  isAuthenticated: authentication(),
   authenticate(cb) {
     if(key !== null){
       this.isAuthenticated = true
     }
-
     setTimeout(cb, 100) // fake async
   },
   signout(cb) {
@@ -63,7 +53,6 @@ const PrivateRoute = ({ component, ...rest }) => (
     ) : (
       <Redirect to={{
         pathname: '/',
-
       }}/>
     )
   )}/>
@@ -75,8 +64,7 @@ const AuthRoute = ({ component, ...rest }) => (
       React.createElement(component, props)
     ) : (
       <Redirect to={{
-        pathname: '/map',
-
+        pathname: '/profile',
       }}/>
     )
   )}/>

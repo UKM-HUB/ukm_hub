@@ -10,5 +10,3 @@ cd react-ukm-hub
 npm i
 npm start
 ```
-## React Native UKM HUB Mobile
-react-native-ukm-hub is used for cooperation front end view using mobile

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 
 import GMaps from '../../../public/assets/js/gmaps.min.js'
-import {connect} from 'react-redux'
-import {upadateCompanyProfileFetch,fetchProfile} from '../../actions/index.js'
+import { connect } from 'react-redux'
+import { updateCompanyProfile, fetchProfile } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
@@ -26,7 +26,7 @@ class Profile extends Component {
         description: '',
         website: '',
         phone: '',
-        profilePicture: ''
+        image: ''
       }
     }
   }
@@ -35,8 +35,8 @@ class Profile extends Component {
     let that = this
 
     this.props.fetchProfile(compId)
-    setTimeout(function(){
-      console.log(that.state.data);
+    setTimeout(function(){;
+      console.log(that.props.profile);
       let newState = {
         name: that.props.profile.name,
         type: that.props.profile.type,
@@ -48,14 +48,14 @@ class Profile extends Component {
         description: that.props.profile.description,
         website: that.props.profile.website,
         phone: that.props.profile.phone ? that.props.profile.phone : '',
-        profilePicture: that.props.profile.images ? that.props.profile.images : ''
+        image: that.props.profile.images ? that.props.profile.images : ''
       }
 
       const newData = Object.assign({}, that.state.data, newState);
       that.setState({
         data: newData
       })
-    },2000)
+    }, 1000)
 
     setTimeout(function(){
       let map = new GMaps({
@@ -103,15 +103,11 @@ class Profile extends Component {
           }
         })
       })
-    },3000)
-  }
-
-  forceHandler(){
-    this.forceUpdate()
+    },1500)
   }
 
   submitUpdate(data,companyId){
-    this.props.upadateCompanyProfileFetch(data,companyId)
+    this.props.updateCompanyProfile(data,companyId)
   }
 
   onHandleChange (e) {
@@ -153,7 +149,7 @@ class Profile extends Component {
                 <div className='col-md-8'>
                   <div className='card'>
                     <div className='header'>
-                      <h4 className='title'>{this.state.profileTitle}</h4>
+                      <h4 className='title'>Edit Company Profile</h4>
                     </div>
                     <div className='content'>
                       <form>
@@ -193,21 +189,6 @@ class Profile extends Component {
                               </select>
                             </div>
                           </div>
-                          <div className='col-md-4'>
-                            <div className='form-group'>
-                              <label htmlFor='exampleInputEmail1'>
-                                Email
-                              </label>
-                              <input
-                                type='email'
-                                name='email'
-                                className='form-control'
-                                value={this.state.data.email}
-                                placeholder='Company email'
-                                onChange={this.onHandleChange.bind(this)}
-                              />
-                            </div>
-                          </div>
                         </div>
                         <div className='row'>
                           <div className='col-md-12'>
@@ -216,7 +197,6 @@ class Profile extends Component {
                                 Category
                               </label>
                             </div>
-
                               { ['fashion', 'food', 'beauty', 'office', 'souvenir', 'electronic', 'book', 'automotive', 'entertainment', 'furniture', 'gadget', 'game'].map((category,index) => (
                                 <div className='col-md-2' key={index}>
                                   <div className='form-group' style={{marginTop: -20}}>
@@ -269,8 +249,6 @@ class Profile extends Component {
                                 rows='3'
                                 name='description'
                                 className='form-control'
-                                style={{cursor: this.state.cursor}}
-                                disabled={this.state.disableForm}
                                 value={this.state.data.description}
                                 placeholder='Describe your company'
                                 onChange={this.onHandleChange.bind(this)} />
@@ -287,8 +265,6 @@ class Profile extends Component {
                                 type='text'
                                 name='website'
                                 className='form-control'
-                                style={{cursor: this.state.cursor}}
-                                disabled={this.state.disableForm}
                                 value={this.state.data.website}
                                 placeholder='Company'
                                 onChange={this.onHandleChange.bind(this)} />
@@ -303,8 +279,6 @@ class Profile extends Component {
                                 type='text'
                                 name='phone'
                                 className='form-control'
-                                style={{cursor: this.state.cursor}}
-                                disabled={this.state.disableForm}
                                 placeholder='Company phone number'
                                 value={this.state.data.phone}
                                 onChange={this.onHandleChange.bind(this)} />
@@ -319,11 +293,9 @@ class Profile extends Component {
                               </label>
                               <input
                                 type='text'
-                                name='profilePicture'
+                                name='image'
                                 className='form-control'
-                                value={this.state.data.profilePicture}
-                                style={{cursor: this.state.cursor}}
-                                disabled={this.state.disableForm}
+                                value={this.state.data.image}
                                 placeholder='Input your photo URL'
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
@@ -352,14 +324,12 @@ class Profile extends Component {
                     </div>
                     <div className='content'>
                       <div className='author'>
-                        <a href='#'><img className='avatar border-gray' src='http://lorempixel.com/100/100/food' alt='Company profile' />
-                          <h4 className='title'>PT. MAJU MUNDUR<br /> <small></small></h4></a>
+                        <a href='#'><img className='avatar border-gray' src={this.state.data.image} alt='Company profile' />
+                          <h4 className='title'>{this.state.data.name}<br /> <small></small></h4></a>
                       </div>
                       <br />
                       <p className='description text-center' style={{padding: '0px 35px', textAlign: 'justify'}}>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                        eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        {this.state.data.description}
                       </p>
                     </div>
                     <hr />
@@ -378,25 +348,24 @@ class Profile extends Component {
           </div>
         </div>
       </div>
-
     )
   }
 }
 
-const mapStateToProp = (state) => {
+const mapStateToProps = (state) => {
   return {
-    profile : state.profiles,
+    profile: state.profile,
     loggedInCompany: state.loggedInCompany
   }
 }
 
-const mapDispatchToProp = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     fetchProfile: (id) => dispatch(fetchProfile(id)),
-    upadateCompanyProfileFetch: (data,id) => dispatch(upadateCompanyProfileFetch(data,id))
+    updateCompanyProfile: (data,id) => dispatch(updateCompanyProfile(data,id))
   }
   //return bindActionCreators({addTodo},dispatch)
 }
 
 
-export default connect(mapStateToProp,mapDispatchToProp)(Profile)
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

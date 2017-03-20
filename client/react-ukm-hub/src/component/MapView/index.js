@@ -164,14 +164,15 @@ class MapView extends Component {
     })
   }
 
+
+
+  componentWillReceiveProps(){
+    console.log(this.props.otherCompany, this.props.profile);
+  }
+
   componentDidMount () {
-    // create obj map to display map window
-    const that = this
-
-      this.props.fetchCompanyByCategory(compId)
-      this.props.fetchProfile(compId)
-
-
+    this.props.fetchCompanyByCategory(compId)
+    this.props.fetchProfile(compId)
 
     var map = new GMaps({
       el: '#map',
@@ -227,7 +228,6 @@ class MapView extends Component {
   }
 
   render () {
-    console.log(this.props.otherCompany, this.props.profile);
     return (
       <div className="wrapper">
         <Sidebar activeNavigation={this.state.activeNavigation} />
@@ -240,14 +240,14 @@ class MapView extends Component {
   }
 }
 
-const mapStateToProp = (state) => {
+const mapStateToProps = (state) => {
   return {
-    profile : state.profiles,
+    profile : state.profile,
     otherCompany: state.companyByCategory
   }
 }
 
-const mapDispatchToProp = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     fetchProfile: (id) => dispatch(fetchProfile(id)),
     fetchCompanyByCategory: (id) => dispatch(fetchCompanyByCategory(id))
@@ -256,4 +256,4 @@ const mapDispatchToProp = (dispatch) => {
 }
 
 
-export default connect(mapStateToProp,mapDispatchToProp)(MapView)
+export default connect(mapStateToProps, mapDispatchToProps)(MapView)
