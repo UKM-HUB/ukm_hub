@@ -26,7 +26,7 @@ export const searchCompanyByCategory = (data) => {
 export const registerCompanyFetch = (email,password) => {
   return (dispatch) => {
 
-      fetch('http://localhost:3001/api/company/auth/register/',
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/auth/register/',
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -48,7 +48,7 @@ export const registerCompanyFetch = (email,password) => {
 export const loginCompanyFetch = (email,password) => {
   return (dispatch) => {
 
-      fetch('http://localhost:3001/api/company/auth/login/',
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/auth/login/',
       {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -68,7 +68,7 @@ export const loginCompanyFetch = (email,password) => {
 export const fetchProfile = (id) => {
   return (dispatch) => {
     setTimeout(()=> {
-      fetch('http://localhost:3001/api/company/'+id)
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
       .then(res => res.json())
       .then(todos => dispatch(fetchingCompanyProfile(todos)))
     },1000)
@@ -79,7 +79,7 @@ export const upadateCompanyProfileFetch = (data,id) => {
 
   return (dispatch) => {
     setTimeout(()=> {
-      fetch('http://localhost:3001/api/company/'+id,
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id,
       {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
@@ -105,7 +105,7 @@ export const upadateCompanyProfileFetch = (data,id) => {
 export const fetchCompanyByCategory = (id) => {
   return (dispatch) => {
     setTimeout(()=> {
-      fetch('http://localhost:3001/api/company/'+id+'/searchByCategory')
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/'+id+'/searchByCategory')
       .then(res => res.json())
       .then(company => dispatch(searchCompanyByCategory(company)))
     },1000)
