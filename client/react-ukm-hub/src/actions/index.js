@@ -81,7 +81,6 @@ export const fetchProfile = (id) => {
 }
 
 export const updateCompanyProfileFetch = (data,id) => {
-
   return (dispatch) => {
     fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id,
       {
@@ -107,10 +106,8 @@ export const updateCompanyProfileFetch = (data,id) => {
 
 export const fetchCompanyByCategory = (id) => {
   return (dispatch) => {
-    setTimeout(()=> {
-      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchByCategory')
+    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchByCategory')
       .then(res => res.json())
       .then(company => dispatch(searchCompanyByCategory(company)))
-    },1000)
   }
 }
