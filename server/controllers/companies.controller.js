@@ -11,6 +11,20 @@ module.exports={
       password: passwordHash.generate(req.body.password),
       verified:false,
       edited:false,
+      name: '',
+      category: [],
+      verified:'',
+      edited:'',
+      type: '',
+      location:{
+        lat:'',
+        lng:''
+      },
+      description: '',
+      website: '',
+      images: '',
+      letter:[],
+      acceptedMessages:[],
       created_at:new Date(),
       updated_at:new Date(),
     })
