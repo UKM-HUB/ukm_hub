@@ -75,8 +75,10 @@ passport.serializeUser(function(user, callback){
 app.use(passport.initialize())
 app.use(passport.session())
 
+
+var dbURI = process.env.MONGO_URL || 'mongodb://localhost/ukmhub'
 // setup database target
-mongoose.connect('mongodb://localhost/ukmhub');
+mongoose.connect(dbURI);
 
 // setup cors
 app.use(cors())
