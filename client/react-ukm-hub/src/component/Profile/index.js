@@ -18,27 +18,46 @@ class Profile extends Component {
       submitUpdateButtonDisplay: 'none',
       cursor: 'text',
       data:{
-        name: 'a',
-        type: 'a',
-        email: 'a',
+        name: '',
+        type: '',
+        email: '',
         category: [],
-        currentlat: '-12.043333',
-        currentlng: '-77.028333',
-        updatedlat: 'a',
-        updatedlng: 'a',
-        address: 'a',
-        description: 'a',
-        website: 'a',
-        phone: 'a',
-        profilePicture: 'a'
+        currentlat: '',
+        currentlng: '',
+        updatedlat: '',
+        updatedlng: '',
+        address: '',
+        description: '',
+        website: '',
+        phone: '',
+        profilePicture: ''
       }
     }
   }
-
-  componentDidMount () {
-    this.props.fetchProfile('58ce962b1083cd44b0c731a9')
+  componentWillMount(){
     let that = this
+    this.props.fetchProfile('58ce962b1083cd44b0c731a9')
+    setTimeout(function(){
+      that.setState({
+        data:{
+          name: that.props.profile.name,
+          type: that.props.profile.type,
+          email: that.props.profile.email,
+          category: that.props.profile.category,
+          address: that.props.profile.address,
+          currentlat:that.props.profile.location.lat,
+          currentlng:that.props.profile.location.lng,
+          description: that.props.profile.description,
+          website: that.props.profile.website,
+          phone: that.props.profile.phone,
+          profilePicture: that.props.profile.images
+        }
+      })
 
+    },3000)
+  }
+  componentWillUpdate () {
+    let that = this
 
     let map = new GMaps({
       el: '#map',
@@ -69,8 +88,16 @@ class Profile extends Component {
         }
       })
     })
+
   }
 
+  forceHandler(){
+    this.forceUpdate()
+  }
+
+  submitUpdate(data,id){
+
+  }
   onHandleChange (e) {
     let newState = {}
 
@@ -87,7 +114,7 @@ class Profile extends Component {
   }
 
   render () {
-    console.log(this.props.profile);
+
     const checkboxStyle = {
       marginRight: 20,
       cursor: 'pointer'
@@ -178,7 +205,8 @@ class Profile extends Component {
                                     value='fashion'
                                     style={checkboxStyle}
                                     disabled={this.state.disableForm}
-                                    onChange={this.onHandleChange.bind(this)} />Fashion
+                                    onChange={this.onHandleChange.bind(this)}
+                                    checked ='checked'/>Fashion
                                 </label>
                               </div>
                               <div className='form-group'>
@@ -421,7 +449,9 @@ class Profile extends Component {
                           style={{marginRight: 20, display: this.state.submitUpdateButtonDisplay}}
                           onClick={(e) => {
                                      e.preventDefault()
-                                     this.setState({disableForm: 'disabled', profileTitle: 'Profile', updateButtonDisplay: 'inline-block', submitUpdateButtonDisplay: 'none'})}}>
+                                     this.setState({disableForm: 'disabled', profileTitle: 'Profile', updateButtonDisplay: 'inline-block', submitUpdateButtonDisplay: 'none'})}}
+                                     
+                                     >
                           Submit Update
                         </button>
                         <div className='clearfix'></div>
