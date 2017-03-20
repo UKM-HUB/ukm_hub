@@ -105,7 +105,7 @@ export const upadateCompanyProfileFetch = (data,id) => {
 export const fetchCompanyByCategory = (id) => {
   return (dispatch) => {
     setTimeout(()=> {
-      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/'+id+'/searchByCategory')
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchByCategory')
       .then(res => res.json())
       .then(company => dispatch(searchCompanyByCategory(company)))
     },1000)
