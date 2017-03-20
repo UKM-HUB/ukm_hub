@@ -1,10 +1,8 @@
 
-export default (state='' , action) => {
+export default (state = '', action) => {
   switch(action.type){
-
     case 'LOGIN_COMPANY' :
       return action.payload
-
     // case 'DELETE_TODO' :
     //   return state.filter((x)=> x.id !== action.payload)
     //
@@ -22,7 +20,6 @@ export default (state='' , action) => {
     //
     // case 'SHOW_ACTIVE' :
     //   return action.payload.filter((x)=>!action.payload.done)
-
     default:
       return state
   }
