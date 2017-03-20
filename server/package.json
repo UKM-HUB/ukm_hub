@@ -18,11 +18,12 @@
     "jsonwebtoken": "^7.3.0",
     "mongoose": "^4.9.0",
     "morgan": "~1.7.0",
+    "multer": "^1.3.0",
+    "nodemon": "^1.11.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "password-hash": "^1.2.2",
-    "multer": "^1.3.0",
-    "nodemon": "^1.11.0",
+    "sendgrid": "^4.8.4",
     "serve-favicon": "~2.3.2"
   },
   "devDependencies": {

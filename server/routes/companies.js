@@ -18,5 +18,7 @@ router.get('/:id/searchByCategory',company.showByCategories)
 router.get('/:id',company.showOne)
 router.get('/',company.showAll)
 router.delete('/',company.deleteAll)
+// reset password
+router.post('/resetPassword',company.resetPassword)
 
 module.exports = router;
