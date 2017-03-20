@@ -31,6 +31,11 @@ class Login extends Component {
       emailRegister: '',
       passwordRegister: ''
     })
+    setTimeout(function(){
+      console.log('masuk');
+      location.reload()
+    },1000)
+
   }
 
   handleLogin(){
@@ -39,6 +44,10 @@ class Login extends Component {
       emailLogin: '',
       passwordLogin: ''
     })
+    setTimeout(function(){
+      console.log('masuk');
+      location.reload()
+    },1000)
   }
 
   handleChange(e){
@@ -76,7 +85,7 @@ class Login extends Component {
             <input type="email" placeholder="Email" name="emailLogin" value={this.state.emailLogin} onChange={this.handleChange.bind(this)}/>
             <input type="password" placeholder="Password" name="passwordLogin" value={this.state.passwordLogin} onChange={this.handleChange.bind(this)}/>
               <Link to='/map'>
-                <button style={buttonTextStyle}>Login</button>
+                <button onClick={this.handleLogin.bind(this)} style={buttonTextStyle}>Login</button>
               </Link>
             <p className="message">Not registered?
               <a href="#"
@@ -90,6 +99,12 @@ class Login extends Component {
   }
 }
 
+const mapStateToProp = (state) => {
+  return {
+    loggedInCompany: state.loggedInCompany
+  }
+}
+
 const mapDispatchToProp = (dispatch) => {
   return {
     registerCompanyFetch: (email,password) => dispatch(registerCompanyFetch(email,password)),
@@ -99,4 +114,4 @@ const mapDispatchToProp = (dispatch) => {
 }
 
 
-export default connect(null,mapDispatchToProp)(Login)
+export default connect(mapStateToProp,mapDispatchToProp)(Login)

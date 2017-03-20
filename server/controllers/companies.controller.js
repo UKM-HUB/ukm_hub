@@ -24,6 +24,8 @@ module.exports={
       website: '',
       images: '',
       letter:[],
+      address:'',
+      phone:'',
       acceptedMessages:[],
       created_at:new Date(),
       updated_at:new Date(),

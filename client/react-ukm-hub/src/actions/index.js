@@ -28,14 +28,18 @@ export const registerCompanyFetch = (email,password) => {
         })
       })
       .then(res => res.json())
-      .then(registered => dispatch(loginCompany(registered)))
+      .then(registered => {
+        localStorage.setItem('token',registered.token)
+        localStorage.setItem('companyId',registered.companyId)
+        return dispatch(loginCompany(registered))
+      })
 
   }
 }
 
 export const loginCompanyFetch = (email,password) => {
   return (dispatch) => {
-    setTimeout(()=> {
+
       fetch('http://localhost:3001/api/company/auth/login/',
       {
         method: 'POST',
@@ -46,8 +50,10 @@ export const loginCompanyFetch = (email,password) => {
         })
       })
       .then(res => res.json())
-      .then(registered => dispatch(loginCompany(registered)))
-    },1000)
+      .then(logged => {
+        localStorage.setItem('token',logged.token)
+        localStorage.setItem('companyId',logged.companyId)
+        return dispatch(loginCompany(logged))})
   }
 }
 
