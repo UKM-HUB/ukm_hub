@@ -74,19 +74,16 @@ export const loginCompanyFetch = (email,password) => {
 
 export const fetchProfile = (id) => {
   return (dispatch) => {
-    setTimeout(()=> {
-      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
+    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
       .then(res => res.json())
       .then(todos => dispatch(fetchingCompanyProfile(todos)))
-    },1000)
   }
 }
 
-export const upadateCompanyProfileFetch = (data,id) => {
+export const updateCompanyProfileFetch = (data,id) => {
 
   return (dispatch) => {
-    setTimeout(()=> {
-      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id,
+    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id,
       {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
@@ -105,7 +102,6 @@ export const upadateCompanyProfileFetch = (data,id) => {
       })
       .then(res => res.json())
       .then(edited => dispatch(updateCompanyProfileSuccess(edited)))
-    },1000)
   }
 }
 

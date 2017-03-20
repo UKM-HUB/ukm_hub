@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import GMaps from '../../../public/assets/js/gmaps.min.js'
 import {connect} from 'react-redux'
-import {upadateCompanyProfileFetch,fetchProfile} from '../../actions/index.js'
+import {updateCompanyProfileFetch,fetchProfile} from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
@@ -111,7 +111,7 @@ class Profile extends Component {
   }
 
   submitUpdate(data,companyId){
-    this.props.upadateCompanyProfileFetch(data,companyId)
+    this.props.updateCompanyProfileFetch(data,companyId)
   }
 
   onHandleChange (e) {
@@ -153,7 +153,6 @@ class Profile extends Component {
                 <div className='col-md-8'>
                   <div className='card'>
                     <div className='header'>
-                      <h2 className='title'>{this.props.profile.name}</h2>
                       <h4 className='title'>Edit Company Profile</h4>
                     </div>
                     <div className='content'>
@@ -378,7 +377,7 @@ const mapStateToProp = (state) => {
 const mapDispatchToProp = (dispatch) => {
   return {
     fetchProfile: (id) => dispatch(fetchProfile(id)),
-    upadateCompanyProfileFetch: (data,id) => dispatch(upadateCompanyProfileFetch(data,id))
+    updateCompanyProfileFetch: (data,id) => dispatch(updateCompanyProfileFetch(data,id))
   }
   //return bindActionCreators({addTodo},dispatch)
 }
