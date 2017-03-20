@@ -3,6 +3,17 @@ var mongoose = require('mongoose');
 const multer = require('multer')
 var jwt = require('jsonwebtoken');
 var passwordHash = require('password-hash');
+var helper = require('sendgrid').mail;
+
+function generatePassword() {
+    var length = 5,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
 
 module.exports={
   register: function(req,res,next){
@@ -257,4 +268,53 @@ module.exports={
       }
     )
   },
+  resetPassword: function(req, res){
+    // find email from data base
+    Company.findOne({ email: req.body.email }, function(err, data){
+      // response error
+      if (err) throw err
+
+        // email found in database
+        if (data) {
+
+          // generate new password
+          var newPassword = generatePassword();
+
+          // update password
+          Company.findOneAndUpdate({ _id: data._id },{ password: passwordHash.generate(newPassword) },function(err, update){
+            // response update error
+            if (err) throw err
+
+            // send email to company
+            from_email = new helper.Email("alexanderhendrawan@gmail.com");
+            to_email = new helper.Email(req.body.email);
+            subject = "Your password succesfully reset";
+            content = new helper.Content("text/html", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`);
+            mail = new helper.Mail(from_email, subject, to_email, content);
+
+            var sg = require('sendgrid')('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');
+            var request = sg.emptyRequest({
+              method: 'POST',
+              path: '/v3/mail/send',
+              body: mail.toJSON()
+            });
+
+            sg.API(request, function(error, response) {
+              if (error) console.log(error)
+              // console.log(response.statusCode);
+              // console.log(response.body);
+              // console.log(response.headers);
+              res.json("Email found, and we are send you a new password to your email")
+            })
+            // end function send email to company
+
+          })
+
+
+        // email not found
+        }else{
+          res.json("Email not found")
+        }
+    })
+  }
 }
