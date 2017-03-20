@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
 import GMaps from '../../../public/assets/js/gmaps.min.js'
-
+import {connect} from 'react-redux'
+import {fetchCompanyByCategory, fetchProfile} from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
+const compId = localStorage.getItem('companyId')
 
-export default class MapView extends Component {
+class MapView extends Component {
   constructor(){
     super()
     this.state = {
       topbarTitle: 'Map View',
-      activeNavigation: ['active',''],
+      activeNavigation: ['active', '', '', '', ''],
       companyLoginLat: 0,
       companyLoginLng: 0,
       corporateIcon: 'https://s21.postimg.org/8hrapdesn/building.png',
@@ -19,6 +21,7 @@ export default class MapView extends Component {
   }
 
   componentWillMount(){
+
     this.setState({
       companyLoginLat: -6.260697,
       companyLoginLng: 106.781391,
@@ -161,6 +164,12 @@ export default class MapView extends Component {
 
   componentDidMount () {
     // create obj map to display map window
+    const that = this
+    setTimeout(function(){
+      that.props.fetchCompanyByCategory(compId)
+    },3000)
+
+
     var map = new GMaps({
       el: '#map',
       lat: this.state.companyLoginLat,
@@ -199,6 +208,7 @@ export default class MapView extends Component {
   }
 
   render () {
+    console.log(this.props.otherCompany);
     return (
       <div className="wrapper">
         <Sidebar activeNavigation={this.state.activeNavigation} />
@@ -210,3 +220,21 @@ export default class MapView extends Component {
     )
   }
 }
+
+const mapStateToProp = (state) => {
+  return {
+    profile : state.profiles,
+    otherCompany: state.companyByCategory
+  }
+}
+
+const mapDispatchToProp = (dispatch) => {
+  return {
+    fetchProfile: (id) => dispatch(fetchProfile(id)),
+    fetchCompanyByCategory: (id) => dispatch(fetchCompanyByCategory(id))
+  }
+  //return bindActionCreators({addTodo},dispatch)
+}
+
+
+export default connect(mapStateToProp,mapDispatchToProp)(MapView)

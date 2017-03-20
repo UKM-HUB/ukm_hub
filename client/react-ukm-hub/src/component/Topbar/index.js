@@ -1,6 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+function logout(){
+  localStorage.clear()
+  location.reload()
+}
 const Topbar = (props) => {
   const logoutTextStyle = {
     height: 40,
@@ -40,7 +44,7 @@ const Topbar = (props) => {
                   </Link>
                 <li className="divider"></li>
                   <Link to='/'>
-                    <li style={logoutTextStyle}><span className='fa fa-sign-out' style={{marginRight:10}}></span>Log Out</li>
+                    <li style={logoutTextStyle} onClick={() => logout()}><span className='fa fa-sign-out' style={{marginRight:10}}></span>Log Out</li>
                   </Link>
               </ul>
             </li>

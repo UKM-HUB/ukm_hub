@@ -25,8 +25,10 @@ var companySchema =  new Schema({
   }],
   description: String,
   website: String,
-  created_at: Date,
+  address:String,
+  phone:String,
   images: String,
+  created_at: Date,
   updated_at: Date,
   letter:[
     {

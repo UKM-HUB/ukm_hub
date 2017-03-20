@@ -3,7 +3,7 @@ export default (state='' , action) => {
   switch(action.type){
 
     case 'FETCH_COMPANY_PROFILE' :
-    console.log(action.payload);
+
       return action.payload
     case 'UPDATE_PROFILE' :
       return state._id !== action.payload._id ? state : {...state,
@@ -20,22 +20,6 @@ export default (state='' , action) => {
       description : action.payload.description,
       images : action.payload.image}
 
-
-    // case 'DELETE_TODO' :
-    //   return state.filter((x)=> x.id !== action.payload)
-    //
-    // case 'DONE_TODO' :
-    //   return state.map((todo) => todo.id !== action.payload.id ? todo : {...todo, done:!todo.done})
-    //
-
-    // case 'SHOW_ALL' :
-    //   return action.payload
-    //
-    // case 'SHOW_COMPLETED' :
-    //   return action.payload.filter((x)=>action.payload.done)
-    //
-    // case 'SHOW_ACTIVE' :
-    //   return action.payload.filter((x)=>!action.payload.done)
 
     default:
       return state

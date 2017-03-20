@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-// import $ from 'jquery'
+
 import GMaps from '../../../public/assets/js/gmaps.min.js'
 import {connect} from 'react-redux'
 import {upadateCompanyProfileFetch,fetchProfile} from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
+const compId = localStorage.getItem('companyId')
 
 class Profile extends Component {
   constructor (props) {
@@ -30,66 +31,10 @@ class Profile extends Component {
     }
   }
 
-  // componentWillMount(){
-  //   let that = this
-  //   this.props.fetchProfile('58cf7fa02e9fe70bd809828b')
-  //   setTimeout(function(){
-  //     that.setState({
-  //       data:{
-  //         name: that.props.profile.name,
-  //         type: that.props.profile.type,
-  //         email: that.props.profile.email,
-  //         category: that.props.profile.category,
-  //         address: that.props.profile.address,
-  //         currentlat:that.props.profile.location.lat,
-  //         currentlng:that.props.profile.location.lng,
-  //         description: that.props.profile.description,
-  //         website: that.props.profile.website,
-  //         phone: that.props.profile.phone,
-  //         profilePicture: that.props.profile.images
-  //       }
-  //     })
-  //   },3000)
-  // }
-
-  // componentWillUpdate () {
-  //   let that = this
-  //
-  //   let map = new GMaps({
-  //     el: '#map',
-  //     lat: this.state.data.currentlat,
-  //     lng: this.state.data.currentlng
-  //   })
-  //
-  //   map.addMarker({
-  //     lat: this.state.data.currentlat,
-  //     lng: this.state.data.currentlng,
-  //     click: function (e) {
-  //       alert('You clicked in this marker')
-  //     }
-  //   })
-  //
-  //   GMaps.on('click', map.map, function (event) {
-  //     that.setState({
-  //       updatedlat: event.latLng.lat(),
-  //       updatedlng: event.latLng.lng()
-  //     })
-  //
-  //     map.removeMarkers()
-  //     map.addMarker({
-  //       lat: that.state.data.updatedlat,
-  //       lng: that.state.data.updatedlng,
-  //       infoWindow: {
-  //         content: '<p>Your company location</p>'
-  //       }
-  //     })
-  //   })
-  // }
-
   componentDidMount () {
     let that = this
 
-    this.props.fetchProfile('58cf7fa02e9fe70bd809828b')
+    this.props.fetchProfile(compId)
     setTimeout(function(){
       console.log(that.state.data);
       let newState = {
@@ -128,11 +73,22 @@ class Profile extends Component {
         }
       })
 
+      let currentState = {
+        updatedlat: that.state.data.currentlat,
+        updatedlng: that.state.data.currentlng
+      }
+
+      const currentData = Object.assign({}, that.state.data, currentState);
+      that.setState({
+        data: currentData
+      })
+
       GMaps.on('click', map.map, function (event) {
         let newState = {
           updatedlat: event.latLng.lat(),
           updatedlng: event.latLng.lng()
         }
+
         const newData = Object.assign({}, that.state.data, newState);
         that.setState({
           data: newData
@@ -154,8 +110,8 @@ class Profile extends Component {
     this.forceUpdate()
   }
 
-  submitUpdate(data,id){
-
+  submitUpdate(data,companyId){
+    this.props.upadateCompanyProfileFetch(data,companyId)
   }
 
   onHandleChange (e) {
@@ -261,8 +217,8 @@ class Profile extends Component {
                               </label>
                             </div>
 
-                              { ['fashion', 'food', 'beauty', 'office', 'souvenir', 'electronic', 'book', 'automotive', 'entertainment', 'furniture', 'gadget', 'game'].map(category => (
-                                <div className='col-md-2'>
+                              { ['fashion', 'food', 'beauty', 'office', 'souvenir', 'electronic', 'book', 'automotive', 'entertainment', 'furniture', 'gadget', 'game'].map((category,index) => (
+                                <div className='col-md-2' key={index}>
                                   <div className='form-group' style={{marginTop: -20}}>
                                     <label style={{cursor: 'pointer'}}>
                                       <input
@@ -380,7 +336,7 @@ class Profile extends Component {
                           style={{marginRight: 20, display: this.state.updateButtonDisplay}}
                           onClick={(e) => {
                             e.preventDefault()
-                            this.setState({})}}>
+                            this.submitUpdate(this.state.data,compId)}}>
                           Update Profile
                         </button>
 

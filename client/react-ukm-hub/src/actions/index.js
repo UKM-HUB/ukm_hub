@@ -14,6 +14,14 @@ export const fetchingCompanyProfile = (data) => {
   }
 }
 
+export const searchCompanyByCategory = (data) => {
+  return {
+    type: 'FETCH_COMPANY_BY_CATEGORY',
+    payload:data,
+
+  }
+}
+
 
 export const registerCompanyFetch = (email,password) => {
   return (dispatch) => {
@@ -68,11 +76,12 @@ export const fetchProfile = (id) => {
 }
 
 export const upadateCompanyProfileFetch = (data,id) => {
+
   return (dispatch) => {
     setTimeout(()=> {
       fetch('http://localhost:3001/api/company/'+id,
       {
-        method: 'POST',
+        method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           name : data.name,
@@ -93,73 +102,12 @@ export const upadateCompanyProfileFetch = (data,id) => {
   }
 }
 
-// export const addTodox = (todo) => {
-//
-//   return (dispatch) => {
-//     setTimeout(()=> {
-//       fetch('http://localhost:3005/todos',
-//       {
-//         method: 'POST',
-//         headers: {'Content-Type': 'application/json'},
-//         body: JSON.stringify({
-//           todo:todo,
-//           done: false
-//         })
-//       })
-//       .then(res => res.json())
-//       .then(todos => dispatch(addTodo(todos.todo,todos.id)))
-//     },1)
-//   }
-// }
-//
-// export const deleteTodox = (id) => {
-//
-//   return (dispatch) => {
-//     setTimeout(()=> {
-//       fetch('http://localhost:3005/todos/'+id,{
-//         method: 'DELETE'
-//
-//       })
-//       .then(res => res.json())
-//       .then(todos => dispatch(deleteTodo(id)))
-//     },1)
-//   }
-// }
-//
-// export const doneTodox = (todo) => {
-//
-//   return (dispatch) => {
-//     setTimeout(()=> {
-//       fetch('http://localhost:3005/todos/'+todo.id,{
-//         method: 'PUT',
-//         headers: {'Content-Type': 'application/json'},
-//         body: JSON.stringify({
-//           id:todo.id,
-//           todo:todo.todo,
-//           done: !todo.done
-//         })
-//       })
-//       .then(res => res.json())
-//       .then(todos => dispatch(doneTodo(todos)))
-//     },1)
-//   }
-// }
-//
-// export const updateTodox = (id,todo,done) => {
-//
-//   return (dispatch) => {
-//     setTimeout(()=> {
-//       fetch('http://localhost:3005/todos/'+id,{
-//         method: 'PUT',
-//         headers: {'Content-Type': 'application/json'},
-//         body: JSON.stringify({
-//           id:id,
-//           todo:todo,
-//           done: done
-//         })
-//       })
-//       .then(res => res.json())
-//       .then(todos => dispatch(updateTodo(todos)))
-//     },1)
-//   }
-// }
+export const fetchCompanyByCategory = (id) => {
+  return (dispatch) => {
+    setTimeout(()=> {
+      fetch('http://localhost:3001/api/company/'+id+'/searchByCategory')
+      .then(res => res.json())
+      .then(company => dispatch(searchCompanyByCategory(company)))
+    },1000)
+  }
+}

@@ -27,16 +27,17 @@ module.exports={
       verified:'',
       edited:'',
       type: '',
+      ayam:'',
       location:{
         lat:'',
         lng:''
       },
+      address:'',
+      phone:'',
       description: '',
       website: '',
       images: '',
       letter:[],
-      address:'',
-      phone:'',
       acceptedMessages:[],
       created_at:new Date(),
       updated_at:new Date(),
@@ -63,14 +64,14 @@ module.exports={
       else{
         company.name = req.body.name
         company.type = req.body.type
-        company.category = JSON.parse(req.body.category)
+        company.category = req.body.category
         company.location.lat = req.body.lat
         company.location.lng = req.body.lng
         company.website = req.body.website
         company.address = req.body.address
         company.phone = req.body.phone
         company.description = req.body.description
-        company.images = req.body.image
+        company.images = req.body.images
         company.updated_at = new Date()
         edited = true
         company.save(function(err){
