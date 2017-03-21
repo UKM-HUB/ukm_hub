@@ -179,11 +179,11 @@ export const createMessageFetch = (title,message,requestTitle,id,otherId,request
   }
 }
 
-export const acceptMessageFetch = (id) => {
+export const acceptMessageFetch = (id,acceptedMessagesId) => {
 
   return (dispatch) => {
 
-      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/acceptMessage',
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/'+acceptedMessagesId+'/acceptMessage',
       {
         method: 'PUT'
       })
