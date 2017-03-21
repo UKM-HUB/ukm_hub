@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {fetchProfile,createBuyRequestFetch,createSellRequestFetch} from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
+import defaultImageRequest from '../../../public/assets/img/box-outline-filled.png'
 const compId = localStorage.getItem('companyId')
 
 class CreateRequest extends Component {
@@ -10,12 +11,12 @@ class CreateRequest extends Component {
     super()
     this.state = {
       topbarTitle: 'Create Request',
-      activeNavigation: ['','','active',''],
+      activeNavigation: ['','','active','', ''],
       requestData:{
         request: '',
         title: '',
         price: '',
-        image: ''
+        image: defaultImageRequest
       }
     }
   }
