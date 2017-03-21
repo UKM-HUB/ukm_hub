@@ -178,3 +178,16 @@ export const createMessageFetch = (title,message,requestTitle,id,otherId,request
 
   }
 }
+
+export const acceptMessageFetch = (id) => {
+
+  return (dispatch) => {
+
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/acceptMessage',
+      {
+        method: 'PUT'
+      })
+      .then(res => console.log(res))
+
+  }
+}

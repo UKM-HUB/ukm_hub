@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import $ from 'jquery'
 import '../../../public/assets/js/jquery.dataTables.min.js'
 import '../../../public/assets/js/dataTables.bootstrap.min.js'
+import {acceptMessageFetch} from '../../actions/index.js'
+import {connect} from 'react-redux'
+const compId = localStorage.getItem('companyId')
 
-export default class MessageList extends Component {
+class MessageList extends Component {
   constructor(){
     super()
     this.state = {
@@ -12,6 +15,9 @@ export default class MessageList extends Component {
     }
   }
 
+  handleAccept(id){
+    this.props.acceptMessageFetch(id)
+  }
   componentDidMount(){
     $(document).ready(function() {
         $('#requestTable').DataTable();
@@ -52,7 +58,7 @@ export default class MessageList extends Component {
                       style={{marginRight: 20}}
                       onClick={(e) => {
                         e.preventDefault()
-                        this.setState({})
+                        this.handleAccept(compId)
                         alert('Accept masukin ke reducer')}}>
                       Accept
                     </button>
@@ -81,3 +87,12 @@ export default class MessageList extends Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    acceptMessageFetch: (id) => dispatch(acceptMessageFetch(id))
+  }
+}
+
+
+export default connect(null, mapDispatchToProps)(MessageList)
