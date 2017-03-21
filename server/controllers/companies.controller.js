@@ -268,6 +268,7 @@ module.exports={
             $push:{
                   'acceptedMessages':{
                     from:req.params.id,
+                    letterId: data._id,
                     title:`${data.name} Answer your request with title: ${req.body.requestTitle} (id: ${req.params.requestId})- ${req.body.title}`,
                     date: new Date(),
                     status:'waiting',
@@ -291,32 +292,40 @@ module.exports={
   },
   acceptMessage: function(req,res){
     Company.findOne({_id:req.params.id}).then(function(result){
-      result.acceptedMessages.status = 'accepted'
-      result.save(function(err){
-        if(err){
-          res.send(err)
-        }
-        else{
-          Company.findOne({_id:result.acceptedMessages.from}).then(function(result2){
-            result2.letter.status = 'accepted'
-            result2.save(function(err){
-              if(err){
-                res.send(err)
-              }
-              else{
-                result.request.findOne({_id:result2.letter.requestId}).then(function(result3){
-                  result3.open = false
-                  result3.save(function(err){
-                    if(err){
-                      res.send(err)
-                    }
-                    else{
-                      sendEmail(result2.email,`dear ${result2.name}, ${result.name} has accepted your answer to this request (${result3.title}), please contact ${result.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
-                    }
-                  })
+      result.acceptedMessages.forEach(function(acm){
+        if(acm._id === req.params.acceptedMessagesId){
+          acm.status = 'accepted'
+          acm.save(function(err){
+            if(err){
+              res.send(err)
+            }
+            else{
+              Company.findOne({_id:acm.from}).then(function(result2){
+                result2.letter.forEach(function(letters){
+                  if(letters._id=== req.params.letterId){
+                    letters.status= 'accepted'
+                    letters.save(function(err){
+                      if(err){
+                        res.send(err)
+                      }
+                      else{
+                        result.request.forEach(function(requests){
+                          requests.open = false
+                          requests.save(function(err){
+                            if(err){
+                              res.send(err)
+                            }
+                            else{
+                              sendEmail(result2.email,`dear ${result2.name}, ${result.name} has accepted your answer to this request (${result3.title}), please contact ${result.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
+                            }
+                          })
+                        })
+                      }
+                    })
+                  }
                 })
-              }
-            })
+              })
+            }
           })
         }
       })
