@@ -27,8 +27,7 @@ better future
 
 | END POINT                 | METHOD | DESCRIPTION                                             
 |---------------------------|--------|-----------------------------------------------
-| /api/coop/login           | POST   | login coop to generate jwt                       
-| /api/coop/logout          | POST   | destroy jwt                                      
+| /api/coop/login           | POST   | login coop to generate jwt                                                            
 | /api/coop/verify/:id      | PUT    | update company verify to true                    
 | /api/company/             | GET    | get all company list fill verify at front end    
 | /api/coop/unverify/:id    | PUT    | Set Status company to unverified                  
