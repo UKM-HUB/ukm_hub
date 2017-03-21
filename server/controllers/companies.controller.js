@@ -268,7 +268,7 @@ module.exports={
             $push:{
                   'acceptedMessages':{
                     from:req.params.id,
-                    title:`Menanggapi request anda dengan judul: ${req.body.requestTitle} (id: ${req.params.requestId})- ${req.body.title}`,
+                    title:`Answer your request with title: ${req.body.requestTitle} (id: ${req.params.requestId})- ${req.body.title}`,
                     date: new Date(),
                     status:'waiting',
                     message:req.body.message
@@ -281,13 +281,69 @@ module.exports={
                 res.send(err)
               }
               else{
-                res.json(data)
+                sendEmail(datas.email,`dear ${datas.name}, ${data.name} has answer your request (${req.body.title}), please contact ${data.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
               }
             }
           )
         }
       }
     )
+  },
+  acceptMessage: function(req,res){
+    Company.findOne({_id:req.params.id},function(result){
+      result.acceptedMessages.status = 'accepted'
+      result.save(function(err){
+        if(err){
+          res.send(err)
+        }
+        else{
+          Company.findOne({_id:result.acceptedMessages.from},function(result2){
+            result2.letter.status = 'accepted'
+            result2.save(function(err){
+              if(err){
+                res.send(err)
+              }
+              else{
+                result.request.findOne({_id:result2.letter.requestId},function(result3){
+                  result3.open = false
+                  result3.save(function(err){
+                    if(err){
+                      res.send(err)
+                    }
+                    else{
+                      sendEmail(result2.email,`dear ${result2.name}, ${result.name} has accepted your answer to this request (${result3.title}), please contact ${result.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
+                    }
+                  })
+                })
+              }
+            })
+          })
+        }
+      })
+    })
+  },
+  rejectMessage: function(req,res){
+    Company.findOne({_id:req.params.id},function(result){
+      result.acceptedMessages.status = 'refused'
+      result.save(function(err){
+        if(err){
+          res.send(err)
+        }
+        else{
+          Company.findOne({_id:result.acceptedMessages.from},function(result2){
+            result2.letter.status = 'refused'
+            result2.save(function(err){
+              if(err){
+                res.send(err)
+              }
+              else{
+                sendEmail(result2.email,`dear ${result2.name}, ${result.name} has refused your answer to this request (${result3.title}), please contact ${result.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
+              }
+            })
+          })
+        }
+      })
+    })
   },
   resetPassword: function(req, res){
     // find email from data base
