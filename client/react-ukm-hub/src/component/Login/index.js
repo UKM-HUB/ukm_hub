@@ -108,7 +108,7 @@ class Login extends Component {
       } else {
         location.reload()
       }
-    },100)
+    },500)
   }
 
   handleForgetPassword(e){
