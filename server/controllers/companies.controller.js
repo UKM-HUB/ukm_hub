@@ -28,7 +28,6 @@ module.exports={
       verified:'',
       edited:'',
       type: '',
-      ayam:'',
       location:{
         lat:'',
         lng:''
@@ -144,7 +143,7 @@ module.exports={
               title:req.body.title,
               price:Number(req.body.price),
               description:req.body.description,
-              images:req.file,
+              images:req.body.images,
               open:true
             }
           }
@@ -168,7 +167,7 @@ module.exports={
               title:req.body.title,
               price:Number(req.body.price),
               description:req.body.description,
-              images:req.file,
+              images:req.body.images,
               open:true
             }
           }
@@ -269,7 +268,7 @@ module.exports={
             $push:{
                   'acceptedMessages':{
                     from:req.params.id,
-                    title:`Menanggapi request anda dengan judul: ${req.body.title} (id: ${req.params.requestId})`
+                    title:`Menanggapi request anda dengan judul: ${req.body.requestTitle} (id: ${req.params.requestId})- ${req.body.title}`,
                     date: new Date(),
                     status:'waiting',
                     message:req.body.message
@@ -295,13 +294,10 @@ module.exports={
     Company.findOne({ email: req.body.email }, function(err, data){
       // response error
       if (err) throw err
-
         // email found in database
         if (data) {
-
           // generate new password
           var newPassword = generatePassword();
-
           // update password from database
           Company.findOneAndUpdate({ _id: data._id },{ password: passwordHash.generate(newPassword) },function(err, update){
             // response update error
@@ -319,7 +315,6 @@ module.exports={
               sendEmail( send to who, subject email, content email, message for server )
             */
             sendEmail(req.body.email, "Your password succesfully reset", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`, "Email found, and we are send you a new password to your email")
-
           })
         // email not found
         }else{
