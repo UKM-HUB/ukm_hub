@@ -38,62 +38,41 @@ export default class MessageList extends Component {
             </tr>
           </thead>
           <tbody style={tableDataStyle}>
-            <tr>
-              <td>PT. MEDIA TEKNOLOGI</td>
-              <td>Teamwork Accepted</td>
-              <td>I need teamwork also for 5 years</td>
-              <td>17 April 2017</td>
-              <td>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Accept
-                </button>
-                <button
-                  type='submit'
-                  className='btn btn-danger btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Decline
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>PT. SINARMAS</td>
-              <td>Send Respond</td>
-              <td>I will buy your sheet for 100000</td>
-              <td>25 April 2017</td>
-              <td>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Accept
-                </button>
-                <button
-                  type='submit'
-                  className='btn btn-danger btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Decline
-                </button>
-              </td>
-            </tr>
+            {
+              this.props.messages.map((message,index)=>{return(
+                <tr key={message._id}>
+                  <td>PT. MEDIA TEKNOLOGI</td>
+                  <td>{message.title}</td>
+                  <td>{message.message}</td>
+                  <td>{message.date}</td>
+                  <td>
+                    <button
+                      type='submit'
+                      className='btn btn-primary btn-fill'
+                      style={{marginRight: 20}}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        this.setState({})
+                        alert('Accept masukin ke reducer')}}>
+                      Accept
+                    </button>
+                    <button
+                      type='submit'
+                      className='btn btn-danger btn-fill'
+                      style={{marginRight: 20}}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        this.setState({})
+                        alert('Accept masukin ke reducer')}}>
+                      Decline
+                    </button>
+                  </td>
+                </tr>
+              )})
+            }
+
+
+
           </tbody>
           </table>
         </div>

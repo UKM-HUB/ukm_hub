@@ -75,7 +75,7 @@ class ListOfRequest extends Component {
             {
               this.props.requests.map((otherRequest,index)=>{return(
                 <tr key={otherRequest.request._id}>
-                  <td>otherRequest-data</td>
+                  <td>{otherRequest.seller.name}</td>
                   <td>{otherRequest.request.title}</td>
                   <td style={{textAlign:'justify'}}>{otherRequest.request.description}</td>
                   <td>{otherRequest.request.price}</td>
@@ -89,7 +89,7 @@ class ListOfRequest extends Component {
                       data-target="#myModal"
                       onClick={(e) => {
                         e.preventDefault()
-                        this.handleOpenMessage(otherRequest.request.title,otherRequest.request._id,otherRequest.seller)
+                        this.handleOpenMessage(otherRequest.request.title,otherRequest.request._id,otherRequest.seller._id)
                       }}>
                       Reply Message
                     </button>
