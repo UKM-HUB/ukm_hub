@@ -143,7 +143,7 @@ module.exports={
               title:req.body.title,
               price:Number(req.body.price),
               description:req.body.description,
-              images:req.file,
+              images:req.body.images,
               open:true
             }
           }
@@ -167,7 +167,7 @@ module.exports={
               title:req.body.title,
               price:Number(req.body.price),
               description:req.body.description,
-              images:req.file,
+              images:req.body.images,
               open:true
             }
           }
