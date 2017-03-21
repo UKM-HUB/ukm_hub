@@ -185,7 +185,8 @@ export const acceptMessageFetch = (id,acceptedMessagesId) => {
 
       fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/'+acceptedMessagesId+'/acceptMessage',
       {
-        method: 'PUT'
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
       })
       .then(res => console.log(res))
 
