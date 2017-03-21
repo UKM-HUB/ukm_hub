@@ -66,6 +66,7 @@ class Profile extends Component {
         zoom: 16
       })
 
+
       GMaps.geolocate({
         success: function(position) {
           map.addMarker({
@@ -253,9 +254,20 @@ class Profile extends Component {
                         </div>
                         <div className='row'>
                           <div className='col-md-12' style={{height: 500}}>
-                            <label style={{marginBottom: 25}}>
+                            <label style={{marginBottom: 25, display:'block'}}>
                               Location
                             </label>
+                            <div style={{marginBottom:25}}>
+                              <button
+                                type='submit'
+                                className='btn btn-warning btn-fill'
+                                style={{marginRight: 20, display: this.state.updateButtonDisplay}}
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  this.submitUpdate(this.state.data,compId)}}>
+                                Update Profile
+                              </button>
+                            </div>
                             <div id='map' style={{width: '100%', height: '85%' }}></div>
                           </div>
                         </div>
