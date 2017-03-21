@@ -14,14 +14,13 @@ better future
 | /auth/register                            | POST   | Add new company email & password with validation
 | /auth/login                               | POST   | Company login with JWT Token                     
 | /api/company/:id                          | PUT    | Complete company profile                         
-| /api/company/:id/buy                      | POST   | create new buy request ( corp only )             
-| /api/company/:id/sale                     | POST   | create new sell request ( ukm only )             
-| /api/company/:id/buy                      | PUT    | change status buy request ( corp only )          
-| /api/company/:id/sale                     | PUT    | change status sale request ( ukm only )          
-| /api/company/:id/po                       | POST   | create new po ( corp only )                      
+| /api/company/:id/buyRequest               | PUT    | create new buy request ( corp only )             
+| /api/company/:id/sellRequest              | PUT    | create new sell request ( ukm only )             
+| /api/company/:id/:requestId               | PUT    | change status buy request ( corp only )                
+| /api/company/:id/:otherId/:requestId/message| PUT  | create new message                     
 | /api/company/:id                          | GET    | get detail one company                           
-| /api/company/:type/?category=exmp1,exmp2  | GET    | get all company by type           
-| /api/company/:id/quotation                | POST   | create new offering ( ukm only )                 
+| /api/company/:id/searchByCategory         | GET    | get all company by type           
+| /api/company/:id/searchRequest            | GET    | get request  (show buy request for ukm only, and show sell for corporate )                 
 
 
 ## Cooperation
