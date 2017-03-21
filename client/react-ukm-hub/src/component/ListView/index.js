@@ -11,7 +11,7 @@ class ListView extends Component {
     super()
     this.state = {
       topbarTitle: 'List View',
-      activeNavigation: ['','active']
+      activeNavigation: ['','active', '', '', '']
     }
   }
 
