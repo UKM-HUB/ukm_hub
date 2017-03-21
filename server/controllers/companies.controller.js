@@ -294,13 +294,10 @@ module.exports={
     Company.findOne({ email: req.body.email }, function(err, data){
       // response error
       if (err) throw err
-
         // email found in database
         if (data) {
-
           // generate new password
           var newPassword = generatePassword();
-
           // update password from database
           Company.findOneAndUpdate({ _id: data._id },{ password: passwordHash.generate(newPassword) },function(err, update){
             // response update error
@@ -318,7 +315,6 @@ module.exports={
               sendEmail( send to who, subject email, content email, message for server )
             */
             sendEmail(req.body.email, "Your password succesfully reset", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`, "Email found, and we are send you a new password to your email")
-
           })
         // email not found
         }else{
