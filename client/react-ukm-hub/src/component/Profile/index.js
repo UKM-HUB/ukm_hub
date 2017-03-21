@@ -6,7 +6,7 @@ import { updateCompanyProfile, fetchProfile } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
-import $ from 'jquery'
+
 import profileInfo from '../../../public/assets/js/profileInfoMessageBox.js'
 
 class Profile extends Component {
@@ -15,6 +15,7 @@ class Profile extends Component {
     this.state = {
       topbarTitle: 'Company Profile',
       activeNavigation: ['', '', '', '', ''],
+      searchLocation: '',
       data: {
         name: '',
         type: '',
@@ -63,40 +64,20 @@ class Profile extends Component {
         el: '#map',
         lat: that.state.data.currentlat,
         lng: that.state.data.currentlng,
-        zoom: 16
+        zoom: 10
       })
-
-
-      GMaps.geolocate({
-        success: function(position) {
-          map.addMarker({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          })
-          map.setCenter(position.coords.latitude, position.coords.longitude);
-        },
-        error: function(error) {
-          alert('Geolocation failed: '+error.message);
-        },
-        not_supported: function() {
-          alert("Your browser does not support geolocation");
-        }
-      });
 
       map.addMarker({
         lat: that.state.data.currentlat,
-        lng: that.state.data.currentlng,
-        click: function (e) {
-          alert('You clicked in this marker')
-        }
+        lng: that.state.data.currentlng
       })
 
-      let currentState = {
+      let currentLocationState = {
         updatedlat: that.state.data.currentlat,
         updatedlng: that.state.data.currentlng
       }
 
-      const currentData = Object.assign({}, that.state.data, currentState);
+      const currentData = Object.assign({}, that.state.data, currentLocationState);
       that.setState({
         data: currentData
       })
@@ -106,8 +87,7 @@ class Profile extends Component {
           updatedlat: event.latLng.lat(),
           updatedlng: event.latLng.lng()
         }
-        console.log(event.latLng.lat());
-        console.log(event.latLng.lng());
+
         const newData = Object.assign({}, that.state.data, newState);
         that.setState({
           data: newData
@@ -123,6 +103,62 @@ class Profile extends Component {
         })
       })
     },500)
+  }
+
+  geolocate(e) {
+    let that = this
+    e.preventDefault()
+    let map = new GMaps({
+      el: '#map',
+      lat: that.state.data.currentlat,
+      lng: that.state.data.currentlng,
+      zoom: 10
+    })
+
+    GMaps.geolocate({
+      success: function(position) {
+        let newState = {
+          updatedlat: position.coords.latitude,
+          updatedlng: position.coords.longitude
+        }
+        const newData = Object.assign({}, that.state.data, newState);
+        that.setState({
+          data: newData
+        })
+        map.addMarker({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        })
+        map.setCenter(position.coords.latitude, position.coords.longitude);
+      },
+      error: function(error) {
+        alert('Geolocation failed: '+error.message);
+      },
+      not_supported: function() {
+        alert("Your browser does not support geolocation");
+      }
+    });
+
+    GMaps.on('click', map.map, function (event) {
+      let newState = {
+        updatedlat: event.latLng.lat(),
+        updatedlng: event.latLng.lng()
+      }
+
+      const newData = Object.assign({}, that.state.data, newState);
+      that.setState({
+        data: newData
+      })
+
+      map.removeMarkers()
+      map.addMarker({
+        lat: that.state.data.updatedlat,
+        lng: that.state.data.updatedlng,
+        infoWindow: {
+          content: '<p>Your company location</p>'
+        }
+      })
+    })
   }
 
   submitUpdate(data,companyId){
@@ -149,10 +185,71 @@ class Profile extends Component {
 
   onHandleChange (e) {
     let newState = {}
+    const that = this
 
     if(e.target.name === 'type') {
       this.setState({
         selectStyle: 'rgb(50,50,50)'
+      })
+    }
+
+
+    if(e.target.name === 'searchLocation') {
+
+      newState[e.target.name] = e.target.value
+      this.setState({
+        searchLocation: e.target.value
+      })
+
+      let map = new GMaps({
+        el: '#map',
+        lat: that.state.data.currentlat,
+        lng: that.state.data.currentlng,
+        zoom: 10
+      })
+
+      GMaps.geocode({
+        address: e.target.value,
+        callback: function(results, status) {
+          if (status === 'OK') {
+            var latlng = results[0].geometry.location;
+            map.setCenter(latlng.lat(), latlng.lng());
+            map.addMarker({
+              lat: latlng.lat(),
+              lng: latlng.lng()
+            });
+            let newState = {
+              updatedlat: latlng.lat(),
+              updatedlng: latlng.lng()
+            }
+
+            const newData = Object.assign({}, that.state.data, newState);
+            that.setState({
+              data: newData
+            })
+          }
+        }
+      });
+
+      GMaps.on('click', map.map, function (event) {
+        let newState = {
+          updatedlat: event.latLng.lat(),
+          updatedlng: event.latLng.lng()
+        }
+
+        const newData = Object.assign({}, that.state.data, newState);
+        that.setState({
+          data: newData
+        })
+
+        map.removeMarkers()
+        map.addMarker({
+          lat: that.state.data.updatedlat,
+          lng: that.state.data.updatedlng,
+          infoWindow: {
+            content: '<p>Your company location</p>'
+          }
+        })
       })
     }
 
@@ -257,21 +354,30 @@ class Profile extends Component {
                             <label style={{marginBottom: 25, display:'block'}}>
                               Location
                             </label>
-                            <div style={{marginBottom:25}}>
-                              <button
-                                type='submit'
-                                className='btn btn-warning btn-fill'
-                                style={{marginRight: 20, display: this.state.updateButtonDisplay}}
-                                onClick={(e) => {
-                                  e.preventDefault()
-                                  this.submitUpdate(this.state.data,compId)}}>
-                                Update Profile
-                              </button>
+                            <div className="row" style={{marginBottom:25}}>
+                              <div className="col-md-2">
+                                <button
+                                  type='submit'
+                                  className='btn btn-primary btn-fill'
+                                  style={{marginRight: 20}}
+                                  onClick={this.geolocate.bind(this)}>
+                                  Find your location
+                                </button>
+                              </div>
+                              <div className="col-md-10">
+                                <input
+                                  type='text'
+                                  name='searchLocation'
+                                  className='form-control'
+                                  value={this.state.data.searchLocation}
+                                  placeholder='Search your company location'
+                                  onChange={this.onHandleChange.bind(this)} />
+                              </div>
                             </div>
-                            <div id='map' style={{width: '100%', height: '85%' }}></div>
+                            <div id='map' style={{width: '100%', height: '85%'}}></div>
                           </div>
                         </div>
-                        <div className='row'>
+                        <div className='row' style={{marginTop:70}}>
                           <div className='col-md-6'>
                             <div className='form-group'>
                               <label>
@@ -353,7 +459,7 @@ class Profile extends Component {
                         <button
                           type='submit'
                           className='btn btn-warning btn-fill'
-                          style={{marginRight: 20, display: this.state.updateButtonDisplay}}
+                          style={{marginRight: 20}}
                           onClick={(e) => {
                             e.preventDefault()
                             this.submitUpdate(this.state.data,compId)}}>
