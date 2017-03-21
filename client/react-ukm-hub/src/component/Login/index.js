@@ -3,8 +3,54 @@ import { Link } from 'react-router-dom'
 import {connect} from 'react-redux'
 import logo from '../../../public/assets/logo/ukmhub.png'
 import '../../../public/assets/js/login'
+import '../../../public/assets/js/bootstrap-notify.js'
 import {registerCompanyFetch, loginCompanyFetch} from '../../actions/index.js'
 import $ from 'jquery'
+
+let loginInfo = {
+  showRegisterInvalid: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-delete-user',
+      message: '<p style="margin-top:8px">Please input valid email</p>'
+
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showPasswordInvalid: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-delete-user',
+      message: '<p style="margin-top:8px">Password must be more than 5 character</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showErrorLogin: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-delete-user',
+      message: '<p style="margin-top:8px">Invalid email/password</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  }
+}
+
+const emailRegex = /\S+@\S+\.\S+/
 
 class Login extends Component {
   constructor(){
@@ -30,27 +76,39 @@ class Login extends Component {
     $('#form_id').attr( "style", "max-width: 400px;" );
   }
 
-  handleRegister(){
-    this.props.registerCompanyFetch(this.state.emailRegister,this.state.passwordRegister)
-    this.setState({
-      emailRegister: '',
-      passwordRegister: ''
-    })
-    setTimeout(function(){
-      location.reload()
-    },1000)
-
+  handleRegister(e){
+    if(!emailRegex.test(this.state.emailRegister)){
+      e.preventDefault()
+      loginInfo.showRegisterInvalid('top','center')
+    } else if(this.state.passwordRegister.length <= 5){
+      e.preventDefault()
+      loginInfo.showPasswordInvalid('top','center')
+    } else {
+      this.props.registerCompanyFetch(this.state.emailRegister,this.state.passwordRegister)
+      this.setState({
+        emailRegister: '',
+        passwordRegister: ''
+      })
+      setTimeout(function(){
+        location.reload()
+      }, 1000)
+    }
   }
 
-  handleLogin(){
+  handleLogin(e){
+    e.preventDefault()
     this.props.loginCompanyFetch(this.state.emailLogin,this.state.passwordLogin)
     this.setState({
       emailLogin: '',
       passwordLogin: ''
     })
     setTimeout(function(){
-      location.reload()
-    },1000)
+      if(!localStorage.getItem('token')){
+        loginInfo.showErrorLogin('top','center')
+      } else {
+        location.reload()
+      }
+    },100)
   }
 
   handleForgetPassword(e){
@@ -109,10 +167,8 @@ class Login extends Component {
               <form className="forget-password-form">
                 <p className="message" data-toggle="collapse" data-target="#demo" style={{marginBottom:25,marginTop:3}}>Forget Password?<a href="#"> Click here</a></p>
                 <div id="demo" className="collapse">
-                  <input type="email" placeholder="Input your company email" name="forgetPassword" value={this.state.forgetPassword} onChange={this.handleChange.bind(this)}/>
-                    <Link to='/profile'>
-                      <button id='register' onClick={this.handleForgetPassword.bind(this)} >Reset Password</button>
-                    </Link>
+                  <input type="email" style={{padding:'10px 15px', marginBottom: 10}} placeholder="Input your company email" name="forgetPassword" value={this.state.forgetPassword} onChange={this.handleChange.bind(this)}/>
+                    <button id='register' onClick={this.handleForgetPassword.bind(this)}>Reset Password</button>
                 </div>
               </form>
             </div>

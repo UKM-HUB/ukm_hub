@@ -65,17 +65,16 @@
   background: rgb(20, 95, 135);
   width: 100%;
   border: 0;
-  padding: 15px;
+  padding: 10px 15px;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   color: #FFFFFF;
-  font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 14px;
 }
 .form .message {
   margin: 15px 0 0;
