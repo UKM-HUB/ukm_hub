@@ -50,10 +50,10 @@ module.exports={
     })
   },
   login: function(req, res, next){
-    console.log(req.body);
-    let token = jwt.sign({ email: req.body.email }, 'ukmhub');
+    let token = '';
     Company.findOne({email:req.body.email}).then(function(result){
-    res.send({ token: token, companyId: result._id ,verified: result.verified,edited: result.edited })
+      token = jwt.sign({ email: req.body.email, companyId: result._id, verified: result.verified,edited: result.edited }, 'ukmhub');
+      res.send({ token: token, companyId: result._id ,verified: result.verified,edited: result.edited })
     }
   )
   },
@@ -269,7 +269,7 @@ module.exports={
             $push:{
                   'acceptedMessages':{
                     from:req.params.id,
-                    title:`Menanggapi request anda dengan judul: ${req.body.title} (id: ${req.params.requestId})`
+                    title:`Menanggapi request anda dengan judul: ${req.body.title} (id: ${req.params.requestId})`,
                     date: new Date(),
                     status:'waiting',
                     message:req.body.message

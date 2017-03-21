@@ -5,8 +5,16 @@ var passwordHash = require('password-hash');
 
 const coopController = {
   login: function(req, res, next){
-    var token = jwt.sign({ email: req.body.email }, 'ukmhub');
-    res.send({ token: token })
+    /*
+      expiresIn : 60 * 60
+      60 * 60 = 3600 = 1 hour
+      60 * 1 = 60 = 1 minute
+    */
+    modelCoop.findOne({}, 'name email ' ,function(err, data){
+      if (err) throw err
+      let token = jwt.sign({data}, 'ukmhub', { expiresIn: 60 * 60 });
+      res.send({ token: token })
+    })
   },
   register: function(req, res, next){
     // create model data
