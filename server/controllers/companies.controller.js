@@ -293,16 +293,18 @@ module.exports={
   acceptMessage: function(req,res){
     Company.findOne({_id:req.params.id}).then(function(result){
       result.acceptedMessages.forEach(function(x){
-        if(x._id === req.params.acceptedMessagesId)
-        x.status = 'accepted'
-        x.save(function(err){
-          if(err){
-            res.send(err)
-          }
-          else{
-            sendEmail(result.email,"your request have been accepted", res)
-          }
-        })
+        if(x._id === req.params.acceptedMessagesId){
+          x.status = 'accepted'
+          x.save(function(err){
+            if(err){
+              res.send(err)
+            }
+            else{
+              res.send('success')
+            }
+          })
+        }
+
 
       })
     })
