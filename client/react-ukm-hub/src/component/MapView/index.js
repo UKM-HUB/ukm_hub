@@ -34,7 +34,7 @@ class MapView extends Component {
 
     for (let i = 0; i < this.props.otherCompany.length; i++) {
       let requestList = '';
-      this.props.otherCompany[i].request.map(function(data){ requestList += '<li class="list-group-item"><a href="https://www.google.com">' + data.title + '</a></li>' })
+      this.props.otherCompany[i].request.map(function(data){ return requestList += '<li class="list-group-item"><a href="https://www.google.com">' + data.title + '</a></li>' })
 
       temp[temp.length] =
       {

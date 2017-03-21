@@ -52,6 +52,7 @@ var companySchema =  new Schema({
     {
       from:String,
       title:String,
+      letterId:String,
       date:Date,
       status:String,
       message:String

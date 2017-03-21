@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import $ from 'jquery'
 import '../../../public/assets/js/jquery.dataTables.min.js'
 import '../../../public/assets/js/dataTables.bootstrap.min.js'
+import {acceptMessageFetch} from '../../actions/index.js'
+import {connect} from 'react-redux'
+const compId = localStorage.getItem('companyId')
 
-export default class MessageList extends Component {
+class MessageList extends Component {
   constructor(){
     super()
     this.state = {
@@ -12,6 +15,9 @@ export default class MessageList extends Component {
     }
   }
 
+  handleAccept(id,acceptedMessagesId){
+    this.props.acceptMessageFetch(id,acceptedMessagesId)
+  }
   componentDidMount(){
     $(document).ready(function() {
         $('#requestTable').DataTable();
@@ -38,62 +44,41 @@ export default class MessageList extends Component {
             </tr>
           </thead>
           <tbody style={tableDataStyle}>
-            <tr>
-              <td>PT. MEDIA TEKNOLOGI</td>
-              <td>Teamwork Accepted</td>
-              <td>I need teamwork also for 5 years</td>
-              <td>17 April 2017</td>
-              <td>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Accept
-                </button>
-                <button
-                  type='submit'
-                  className='btn btn-danger btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Decline
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>PT. SINARMAS</td>
-              <td>Send Respond</td>
-              <td>I will buy your sheet for 100000</td>
-              <td>25 April 2017</td>
-              <td>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Accept
-                </button>
-                <button
-                  type='submit'
-                  className='btn btn-danger btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Decline
-                </button>
-              </td>
-            </tr>
+            {
+              this.props.messages.map((message,index)=>{return(
+                <tr key={message._id}>
+                  <td>PT. MEDIA TEKNOLOGI</td>
+                  <td>{message.title}</td>
+                  <td>{message.message}</td>
+                  <td>{message.date}</td>
+                  <td>
+                    <button
+                      type='submit'
+                      className='btn btn-primary btn-fill'
+                      style={{marginRight: 20}}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        this.handleAccept(compId,message._id)
+                        alert('Accept masukin ke reducer')}}>
+                      Accept
+                    </button>
+                    <button
+                      type='submit'
+                      className='btn btn-danger btn-fill'
+                      style={{marginRight: 20}}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        this.setState({})
+                        alert('Accept masukin ke reducer')}}>
+                      Decline
+                    </button>
+                  </td>
+                </tr>
+              )})
+            }
+
+
+
           </tbody>
           </table>
         </div>
@@ -102,3 +87,12 @@ export default class MessageList extends Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    acceptMessageFetch: (id,acceptedMessagesId) => dispatch(acceptMessageFetch(id,acceptedMessagesId))
+  }
+}
+
+
+export default connect(null, mapDispatchToProps)(MessageList)

@@ -7,12 +7,15 @@ import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
 
+import profileInfo from '../../../public/assets/js/profileInfoMessageBox.js'
+
 class Profile extends Component {
   constructor (props) {
     super(props)
     this.state = {
       topbarTitle: 'Company Profile',
       activeNavigation: ['', '', '', '', ''],
+      searchLocation: '',
       data: {
         name: '',
         type: '',
@@ -36,15 +39,14 @@ class Profile extends Component {
 
     this.props.fetchProfile(compId)
     setTimeout(function(){
-      console.log(that.props.profile);
       let newState = {
         name: that.props.profile.name,
         type: that.props.profile.type,
         email: that.props.profile.email,
         category: that.props.profile.category,
         address: that.props.profile.address ? that.props.profile.address : '',
-        currentlat:that.props.profile.location.lat,
-        currentlng:that.props.profile.location.lng,
+        currentlat:that.props.profile.location.lat ? that.props.profile.location.lat : '-6.260745364770679',
+        currentlng:that.props.profile.location.lng ? that.props.profile.location.lng : '106.78169667720795',
         description: that.props.profile.description,
         website: that.props.profile.website,
         phone: that.props.profile.phone ? that.props.profile.phone : '',
@@ -55,31 +57,27 @@ class Profile extends Component {
       that.setState({
         data: newData
       })
-    }, 1000)
+    }, 250)
 
     setTimeout(function(){
       let map = new GMaps({
         el: '#map',
         lat: that.state.data.currentlat,
         lng: that.state.data.currentlng,
-        zoom: 5
+        zoom: 10
       })
-
 
       map.addMarker({
         lat: that.state.data.currentlat,
-        lng: that.state.data.currentlng,
-        click: function (e) {
-          alert('You clicked in this marker')
-        }
+        lng: that.state.data.currentlng
       })
 
-      let currentState = {
+      let currentLocationState = {
         updatedlat: that.state.data.currentlat,
         updatedlng: that.state.data.currentlng
       }
 
-      const currentData = Object.assign({}, that.state.data, currentState);
+      const currentData = Object.assign({}, that.state.data, currentLocationState);
       that.setState({
         data: currentData
       })
@@ -104,19 +102,154 @@ class Profile extends Component {
           }
         })
       })
-    },1500)
+    },500)
+  }
+
+  geolocate(e) {
+    let that = this
+    e.preventDefault()
+    let map = new GMaps({
+      el: '#map',
+      lat: that.state.data.currentlat,
+      lng: that.state.data.currentlng,
+      zoom: 10
+    })
+
+    GMaps.geolocate({
+      success: function(position) {
+        let newState = {
+          updatedlat: position.coords.latitude,
+          updatedlng: position.coords.longitude
+        }
+        const newData = Object.assign({}, that.state.data, newState);
+        that.setState({
+          data: newData
+        })
+        map.addMarker({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        })
+        map.setCenter(position.coords.latitude, position.coords.longitude);
+      },
+      error: function(error) {
+        alert('Geolocation failed: '+error.message);
+      },
+      not_supported: function() {
+        alert("Your browser does not support geolocation");
+      }
+    });
+
+    GMaps.on('click', map.map, function (event) {
+      let newState = {
+        updatedlat: event.latLng.lat(),
+        updatedlng: event.latLng.lng()
+      }
+
+      const newData = Object.assign({}, that.state.data, newState);
+      that.setState({
+        data: newData
+      })
+
+      map.removeMarkers()
+      map.addMarker({
+        lat: that.state.data.updatedlat,
+        lng: that.state.data.updatedlng,
+        infoWindow: {
+          content: '<p>Your company location</p>'
+        }
+      })
+    })
   }
 
   submitUpdate(data,companyId){
-    this.props.updateCompanyProfile(data,companyId)
+    if (this.state.data.name === '') {
+      profileInfo.showNameMessage('top','center')
+    } else if (this.state.data.type === '') {
+      profileInfo.showTypeMessage('top','center')
+    } else if (this.state.data.category.length === 0) {
+      profileInfo.showCategoryMessage('top','center')
+    } else if (this.state.data.updatedlat === '-6.260745364770679') {
+      profileInfo.showMarkerMessage('top','center')
+    } else if (this.state.data.address === '') {
+      profileInfo.showAddressMessage('top','center')
+    } else if (this.state.data.description === '') {
+      profileInfo.showDescriptionMessage('top','center')
+    } else if (this.state.data.phone === '') {
+      profileInfo.showPhoneMessage('top','center')
+    } else {
+      profileInfo.showUpdateSuccessMessage('top','center')
+      this.props.updateCompanyProfile(data,companyId)
+    }
+
   }
 
   onHandleChange (e) {
     let newState = {}
+    const that = this
 
     if(e.target.name === 'type') {
       this.setState({
         selectStyle: 'rgb(50,50,50)'
+      })
+    }
+
+
+    if(e.target.name === 'searchLocation') {
+
+      newState[e.target.name] = e.target.value
+      this.setState({
+        searchLocation: e.target.value
+      })
+
+      let map = new GMaps({
+        el: '#map',
+        lat: that.state.data.currentlat,
+        lng: that.state.data.currentlng,
+        zoom: 10
+      })
+
+      GMaps.geocode({
+        address: e.target.value,
+        callback: function(results, status) {
+          if (status === 'OK') {
+            var latlng = results[0].geometry.location;
+            map.setCenter(latlng.lat(), latlng.lng());
+            map.addMarker({
+              lat: latlng.lat(),
+              lng: latlng.lng()
+            });
+            let newState = {
+              updatedlat: latlng.lat(),
+              updatedlng: latlng.lng()
+            }
+
+            const newData = Object.assign({}, that.state.data, newState);
+            that.setState({
+              data: newData
+            })
+          }
+        }
+      });
+
+      GMaps.on('click', map.map, function (event) {
+        let newState = {
+          updatedlat: event.latLng.lat(),
+          updatedlng: event.latLng.lng()
+        }
+
+        const newData = Object.assign({}, that.state.data, newState);
+        that.setState({
+          data: newData
+        })
+
+        map.removeMarkers()
+        map.addMarker({
+          lat: that.state.data.updatedlat,
+          lng: that.state.data.updatedlng,
+          infoWindow: {
+            content: '<p>Your company location</p>'
+          }
+        })
       })
     }
 
@@ -218,13 +351,33 @@ class Profile extends Component {
                         </div>
                         <div className='row'>
                           <div className='col-md-12' style={{height: 500}}>
-                            <label style={{marginBottom: 25}}>
+                            <label style={{marginBottom: 25, display:'block'}}>
                               Location
                             </label>
-                            <div id='map' style={{width: '100%', height: '85%' }}></div>
+                            <div className="row" style={{marginBottom:25}}>
+                              <div className="col-md-2">
+                                <button
+                                  type='submit'
+                                  className='btn btn-primary btn-fill'
+                                  style={{marginRight: 20}}
+                                  onClick={this.geolocate.bind(this)}>
+                                  Find your location
+                                </button>
+                              </div>
+                              <div className="col-md-10">
+                                <input
+                                  type='text'
+                                  name='searchLocation'
+                                  className='form-control'
+                                  value={this.state.data.searchLocation}
+                                  placeholder='Search your company location'
+                                  onChange={this.onHandleChange.bind(this)} />
+                              </div>
+                            </div>
+                            <div id='map' style={{width: '100%', height: '85%'}}></div>
                           </div>
                         </div>
-                        <div className='row'>
+                        <div className='row' style={{marginTop:70}}>
                           <div className='col-md-6'>
                             <div className='form-group'>
                               <label>
@@ -260,7 +413,7 @@ class Profile extends Component {
                           <div className='col-md-6'>
                             <div className='form-group'>
                               <label>
-                                Website
+                                Website (optional)
                               </label>
                               <input
                                 type='text'
@@ -290,7 +443,7 @@ class Profile extends Component {
                           <div className='col-md-12'>
                             <div className='form-group'>
                               <label>
-                                Profile picture
+                                Profile picture (optional)
                               </label>
                               <input
                                 type='text'
@@ -306,7 +459,7 @@ class Profile extends Component {
                         <button
                           type='submit'
                           className='btn btn-warning btn-fill'
-                          style={{marginRight: 20, display: this.state.updateButtonDisplay}}
+                          style={{marginRight: 20}}
                           onClick={(e) => {
                             e.preventDefault()
                             this.submitUpdate(this.state.data,compId)}}>
@@ -325,7 +478,7 @@ class Profile extends Component {
                     </div>
                     <div className='content'>
                       <div className='author'>
-                        <a href='#'><img className='avatar border-gray' src={this.state.data.image} alt='Company profile' />
+                        <a href='#'><img className='avatar border-gray' src={this.state.data.image} alt='' />
                           <h4 className='title'>{this.state.data.name}<br /> <small></small></h4></a>
                       </div>
                       <br />
@@ -335,11 +488,8 @@ class Profile extends Component {
                     </div>
                     <hr />
                     <div className='text-center'>
-                      <button href='#' className='btn btn-simple'>
+                      <button href={this.state.data.website} className='btn btn-simple'>
                         <i className='fa fa-institution'></i>
-                      </button>
-                      <button href='#' className='btn btn-simple'>
-                        <i className='fa fa-facebook'></i>
                       </button>
                     </div>
                   </div>

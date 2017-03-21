@@ -2,13 +2,19 @@ import React, { Component } from 'react'
 import $ from 'jquery'
 import '../../../public/assets/js/jquery.dataTables.min.js'
 import '../../../public/assets/js/dataTables.bootstrap.min.js'
+import {connect} from 'react-redux'
+import {createMessageFetch} from '../../actions/index.js'
+const compId = localStorage.getItem('companyId')
 
-export default class ListOfRequest extends Component {
+class ListOfRequest extends Component {
   constructor(props){
     super(props)
     this.state = {
       title: '',
       message: '',
+      requestTitle:'',
+      requestId:'',
+      otherId:'',
     }
   }
 
@@ -23,6 +29,25 @@ export default class ListOfRequest extends Component {
         $('#requestTable').DataTable();
     });
 
+  }
+
+  onHandleSubmitMessage(title,message,requestTitle,id,otherId,requestId){
+    this.props.createMessageFetch(title,message,requestTitle,id,otherId,requestId)
+    this.setState({
+        title: '',
+        message:'',
+        requestTitle:'',
+        requestId:'',
+        otherId:'',
+    })
+  }
+
+  handleOpenMessage(title,id,seller){
+    this.setState({
+      requestTitle:title,
+      requestId:id,
+      otherId:seller
+    })
   }
 
   render() {
@@ -50,7 +75,7 @@ export default class ListOfRequest extends Component {
             {
               this.props.requests.map((otherRequest,index)=>{return(
                 <tr key={otherRequest.request._id}>
-                  <td>otherRequest-data</td>
+                  <td>{otherRequest.seller.name}</td>
                   <td>{otherRequest.request.title}</td>
                   <td style={{textAlign:'justify'}}>{otherRequest.request.description}</td>
                   <td>{otherRequest.request.price}</td>
@@ -64,7 +89,8 @@ export default class ListOfRequest extends Component {
                       data-target="#myModal"
                       onClick={(e) => {
                         e.preventDefault()
-                        this.setState({})}}>
+                        this.handleOpenMessage(otherRequest.request.title,otherRequest.request._id,otherRequest.seller._id)
+                      }}>
                       Reply Message
                     </button>
                   </td>
@@ -120,7 +146,10 @@ export default class ListOfRequest extends Component {
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={()=>alert('Masukin ke reducer isi statenya')}>Save changes
+                    onClick={(e)=> {
+                      e.preventDefault()
+                      this.onHandleSubmitMessage(this.state.title,this.state.message,this.state.requestTitle,compId,this.state.otherId,this.state.requestId)
+                    }}>Save changes
                   </button>
                 </div>
               </div>
@@ -132,3 +161,11 @@ export default class ListOfRequest extends Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createMessageFetch: (title,message,requestTitle,id,otherId,requestId) => dispatch(createMessageFetch(title,message,requestTitle,id,otherId,requestId))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(ListOfRequest)

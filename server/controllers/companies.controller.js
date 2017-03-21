@@ -28,7 +28,6 @@ module.exports={
       verified:'',
       edited:'',
       type: '',
-      ayam:'',
       location:{
         lat:'',
         lng:''
@@ -144,7 +143,7 @@ module.exports={
               title:req.body.title,
               price:Number(req.body.price),
               description:req.body.description,
-              images:req.file,
+              images:req.body.images,
               open:true
             }
           }
@@ -168,7 +167,7 @@ module.exports={
               title:req.body.title,
               price:Number(req.body.price),
               description:req.body.description,
-              images:req.file,
+              images:req.body.images,
               open:true
             }
           }
@@ -269,7 +268,8 @@ module.exports={
             $push:{
                   'acceptedMessages':{
                     from:req.params.id,
-                    title:`Menanggapi request anda dengan judul: ${req.body.title} (id: ${req.params.requestId})`,
+                    letterId: data.letter[data.letter.length-1]._id,
+                    title:`${data.name} Answer your request with title: ${req.body.requestTitle} (id: ${req.params.requestId})- ${req.body.title}`,
                     date: new Date(),
                     status:'waiting',
                     message:req.body.message
@@ -282,13 +282,53 @@ module.exports={
                 res.send(err)
               }
               else{
-                res.json(data)
+                sendEmail(datas.email,`dear ${datas.name}, ${data.name} has answer your request (${req.body.title}), please contact ${data.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
               }
             }
           )
         }
       }
     )
+  },
+  acceptMessage: function(req,res){
+    Company.findOne({_id:req.params.id}).then(function(result){
+      result.acceptedMessages.forEach(function(x){
+        if(x._id === req.params.acceptedMessagesId)
+        x.status = 'accepted'
+        x.save(function(err){
+          if(err){
+            res.send(err)
+          }
+          else{
+            sendEmail(result.email,"your request have been accepted", res)
+          }
+        })
+
+      })
+    })
+  },
+  rejectMessage: function(req,res){
+    Company.findOne({_id:req.params.id},function(result){
+      result.acceptedMessages.status = 'refused'
+      result.save(function(err){
+        if(err){
+          res.send(err)
+        }
+        else{
+          Company.findOne({_id:result.acceptedMessages.from},function(result2){
+            result2.letter.status = 'refused'
+            result2.save(function(err){
+              if(err){
+                res.send(err)
+              }
+              else{
+                sendEmail(result2.email,`dear ${result2.name}, ${result.name} has refused your answer to this request (${result3.title}), please contact ${result.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
+              }
+            })
+          })
+        }
+      })
+    })
   },
   resetPassword: function(req, res){
     // find email from data base
@@ -315,7 +355,7 @@ module.exports={
               =========================
               sendEmail( send to who, subject email, content email, message for server )
             */
-            sendEmail(req.body.email, "Your password succesfully reset", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`, "Email found, and we are send you a new password to your email")
+            sendEmail(req.body.email, "Your password succesfully reset", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`, "Email found, and we are send you a new password to your email", res)
           })
         // email not found
         }else{
