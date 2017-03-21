@@ -35,7 +35,7 @@ class Profile extends Component {
     let that = this
 
     this.props.fetchProfile(compId)
-    setTimeout(function(){;
+    setTimeout(function(){
       console.log(that.props.profile);
       let newState = {
         name: that.props.profile.name,
@@ -61,7 +61,8 @@ class Profile extends Component {
       let map = new GMaps({
         el: '#map',
         lat: that.state.data.currentlat,
-        lng: that.state.data.currentlng
+        lng: that.state.data.currentlng,
+        zoom: 5
       })
 
 

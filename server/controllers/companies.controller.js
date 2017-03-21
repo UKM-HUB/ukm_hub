@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 const multer = require('multer')
 var jwt = require('jsonwebtoken');
 var passwordHash = require('password-hash');
-var helper = require('sendgrid').mail;
+// var helper = require('sendgrid').mail;
+var sendEmail = require('../helpers/sendEmail')
 
 function generatePassword() {
     var length = 5,
@@ -301,37 +302,25 @@ module.exports={
           // generate new password
           var newPassword = generatePassword();
 
-          // update password
+          // update password from database
           Company.findOneAndUpdate({ _id: data._id },{ password: passwordHash.generate(newPassword) },function(err, update){
             // response update error
             if (err) throw err
-
-            // send email to company
-            from_email = new helper.Email("alexanderhendrawan@gmail.com");
-            to_email = new helper.Email(req.body.email);
-            subject = "Your password succesfully reset";
-            content = new helper.Content("text/html", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`);
-            mail = new helper.Mail(from_email, subject, to_email, content);
-
-            var sg = require('sendgrid')('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');
-            var request = sg.emptyRequest({
-              method: 'POST',
-              path: '/v3/mail/send',
-              body: mail.toJSON()
-            });
-
-            sg.API(request, function(error, response) {
-              if (error) console.log(error)
-              // console.log(response.statusCode);
-              // console.log(response.body);
-              // console.log(response.headers);
-              res.json("Email found, and we are send you a new password to your email")
-            })
-            // end function send email to company
+            /*
+              send email reset password
+              =========================
+              sendTo: req.body.email
+              subjectEmail: Your password succesfully reset
+              contentEmail: your password has been successfully reset, here your new password : <b>${newPassword}</b>
+              responseServer: Email found, and we are send you a new password to your email
+              =========================
+              Useage
+              =========================
+              sendEmail( send to who, subject email, content email, message for server )
+            */
+            sendEmail(req.body.email, "Your password succesfully reset", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`, "Email found, and we are send you a new password to your email")
 
           })
-
-
         // email not found
         }else{
           res.json("Email not found")
