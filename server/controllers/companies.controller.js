@@ -300,7 +300,7 @@ module.exports={
             res.send(err)
           }
           else{
-            sendEmail(result.email,`dear ${result2.name}, ${result.name} has accepted your answer to this request (${result3.title}), please contact ${result.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
+            sendEmail(result.email,"your request have been accepted", res)
           }
         })
 
