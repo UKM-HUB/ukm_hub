@@ -302,7 +302,7 @@ module.exports={
             else{
               Company.findOne({_id:acm.from}).then(function(result2){
                 result2.letter.forEach(function(letters){
-                  if(letters._id=== req.params.letterId){
+                  if(letters._id=== acm.letterId){
                     letters.status= 'accepted'
                     letters.save(function(err){
                       if(err){
