@@ -309,6 +309,10 @@ module.exports={
               subjectEmail: Your password succesfully reset
               contentEmail: your password has been successfully reset, here your new password : <b>${newPassword}</b>
               responseServer: Email found, and we are send you a new password to your email
+              =========================
+              Useage
+              =========================
+              sendEmail( send to who, subject email, content email, message for server )
             */
             sendEmail(req.body.email, "Your password succesfully reset", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`, "Email found, and we are send you a new password to your email")
 
