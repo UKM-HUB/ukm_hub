@@ -295,7 +295,7 @@ module.exports={
       result.acceptedMessages.forEach(function(x){
         if(x._id === req.params.acceptedMessagesId){
           x.status = 'accepted'
-          x.save(function(err){
+          result.save(function(err){
             if(err){
               res.send(err)
             }
