@@ -13,8 +13,8 @@ class Sidebar extends Component {
   render(){
     return (
       <div className="sidebar">
-      	<div className="sidebar-wrapper" style={{background:'rgb(125,125,125)'}}>
-          <div className="logo" style={{textAlign:'center'}}>
+      	<div className="sidebar-wrapper" style={{background:'rgba(45,45,45,0.8)'}}>
+          <div className="logo" style={{textAlign:'center', background:'white', borderRight: '1px solid rgba(20,20,20,0.1)'}}>
             <Link to='/map'>
                 <img src={logo} style={{width:'75%', padding:'1px 15px'}} alt='ukmhub logo'></img>
             </Link>
