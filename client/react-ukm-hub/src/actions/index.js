@@ -26,6 +26,12 @@ export const searchCompanyByCategory = (data) => {
   }
 }
 
+export const searchOtherCompanyRequest = (data) => {
+  return {
+    type: 'FETCH_OTHER_COMPANY_REQUEST',
+    payload:data,
+  }
+}
 
 export const registerCompanyFetch = (email,password) => {
   return (dispatch) => {
@@ -143,5 +149,13 @@ export const createSellRequestFetch = (data,id) => {
       .then(res => res.json())
       // .then(edited => dispatch(loginCompany(edited)))
 
+  }
+}
+
+export const otherCompanyRequestFetch = (id) => {
+  return (dispatch) => {
+    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchRequest')
+      .then(res => res.json())
+      .then(company => dispatch(searchOtherCompanyRequest(company)))
   }
 }

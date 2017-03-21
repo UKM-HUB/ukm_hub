@@ -192,7 +192,7 @@ module.exports={
             data.request.forEach(function(dats){
               if(dats.open==true){
 
-                requestArray.push({seller: data._id,request:dats})
+                requestArray.push({seller: data,request:dats})
               }
             })
           })
@@ -205,7 +205,7 @@ module.exports={
             data.request.forEach(function(dats){
               if(dats.open==true){
 
-                requestArray.push(dats)
+                requestArray.push({seller: data ,request:dats})
               }
             })
           })
@@ -267,7 +267,11 @@ module.exports={
           Company.findByIdAndUpdate(req.params.otherId,{
             $push:{
                   'acceptedMessages':{
-                    letterId: data.letter[data.letter.length-1]._id
+                    from:req.params.id,
+                    title:`Menanggapi request anda dengan judul: ${req.body.title} (id: ${req.params.requestId})`
+                    date: new Date(),
+                    status:'waiting',
+                    message:req.body.message
                   },
                 }
             },{

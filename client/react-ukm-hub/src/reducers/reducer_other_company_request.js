@@ -1,7 +1,6 @@
-
-export default (state = '', action) => {
+export default (state = [], action) => {
   switch(action.type){
-    case 'LOGIN_COMPANY' :
+    case 'FETCH_OTHER_COMPANY_REQUEST' :
       return action.payload
     default:
       return state

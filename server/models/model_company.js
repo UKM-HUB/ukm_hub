@@ -35,6 +35,7 @@ var companySchema =  new Schema({
       to:String,
       from:String,
       title:String,
+      requestId:String,
       date: Date,
       status:String,
       message:String
@@ -42,8 +43,11 @@ var companySchema =  new Schema({
   ],
   acceptedMessages:[
     {
-      companyId:String,
-      letterId:String,
+      from:String,
+      title:String,
+      date:Date,
+      status:String,
+      message:String
     }
   ]
 
