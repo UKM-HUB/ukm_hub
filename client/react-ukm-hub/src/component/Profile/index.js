@@ -6,6 +6,7 @@ import { updateCompanyProfile, fetchProfile } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
+// import defaultCompanyImage from '../../../public/assets/img/company_icon.png'
 
 class Profile extends Component {
   constructor (props) {
@@ -36,7 +37,6 @@ class Profile extends Component {
 
     this.props.fetchProfile(compId)
     setTimeout(function(){
-      console.log(that.props.profile);
       let newState = {
         name: that.props.profile.name,
         type: that.props.profile.type,
@@ -325,7 +325,7 @@ class Profile extends Component {
                     </div>
                     <div className='content'>
                       <div className='author'>
-                        <a href='#'><img className='avatar border-gray' src={this.state.data.image} alt='Company profile' />
+                        <a href='#'><img className='avatar border-gray' src={this.state.data.image} alt='' />
                           <h4 className='title'>{this.state.data.name}<br /> <small></small></h4></a>
                       </div>
                       <br />
@@ -335,11 +335,8 @@ class Profile extends Component {
                     </div>
                     <hr />
                     <div className='text-center'>
-                      <button href='#' className='btn btn-simple'>
+                      <button href={this.state.data.website} className='btn btn-simple'>
                         <i className='fa fa-institution'></i>
-                      </button>
-                      <button href='#' className='btn btn-simple'>
-                        <i className='fa fa-facebook'></i>
                       </button>
                     </div>
                   </div>
