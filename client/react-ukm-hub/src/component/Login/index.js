@@ -112,8 +112,17 @@ class Login extends Component {
   }
 
   handleForgetPassword(e){
-    e.preventDefault()
-    alert('Password random kirim ke email')
+    console.log("hallo");
+    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/resetPassword', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        email: this.state.forgetPassword
+      })
+    })
+    .then(res => console.log(res))
+
+
   }
 
   handleChange(e){
