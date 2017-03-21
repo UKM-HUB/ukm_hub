@@ -26,7 +26,7 @@ class RequestList extends Component {
         <div className="main-panel">
           <Topbar title={this.state.topbarTitle} />
             {
-              this.props.otherCompanyRequest === 0 ? <p>waiting...</p> :
+              this.props.otherCompanyRequest < 1 ? <p>waiting...</p> :
               <ListOfRequest requests={this.props.otherCompanyRequest}/>
             }
 
