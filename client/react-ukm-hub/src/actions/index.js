@@ -159,3 +159,22 @@ export const otherCompanyRequestFetch = (id) => {
       .then(company => dispatch(searchOtherCompanyRequest(company)))
   }
 }
+
+export const createMessageFetch = (title,message,requestTitle,id,otherId,requestId) => {
+
+  return (dispatch) => {
+
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/'+otherId+'/'+requestId+'/message',
+      {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          title:title,
+          message:message,
+          requestTitle:requestTitle
+        })
+      })
+      .then(res => res.json())
+
+  }
+}

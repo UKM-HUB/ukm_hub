@@ -28,7 +28,6 @@ module.exports={
       verified:'',
       edited:'',
       type: '',
-      ayam:'',
       location:{
         lat:'',
         lng:''
@@ -269,7 +268,7 @@ module.exports={
             $push:{
                   'acceptedMessages':{
                     from:req.params.id,
-                    title:`Menanggapi request anda dengan judul: ${req.body.title} (id: ${req.params.requestId})`
+                    title:`Menanggapi request anda dengan judul: ${req.body.requestTitle} (id: ${req.params.requestId})- ${req.body.title}`,
                     date: new Date(),
                     status:'waiting',
                     message:req.body.message
