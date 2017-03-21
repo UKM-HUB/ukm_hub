@@ -268,7 +268,7 @@ module.exports={
             $push:{
                   'acceptedMessages':{
                     from:req.params.id,
-                    title:`Answer your request with title: ${req.body.requestTitle} (id: ${req.params.requestId})- ${req.body.title}`,
+                    title:`${data.name} Answer your request with title: ${req.body.requestTitle} (id: ${req.params.requestId})- ${req.body.title}`,
                     date: new Date(),
                     status:'waiting',
                     message:req.body.message
@@ -290,21 +290,21 @@ module.exports={
     )
   },
   acceptMessage: function(req,res){
-    Company.findOne({_id:req.params.id},function(result){
+    Company.findOne({_id:req.params.id}).then(function(result){
       result.acceptedMessages.status = 'accepted'
       result.save(function(err){
         if(err){
           res.send(err)
         }
         else{
-          Company.findOne({_id:result.acceptedMessages.from},function(result2){
+          Company.findOne({_id:result.acceptedMessages.from}).then(function(result2){
             result2.letter.status = 'accepted'
             result2.save(function(err){
               if(err){
                 res.send(err)
               }
               else{
-                result.request.findOne({_id:result2.letter.requestId},function(result3){
+                result.request.findOne({_id:result2.letter.requestId}).then(function(result3){
                   result3.open = false
                   result3.save(function(err){
                     if(err){
