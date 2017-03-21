@@ -268,7 +268,7 @@ module.exports={
             $push:{
                   'acceptedMessages':{
                     from:req.params.id,
-                    letterId: data._id,
+                    letterId: data.letter[data.letter.length-1]._id,
                     title:`${data.name} Answer your request with title: ${req.body.requestTitle} (id: ${req.params.requestId})- ${req.body.title}`,
                     date: new Date(),
                     status:'waiting',
