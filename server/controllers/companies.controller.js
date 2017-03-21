@@ -292,42 +292,18 @@ module.exports={
   },
   acceptMessage: function(req,res){
     Company.findOne({_id:req.params.id}).then(function(result){
-      result.acceptedMessages.forEach(function(acm){
-        if(acm._id === req.params.acceptedMessagesId){
-          acm.status = 'accepted'
-          acm.save(function(err){
-            if(err){
-              res.send(err)
-            }
-            else{
-              Company.findOne({_id:acm.from}).then(function(result2){
-                result2.letter.forEach(function(letters){
-                  if(letters._id=== acm.letterId){
-                    letters.status= 'accepted'
-                    letters.save(function(err){
-                      if(err){
-                        res.send(err)
-                      }
-                      else{
-                        result.request.forEach(function(requests){
-                          requests.open = false
-                          requests.save(function(err){
-                            if(err){
-                              res.send(err)
-                            }
-                            else{
-                              sendEmail(result2.email,`dear ${result2.name}, ${result.name} has accepted your answer to this request (${result3.title}), please contact ${result.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
-                            }
-                          })
-                        })
-                      }
-                    })
-                  }
-                })
-              })
-            }
-          })
-        }
+      result.acceptedMessages.forEach(function(x){
+        if(x._id === req.params.acceptedMessagesId)
+        x.status = 'accepted'
+        x.save(function(err){
+          if(err){
+            res.send(err)
+          }
+          else{
+            sendEmail(result.email,`dear ${result2.name}, ${result.name} has accepted your answer to this request (${result3.title}), please contact ${result.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
+          }
+        })
+
       })
     })
   },

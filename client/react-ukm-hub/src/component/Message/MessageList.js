@@ -15,8 +15,8 @@ class MessageList extends Component {
     }
   }
 
-  handleAccept(id){
-    this.props.acceptMessageFetch(id)
+  handleAccept(id,acceptedMessagesId){
+    this.props.acceptMessageFetch(id,acceptedMessagesId)
   }
   componentDidMount(){
     $(document).ready(function() {
@@ -58,7 +58,7 @@ class MessageList extends Component {
                       style={{marginRight: 20}}
                       onClick={(e) => {
                         e.preventDefault()
-                        this.handleAccept(compId)
+                        this.handleAccept(compId,message._id)
                         alert('Accept masukin ke reducer')}}>
                       Accept
                     </button>
@@ -90,7 +90,7 @@ class MessageList extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    acceptMessageFetch: (id) => dispatch(acceptMessageFetch(id))
+    acceptMessageFetch: (id,acceptedMessagesId) => dispatch(acceptMessageFetch(id,acceptedMessagesId))
   }
 }
 
