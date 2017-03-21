@@ -4,11 +4,11 @@ import '../../../public/assets/js/jquery.dataTables.min.js'
 import '../../../public/assets/js/dataTables.bootstrap.min.js'
 
 export default class ListOfRequest extends Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state = {
       title: '',
-      message: ''
+      message: '',
     }
   }
 
@@ -22,6 +22,7 @@ export default class ListOfRequest extends Component {
     $(document).ready(function() {
         $('#requestTable').DataTable();
     });
+
   }
 
   render() {
@@ -30,6 +31,7 @@ export default class ListOfRequest extends Component {
       fontSize: 14,
       textAlign: 'center'
     }
+    console.log(this.props.requests.length);
     return (
       <div className='content'>
         <div className='container-fluid'>
@@ -45,66 +47,31 @@ export default class ListOfRequest extends Component {
             </tr>
           </thead>
           <tbody style={tableDataStyle}>
-            <tr>
-              <td>PT. MEDIA TEKNOLOGI</td>
-              <td>Request teamwork</td>
-              <td style={{textAlign:'justify'}}>Our UKM need to collaborate with nearby corporate for brick distribution</td>
-              <td>100000</td>
-              <td><img className='avatar border-gray' src='http://lorempixel.com/200/100/food' alt='request' /></td>
-              <td>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  data-toggle="modal"
-                  data-target="#myModal"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})}}>
-                  Reply Message
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>PT. MAJU MUNDUR</td>
-              <td>Request to sell</td>
-              <td style={{textAlign:'justify'}}>WTS 100 sheets for batik</td>
-              <td>250000</td>
-              <td style={{textAlign:'center'}}><img className='avatar border-gray' src='http://lorempixel.com/200/100/food' alt='request' /></td>
-              <td style={{textAlign:'center'}}>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  data-toggle="modal"
-                  data-target="#myModal"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})}}>
-                  Reply Message
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>PT. SINARMAS</td>
-              <td>Request to sell</td>
-              <td style={{textAlign:'justify'}}>WTS 100kg of grain</td>
-              <td>200000</td>
-              <td><img className='avatar border-gray' src='http://lorempixel.com/200/100/food' alt='request' /></td>
-              <td>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  data-toggle="modal"
-                  data-target="#myModal"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})}}>
-                  Reply Message
-                </button>
-              </td>
-            </tr>
+            {
+              this.props.requests.map((otherRequest,index)=>{return(
+                <tr key={otherRequest.request._id}>
+                  <td>otherRequest-data</td>
+                  <td>{otherRequest.request.title}</td>
+                  <td style={{textAlign:'justify'}}>{otherRequest.request.description}</td>
+                  <td>{otherRequest.request.price}</td>
+                  <td><img className='avatar border-gray' src={otherRequest.request.images} alt='request' /></td>
+                  <td>
+                    <button
+                      type='submit'
+                      className='btn btn-primary btn-fill'
+                      style={{marginRight: 20}}
+                      data-toggle="modal"
+                      data-target="#myModal"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        this.setState({})}}>
+                      Reply Message
+                    </button>
+                  </td>
+                </tr>
+              )})
+            }
+
           </tbody>
           </table>
 
