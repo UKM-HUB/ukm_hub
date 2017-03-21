@@ -314,7 +314,7 @@ module.exports={
               =========================
               sendEmail( send to who, subject email, content email, message for server )
             */
-            sendEmail(req.body.email, "Your password succesfully reset", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`, "Email found, and we are send you a new password to your email")
+            sendEmail(req.body.email, "Your password succesfully reset", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`, "Email found, and we are send you a new password to your email", res)
           })
         // email not found
         }else{

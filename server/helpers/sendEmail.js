@@ -1,7 +1,7 @@
 require('dotenv').config()
 var helper = require('sendgrid').mail;
 
-module.exports = function(sendTo, subjectEmail, contentEmail, responseServer){
+module.exports = function(sendTo, subjectEmail, contentEmail, responseServer, res){
 
   /* send email to company */
   // configure email ( send to who, subject email, content email, give feed back to server )
@@ -22,9 +22,12 @@ module.exports = function(sendTo, subjectEmail, contentEmail, responseServer){
   // response server
   sg.API(request, function(error, response) {
     if (error) console.log(error)
-    // console.log(response.statusCode);
-    // console.log(response.body);
-    // console.log(response.headers);
-    console.log(responseServer)
+      // console.log(response.statusCode);
+      // console.log(response.body);
+      // console.log(response.headers);
+      console.log(responseServer)
+      res.json({
+        message: 'Email has been sent'
+      })
   })
 }
