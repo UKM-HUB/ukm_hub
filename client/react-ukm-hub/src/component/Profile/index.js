@@ -6,7 +6,8 @@ import { updateCompanyProfile, fetchProfile } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
-// import defaultCompanyImage from '../../../public/assets/img/company_icon.png'
+import $ from 'jquery'
+import profileInfo from '../../../public/assets/js/profileInfoMessageBox.js'
 
 class Profile extends Component {
   constructor (props) {
@@ -43,8 +44,8 @@ class Profile extends Component {
         email: that.props.profile.email,
         category: that.props.profile.category,
         address: that.props.profile.address ? that.props.profile.address : '',
-        currentlat:that.props.profile.location.lat,
-        currentlng:that.props.profile.location.lng,
+        currentlat:that.props.profile.location.lat ? that.props.profile.location.lat : '-6.260745364770679',
+        currentlng:that.props.profile.location.lng ? that.props.profile.location.lng : '106.78169667720795',
         description: that.props.profile.description,
         website: that.props.profile.website,
         phone: that.props.profile.phone ? that.props.profile.phone : '',
@@ -55,16 +56,31 @@ class Profile extends Component {
       that.setState({
         data: newData
       })
-    }, 1000)
+    }, 250)
 
     setTimeout(function(){
       let map = new GMaps({
         el: '#map',
         lat: that.state.data.currentlat,
         lng: that.state.data.currentlng,
-        zoom: 5
+        zoom: 16
       })
 
+      GMaps.geolocate({
+        success: function(position) {
+          map.addMarker({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          })
+          map.setCenter(position.coords.latitude, position.coords.longitude);
+        },
+        error: function(error) {
+          alert('Geolocation failed: '+error.message);
+        },
+        not_supported: function() {
+          alert("Your browser does not support geolocation");
+        }
+      });
 
       map.addMarker({
         lat: that.state.data.currentlat,
@@ -89,7 +105,8 @@ class Profile extends Component {
           updatedlat: event.latLng.lat(),
           updatedlng: event.latLng.lng()
         }
-
+        console.log(event.latLng.lat());
+        console.log(event.latLng.lng());
         const newData = Object.assign({}, that.state.data, newState);
         that.setState({
           data: newData
@@ -104,11 +121,29 @@ class Profile extends Component {
           }
         })
       })
-    },1500)
+    },500)
   }
 
   submitUpdate(data,companyId){
-    this.props.updateCompanyProfile(data,companyId)
+    if (this.state.data.name === '') {
+      profileInfo.showNameMessage('top','center')
+    } else if (this.state.data.type === '') {
+      profileInfo.showTypeMessage('top','center')
+    } else if (this.state.data.category.length === 0) {
+      profileInfo.showCategoryMessage('top','center')
+    } else if (this.state.data.updatedlat === '-6.260745364770679') {
+      profileInfo.showMarkerMessage('top','center')
+    } else if (this.state.data.address === '') {
+      profileInfo.showAddressMessage('top','center')
+    } else if (this.state.data.description === '') {
+      profileInfo.showDescriptionMessage('top','center')
+    } else if (this.state.data.phone === '') {
+      profileInfo.showPhoneMessage('top','center')
+    } else {
+      profileInfo.showUpdateSuccessMessage('top','center')
+      this.props.updateCompanyProfile(data,companyId)
+    }
+
   }
 
   onHandleChange (e) {
@@ -260,7 +295,7 @@ class Profile extends Component {
                           <div className='col-md-6'>
                             <div className='form-group'>
                               <label>
-                                Website
+                                Website (optional)
                               </label>
                               <input
                                 type='text'
@@ -290,7 +325,7 @@ class Profile extends Component {
                           <div className='col-md-12'>
                             <div className='form-group'>
                               <label>
-                                Profile picture
+                                Profile picture (optional)
                               </label>
                               <input
                                 type='text'
