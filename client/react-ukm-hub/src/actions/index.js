@@ -33,6 +33,15 @@ export const searchOtherCompanyRequest = (data) => {
   }
 }
 
+export const searchRequestByClick = (data) => {
+  return {
+    type: 'SEARCH_REQUEST_CLICK',
+    payload:data,
+  }
+}
+
+
+
 export const registerCompanyFetch = (email,password) => {
   return (dispatch) => {
     fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/auth/register/', {

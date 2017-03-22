@@ -53,10 +53,14 @@ class ListOfRequest extends Component {
     this.setState(newState)
   }
 
-  componentDidMount(){
+  componentWillMount(){
+    const that = this
     $(document).ready(function() {
-        $('#requestTable').DataTable();
+        var table = $('#requestTable').DataTable();
+        table.search(that.props.searchKey).draw()
+
     });
+
 
   }
 
@@ -196,10 +200,16 @@ class ListOfRequest extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    searchKey : state.searchKey
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     createMessageFetch: (title,message,requestTitle,id,otherId,requestId) => dispatch(createMessageFetch(title,message,requestTitle,id,otherId,requestId))
   }
 }
 
-export default connect(null, mapDispatchToProps)(ListOfRequest)
+export default connect(mapStateToProps, mapDispatchToProps)(ListOfRequest)

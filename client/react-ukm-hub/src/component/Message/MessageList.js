@@ -57,7 +57,11 @@ class MessageList extends Component {
         $('#requestTable').DataTable();
     });
   }
-
+  fullDate(date){
+    let fullDate = new Date(date)
+    let month = ['January','February','March','April','May','June','July','August','September','October','November']
+    return fullDate.getDate() + '/' + month[(fullDate.getMonth())] + '/' +  fullDate.getFullYear()
+  }
   render() {
     const tableDataStyle = {
       fontFamily: 'Peddana',
@@ -80,13 +84,14 @@ class MessageList extends Component {
           </thead>
           <tbody style={tableDataStyle}>
             {
+
               this.props.messages.filter((filterMessage)=> filterMessage.status === 'waiting'  ).map((message,index)=>{return(
                 <tr key={message._id}>
                   <td>{message.sender}</td>
                   <td>{message.title}</td>
                   <td>{message.requestTitle}</td>
                   <td>{message.message}</td>
-                  <td>{message.date}</td>
+                  <td>{this.fullDate(message.date)}</td>
                   <td>
                     <button
                       type='submit'

@@ -15,8 +15,8 @@ class Message extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    nextProps.fetchProfile(compId)
+  componentDidMount(){
+    this.props.fetchProfile(compId)
   }
 
   render () {

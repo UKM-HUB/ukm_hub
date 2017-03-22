@@ -12,12 +12,13 @@ class RequestList extends Component {
     super()
     this.state = {
       topbarTitle: 'Request List',
-      activeNavigation: ['','','','active']
+      activeNavigation: ['','','','active'],
+      otherCompRequest:[]
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    nextProps.otherCompanyRequestFetch(compId)
+  componentDidMount(){
+    this.props.otherCompanyRequestFetch(compId)
   }
 
   render () {
@@ -28,7 +29,7 @@ class RequestList extends Component {
           <Topbar title={this.state.topbarTitle} />
             {
               this.props.otherCompanyRequest.length < 1 ? <RequestEmpty /> :
-              <ListOfRequest requests={this.props.otherCompanyRequest}/>
+              <ListOfRequest requests={this.props.otherCompanyRequest} searchKey={this.props.searchKey}/>
             }
 
         </div>
@@ -39,7 +40,8 @@ class RequestList extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    otherCompanyRequest: state.otherCompanyRequest
+    otherCompanyRequest: state.otherCompanyRequest,
+    searchKey : state.searchKey
   }
 }
 
