@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import GMaps from '../../../public/assets/js/gmaps.min.js'
 import { connect } from 'react-redux'
-import { updateCompanyProfile, fetchProfile } from '../../actions/index.js'
+import { updateCompanyProfile, fetchProfileGmaps } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
@@ -36,74 +36,74 @@ class Profile extends Component {
   }
 
   componentDidMount () {
-    let that = this
+    const that = this
+    this.props.fetchProfileGmaps(compId, this.createGmapsMarker, that)
+  }
 
-    this.props.fetchProfile(compId)
-    setTimeout(function(){
+  createGmapsMarker(company, that){
+
+    let newState = {
+      name: company.name,
+      type: company.type,
+      email: company.email,
+      category: company.category,
+      address: company.address ? company.address : '',
+      currentlat:company.location.lat ? company.location.lat : '-6.260745364770679',
+      currentlng:company.location.lng ? company.location.lng : '106.78169667720795',
+      description: company.description,
+      website: company.website,
+      phone: company.phone ? company.phone : '',
+      image: company.images ? company.images : ''
+    }
+
+    const newData = Object.assign({}, that.state.data, newState);
+
+    that.setState({
+      data: newData
+    })
+
+    let map = new GMaps({
+      el: '#map',
+      lat: that.state.data.currentlat,
+      lng: that.state.data.currentlng,
+      zoom: 10
+    })
+
+    map.addMarker({
+      lat: that.state.data.currentlat,
+      lng: that.state.data.currentlng
+    })
+
+    let currentLocationState = {
+      updatedlat: that.state.data.currentlat,
+      updatedlng: that.state.data.currentlng
+    }
+
+    const currentData = Object.assign({}, that.state.data, currentLocationState);
+    that.setState({
+      data: currentData
+    })
+
+    GMaps.on('click', map.map, function (event) {
       let newState = {
-        name: that.props.profile.name,
-        type: that.props.profile.type,
-        email: that.props.profile.email,
-        category: that.props.profile.category,
-        address: that.props.profile.address ? that.props.profile.address : '',
-        currentlat:that.props.profile.location.lat ? that.props.profile.location.lat : '-6.260745364770679',
-        currentlng:that.props.profile.location.lng ? that.props.profile.location.lng : '106.78169667720795',
-        description: that.props.profile.description,
-        website: that.props.profile.website,
-        phone: that.props.profile.phone ? that.props.profile.phone : '',
-        image: that.props.profile.images ? that.props.profile.images : ''
+        updatedlat: event.latLng.lat(),
+        updatedlng: event.latLng.lng()
       }
 
       const newData = Object.assign({}, that.state.data, newState);
       that.setState({
         data: newData
       })
-    }, 1000)
 
-    setTimeout(function(){
-      let map = new GMaps({
-        el: '#map',
-        lat: that.state.data.currentlat,
-        lng: that.state.data.currentlng,
-        zoom: 10
-      })
-
+      map.removeMarkers()
       map.addMarker({
-        lat: that.state.data.currentlat,
-        lng: that.state.data.currentlng
-      })
-
-      let currentLocationState = {
-        updatedlat: that.state.data.currentlat,
-        updatedlng: that.state.data.currentlng
-      }
-
-      const currentData = Object.assign({}, that.state.data, currentLocationState);
-      that.setState({
-        data: currentData
-      })
-
-      GMaps.on('click', map.map, function (event) {
-        let newState = {
-          updatedlat: event.latLng.lat(),
-          updatedlng: event.latLng.lng()
+        lat: that.state.data.updatedlat,
+        lng: that.state.data.updatedlng,
+        infoWindow: {
+          content: '<p>Your company location</p>'
         }
-
-        const newData = Object.assign({}, that.state.data, newState);
-        that.setState({
-          data: newData
-        })
-
-        map.removeMarkers()
-        map.addMarker({
-          lat: that.state.data.updatedlat,
-          lng: that.state.data.updatedlng,
-          infoWindow: {
-            content: '<p>Your company location</p>'
-          }
-        })
       })
-    },1500)
+    })
   }
 
   geolocate(e) {
@@ -514,7 +514,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchProfile: (id) => dispatch(fetchProfile(id)),
+    fetchProfileGmaps: (id, cb, that) => dispatch(fetchProfileGmaps(id, cb, that)),
     updateCompanyProfile: (data,id) => dispatch(updateCompanyProfile(data,id))
   }
 }

@@ -14,8 +14,11 @@ Module._extensions['.png'] = function(module, fn) {
 var sendEmail = require('../helpers/sendEmail')
 var defaultCompanyImage = require ('../public/image/company_icon.png')
 var defaultReqImage = require ('../public/image/box-outline-filled.png')
-var validationEditProfile = require('../helpers/validations/validationEditProfile')
-var validationRequest = require('../helpers/validations/validationRequest')
+
+// function validation
+var validationEditProfile = require('../helpers/validation/validationEditProfile')
+var validationRequest = require('../helpers/validation/validationRequest')
+var validationCreateLetter = require('../helpers/validation/validationCreateLetter')
 
 function generatePassword() {
     var length = 5,
@@ -153,7 +156,7 @@ module.exports={
   },
   createBuyRequest: function(req,res){
 
-    validationRequest(req.body.title, req.body.price, req.body.description,  res, function(){
+    validationRequest(req.body.title, req.body.description, res, function(){
       // save buy request to database
       Company.findByIdAndUpdate(req.params.id,{
         $push:{
@@ -182,7 +185,7 @@ module.exports={
   },
   createSellRequest: function(req,res){
 
-    validationRequest(req.body.title, req.body.price, req.body.description,  res, function(){
+    validationRequest(req.body.title, req.body.description,  res, function(){
       // save sell request to database
       Company.findByIdAndUpdate(req.params.id,{
         $push:{
@@ -433,7 +436,16 @@ module.exports={
               =========================
               sendEmail( send to who, subject email, content email, message for server )
             */
-            sendEmail(req.body.email, "Your password succesfully reset", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`, "Email found, and we are send you a new password to your email", res)
+            sendEmail(
+              req.body.email,
+              "Your password succesfully reset",
+              `
+              <h1 style="text-align: center"><b>RESET PASSWORD SUCCESS</b></h1>
+              <p style="text-align: center">your password has been successfully reset, here your new password : <b>${newPassword}</b></p>
+              `,
+              "Email found, and we are send you a new password to your email",
+              res
+            )
           })
         // email not found
         }else{

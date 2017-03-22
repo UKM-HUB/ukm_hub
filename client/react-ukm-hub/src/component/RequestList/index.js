@@ -18,6 +18,7 @@ class RequestList extends Component {
   }
 
   componentDidMount(){
+
     this.props.otherCompanyRequestFetch(compId)
   }
 
