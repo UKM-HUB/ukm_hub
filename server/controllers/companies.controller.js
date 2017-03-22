@@ -156,7 +156,7 @@ module.exports={
   },
   createBuyRequest: function(req,res){
 
-    validationRequest(req.body.title, req.body.price, req.body.description,  res, function(){
+    validationRequest(req.body.title, req.body.description, res, function(){
       // save buy request to database
       Company.findByIdAndUpdate(req.params.id,{
         $push:{
@@ -185,7 +185,7 @@ module.exports={
   },
   createSellRequest: function(req,res){
 
-    validationRequest(req.body.title, req.body.price, req.body.description,  res, function(){
+    validationRequest(req.body.title, req.body.description,  res, function(){
       // save sell request to database
       Company.findByIdAndUpdate(req.params.id,{
         $push:{
@@ -436,7 +436,16 @@ module.exports={
               =========================
               sendEmail( send to who, subject email, content email, message for server )
             */
-            sendEmail(req.body.email, "Your password succesfully reset", `your password has been successfully reset, here your new password : <b>${newPassword}</b>`, "Email found, and we are send you a new password to your email", res)
+            sendEmail(
+              req.body.email,
+              "Your password succesfully reset",
+              `
+              <h1 style="text-align: center"><b>RESET PASSWORD SUCCESS</b></h1>
+              <p style="text-align: center">your password has been successfully reset, here your new password : <b>${newPassword}</b></p>
+              `,
+              "Email found, and we are send you a new password to your email",
+              res
+            )
           })
         // email not found
         }else{
