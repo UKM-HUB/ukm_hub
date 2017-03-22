@@ -6,6 +6,35 @@ import {connect} from 'react-redux'
 import {createMessageFetch} from '../../actions/index.js'
 const compId = localStorage.getItem('companyId')
 
+let requestListInfo = {
+  showReplyMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-close',
+      message: '<p style="margin-top:8px">Reply message is required</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showSubmitMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-cloud-download',
+      message: '<p style="margin-top:8px">Reply message has been sent</p>'
+    }, {
+      type: 'info',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  }
+}
+
 class ListOfRequest extends Component {
   constructor(props){
     super(props)
@@ -32,14 +61,19 @@ class ListOfRequest extends Component {
   }
 
   onHandleSubmitMessage(title,message,requestTitle,id,otherId,requestId){
-    this.props.createMessageFetch(title,message,requestTitle,id,otherId,requestId)
-    this.setState({
-        title: '',
-        message:'',
-        requestTitle:'',
-        requestId:'',
-        otherId:'',
-    })
+    if (this.state.message === '') {
+      requestListInfo.showReplyMessage('top','center')
+    } else {
+      this.props.createMessageFetch(title,message,requestTitle,id,otherId,requestId)
+      requestListInfo.showSubmitMessage('top','center')
+      this.setState({
+          title: '',
+          message:'',
+          requestTitle:'',
+          requestId:'',
+          otherId:'',
+      })
+    }
   }
 
   handleOpenMessage(title,id,seller){
@@ -113,7 +147,7 @@ class ListOfRequest extends Component {
                     <div className='col-md-12'>
                       <div className='form-group'>
                         <label>
-                          Title
+                          Title (Optional)
                         </label>
                         <input
                           type='text'

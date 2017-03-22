@@ -12,8 +12,8 @@ class MapView extends Component {
     this.state = {
       topbarTitle: 'Map View',
       activeNavigation: ['active', '', '', '', ''],
-      corporateIcon: 'https://s21.postimg.org/8hrapdesn/building.png',
-      ukmIcon: 'https://s4.postimg.org/jlidgjun1/store.png',
+      companyIcon: 'https://s4.postimg.org/jlidgjun1/store.png',
+      otherCompanyIcon: 'https://s21.postimg.org/8hrapdesn/building.png',
       dataMapCompany: []
     }
   }
@@ -22,80 +22,90 @@ class MapView extends Component {
     var temp = []
     var pathTemp = []
     const that = this
-    console.log("this will receview props");
+    // if(this.props.profile.category)
 
     setTimeout(function(){
+      if (that.props.profile.type === 'corporate') {
+        that.setState({
+          companyIcon: 'https://s21.postimg.org/8hrapdesn/building.png',
+          otherCompanyIcon: 'https://s4.postimg.org/jlidgjun1/store.png'
+        })
+      }
+
       for (let i = 0; i < that.props.otherCompany.length; i++) {
-        console.log(i);
         pathTemp[pathTemp.length] = [ that.props.profile.location.lat, that.props.profile.location.lng ]
         pathTemp[pathTemp.length] = [ that.props.otherCompany[i].location.lat, that.props.otherCompany[i].location.lng ]
       }
-    }, 1500)
 
-    for (let i = 0; i < this.props.otherCompany.length; i++) {
-      let requestList = '';
-      this.props.otherCompany[i].request.map(function(data){ return requestList += '<li class="list-group-item"><a href="https://www.google.com">' + data.title + '</a></li>' })
+      for (let i = 0; i < that.props.otherCompany.length; i++) {
+        let requestList = '';
+        that.props.otherCompany[i].request.map(function(data){
+          return requestList +=
+          '<li class="list-group-item"><a href="https://www.google.com">' + data.title + '</a></li>'
+        })
 
-      temp[temp.length] =
-      {
-        title: this.props.otherCompany[i].name,
-        icon: this.state.ukmIcon,
-        lat: this.props.otherCompany[i].location.lat,
-        lng: this.props.otherCompany[i].location.lng,
-        infoWindow: {
-          content:
-          `
-          <div style='padding:25px'>
-            <div class="row">
-              <div class="col-sm-3">
-                <img
-                  src=${this.props.otherCompany[i].images}
-                  style="width: 118px; height:100px; border-radius: 5px; filter:grayscale(0.3) opacity(0.9)"
-                />
+        temp[temp.length] =
+        {
+          title: that.props.otherCompany[i].name,
+          icon: that.state.otherCompanyIcon,
+          lat: that.props.otherCompany[i].location.lat,
+          lng: that.props.otherCompany[i].location.lng,
+          infoWindow: {
+            content:
+            `
+            <div style='padding:25px'>
+              <div class="row">
+                <div class="col-sm-3">
+                  <img
+                    src=${that.props.otherCompany[i].images}
+                    style="width: 118px; height:100px; border-radius: 5px; filter:grayscale(0.3) opacity(0.9)"
+                  />
+                </div>
+                <div class="col-sm-9" style="margin-top: -20px; padding-left:30px">
+                  <h3><b>${that.props.otherCompany[i].name}</b></h3>
+                  <p><b>Alamat : </b>${that.props.otherCompany[i].address}</p>
+                  <p><b>Telepon : </b>${that.props.otherCompany[i].phone}</p>
+                </div>
               </div>
-              <div class="col-sm-9" style="margin-top: -20px; padding-left:30px">
-                <h3><b>${this.props.otherCompany[i].name}</b></h3>
-                <p><b>Alamat : </b>${this.props.otherCompany[i].address}</p>
-                <p><b>Telepon : </b>${this.props.otherCompany[i].phone}</p>
+              <hr />
+              <div class="row">
+                <div class="col-sm-12">
+                  <p><b>Detail : </b></p>
+                  <p>${that.props.otherCompany[i].description}</p>
+                  <p><b>Category : </b>
+                    ${ that.props.otherCompany[i].category.map(function(data){ return `${data}` }) }
+                  </p>
+                  <p><b>Request : </b>
+                    <div class="card">
+                      <ul class="list-group list-group-flush">
+                        ${requestList}
+                      </ul>
+                    </div>
+                  </p>
+                  <a href="https://www.google.com" target="_blank">${that.props.otherCompany[i].website}</a>
+                </div>
               </div>
             </div>
-            <hr />
-            <div class="row">
-              <div class="col-sm-12">
-                <p><b>Detail : </b></p>
-                <p>${this.props.otherCompany[i].description}</p>
-                <p><b>Category : </b>
-                  ${ this.props.otherCompany[i].category.map(function(data){ return `${data}` }) }
-                </p>
-                <p><b>Request : </b>
-                  <div class="card">
-                    <ul class="list-group list-group-flush">
-                      ${requestList}
-                    </ul>
-                  </div>
-                </p>
-                <a href="https://www.google.com" target="_blank">${this.props.otherCompany[i].website}</a>
-              </div>
-            </div>
-          </div>
-          `
+            `
+          }
         }
       }
-    }
+    }, 1500)
+
 
     setTimeout(function(){
       var map = new GMaps({
         el: '#map',
         lat: that.props.profile.location.lat,
         lng: that.props.profile.location.lng,
-        zoom: 6
+        zoom: 10
       });
 
       // add login marker, on maps(it maybe corporate or ukm)
 
       map.addMarkers([{
         title: that.props.profile.name,
-        icon: that.state.corporateIcon,
+        icon: that.state.companyIcon,
         lat: that.props.profile.location.lat,
         lng: that.props.profile.location.lng,
         details: that.props.profile.name

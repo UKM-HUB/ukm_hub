@@ -21,7 +21,7 @@ var coopSchema =  new Schema({
   phone: String,
   image: String,
   email: { type: String, required: [true, 'you must insert your email'], validate: emailValidator},
-  password: String
+  password: { type: String, required: [true, 'you must insert your password'] }
 });
 
 // the schema is useless so far

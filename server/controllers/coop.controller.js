@@ -2,6 +2,7 @@ var modelCoop = require('../models/model_coop.js')
 var modelCompany = require('../models/model_company.js')
 var jwt = require('jsonwebtoken');
 var passwordHash = require('password-hash');
+const assert = require('assert');
 
 const coopController = {
   login: function(req, res, next){
@@ -17,6 +18,11 @@ const coopController = {
     })
   },
   register: function(req, res, next){
+    // prevent to create coop with null password
+    if (req.body.password == '') {
+      res.json("you must insert your password")
+    }
+
     // create model data
     var newCoop = modelCoop({
       email: req.body.email,
@@ -24,7 +30,16 @@ const coopController = {
     })
     // model data save to database
     newCoop.save(function(err, data){
-      if (err) throw err
+      // validation email
+      if(err){
+        if (err.errors['email'].message) {
+          res.json(err.errors['email'].message)
+        }
+      }
+
+      // validation password
+
+      // if (err) throw err
       res.json(data)
     })
   },
