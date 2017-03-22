@@ -18,13 +18,11 @@ class MapView extends Component {
   }
 
   createGmapsMarkers(otherCompany, company){
-
     let temp = []
     let pathTemp = []
     let otherCompanyIcon = 'https://s21.postimg.org/8hrapdesn/building.png'
     let companyIcon = 'https://s4.postimg.org/jlidgjun1/store.png'
     const that = this
-
 
       if (company.type === 'corporate') {
         companyIcon = 'https://s21.postimg.org/8hrapdesn/building.png',
@@ -60,8 +58,8 @@ class MapView extends Component {
                     style="width: 118px; height:100px; border-radius: 5px; filter:grayscale(0.3) opacity(0.9)"
                   />
                 </div>
-                <div class="col-sm-9" style="margin-top: -20px; padding-left:30px">
-                  <h3><b>${otherCompany[i].name}</b></h3>
+                <div class="col-sm-9" style="margin-top: -20px; padding-left:50px">
+                  <h2><b>${otherCompany[i].name}</b></h2>
                   <p><b>Alamat : </b>${otherCompany[i].address}</p>
                   <p><b>Telepon : </b>${otherCompany[i].phone}</p>
                 </div>
@@ -69,9 +67,13 @@ class MapView extends Component {
               <hr />
               <div class="row">
                 <div class="col-sm-12">
-                  <p><b>Detail : </b></p>
                   <p>${otherCompany[i].description}</p>
-                  <p><b>Category : </b>
+                  <div class="list-group">
+                    <a href="#" class="list-group-item active">
+                      <h4 class="list-group-item-heading">Category</h4>
+                      <p class="list-group-item-text">...</p>
+                    </a>
+                  </div>
                     ${ otherCompany[i].category.map(function(data){ return `${data}` }) }
                   </p>
                   <p><b>Request : </b>

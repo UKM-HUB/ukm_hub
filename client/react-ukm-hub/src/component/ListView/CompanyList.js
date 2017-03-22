@@ -28,7 +28,8 @@ const CompanyList = (props) => {
   const companyTitleFontStyle = {
     fontFamily: 'open sans',
     textDecoration: 'underline',
-    marginBottom: 15
+    marginBottom: 15,
+    fontSize: 27
   }
 
   const panelBodyStyle = {
@@ -65,14 +66,11 @@ const CompanyList = (props) => {
               <li className="list-group-item"><span style={companyDetailStyle}>Email</span>
                 <span>{props.email}</span>
               </li>
-              <li className="list-group-item"><span style={companyDetailStyle}>Request List</span>
-                  <ul style={{display:'inline-block'}}>
+              <li className="list-group-item" ><span style={companyDetailStyle}>Request List</span>
+                  <ul style={{display:'inline-block', paddingLeft:16, listStyleType: 'square'}}>
                     {
-
-                      props.request.length === 0 ? <p>-</p> :
-                      props.request.filter((y)=> y.open === true ).map((x,index)=>{return(<li key={index}><Link to='/request-list' onClick={()=> props.searchRequestByClick(x.title)}>{x.title}</Link></li>)})
-
-
+                      props.request.length === 0 ? <p></p> :
+                      props.request.filter((y)=> y.open === true ).map((x,index)=>{return(<li key={index}><Link to='/request-list' onClick={()=> props.searchRequestByClick(x.title)} style={{color:'rgb(30,30,30)',fontSize:15,textDecoration:'underline'}}>{x.title}</Link></li>)})
                     }
                   </ul>
               </li>
@@ -87,6 +85,9 @@ const CompanyList = (props) => {
               </li>
               <li className="list-group-item"><span style={companyDetailStyle}>Address</span>
                 <span>{props.address}</span>
+              </li>
+              <li className="list-group-item"><span style={companyDetailStyle}>Phone</span>
+                <span>{props.phone}</span>
               </li>
             </ul>
         </div>
