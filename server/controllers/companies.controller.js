@@ -14,7 +14,8 @@ Module._extensions['.png'] = function(module, fn) {
 var sendEmail = require('../helpers/sendEmail')
 var defaultCompanyImage = require ('../public/image/company_icon.png')
 var defaultReqImage = require ('../public/image/box-outline-filled.png')
-var validationEditProfile = require('../helpers/validationEditProfile')
+var validationEditProfile = require('../helpers/validations/validationEditProfile')
+var validationCreateRequest = require('../helpers/validations/validationCreateRequest')
 
 function generatePassword() {
     var length = 5,
@@ -151,30 +152,36 @@ module.exports={
     })
   },
   createBuyRequest: function(req,res){
-    Company.findByIdAndUpdate(req.params.id,{
-      $push:{
-            'request':{
-              types:"buy",
-              title:req.body.title,
-              price:Number(req.body.price),
-              description:req.body.description,
-              images:req.body.images||defaultReqImage,
-              open:true
+
+    validationCreateRequest(req.body.title, req.body.price, req.body.description,  res, function(){
+      // save buy request to database
+      Company.findByIdAndUpdate(req.params.id,{
+        $push:{
+              'request':{
+                types:"buy",
+                title:req.body.title,
+                price:Number(req.body.price),
+                description:req.body.description,
+                images:req.body.images||defaultReqImage,
+                open:true
+              }
             }
+        },{
+          new:true
+        }, (err,data)=>{
+          if(err){
+            res.send(err)
           }
-      },{
-        new:true
-      }, (err,data)=>{
-        if(err){
-          res.send(err)
+          else{
+            res.send(data)
+          }
         }
-        else{
-          res.send(data)
-        }
-      }
-    )
+      )
+
+    })
   },
   createSellRequest: function(req,res){
+
     Company.findByIdAndUpdate(req.params.id,{
       $push:{
             'request':{
@@ -197,6 +204,7 @@ module.exports={
         }
       }
     )
+
   },
   showRequest: function(req,res){
     var requestArray =[]
