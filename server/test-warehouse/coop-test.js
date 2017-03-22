@@ -5,6 +5,13 @@ chai.use(chaiHttp);
 
 
 describe('test routing coop',function(){
+  it('Should return you dont have access token',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').get(`/api/coop`)
+    .end(function (err, res) {
+      res.should.be.an('object');
+    done()
+    })
+  })
   // testing register coop
   it('should return email of the register coop when post api/coop/register',function(done){
     chai

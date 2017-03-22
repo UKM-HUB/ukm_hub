@@ -24,7 +24,7 @@ const coopController = {
     }
 
     // create model data
-    var newCoop = modelCoop({
+    var newCoop = new modelCoop({
       email: req.body.email,
       password: passwordHash.generate(req.body.password)
     })
