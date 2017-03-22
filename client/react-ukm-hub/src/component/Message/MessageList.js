@@ -17,9 +17,11 @@ class MessageList extends Component {
 
   handleAccept(id,acceptedMessagesId){
     this.props.acceptMessageFetch(id,acceptedMessagesId)
+    this.forceUpdate()
   }
   handleReject(id,rejectedMessagesId){
     this.props.rejectMessageFetch(id,rejectedMessagesId)
+    this.forceUpdate()
   }
   componentDidMount(){
     $(document).ready(function() {

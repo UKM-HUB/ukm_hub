@@ -15,9 +15,10 @@ class Message extends Component {
     }
   }
 
-  componentWillMount(){
-    this.props.fetchProfile(compId)
+  componentWillReceiveProps(nextProps){
+    nextProps.fetchProfile(compId)
   }
+
   render () {
     return (
       <div className="wrapper">
@@ -25,7 +26,7 @@ class Message extends Component {
         <div className="main-panel">
           <Topbar title={this.state.topbarTitle} />
             {
-              this.props.profile === '' ? <p>waiting...</p> :
+              this.props.profile === '' ? <p></p> :
               <MessageList messages={this.props.profile.acceptedMessages}/>
             }
 
@@ -45,7 +46,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchProfile: (id) => dispatch(fetchProfile(id))
   }
-  //return bindActionCreators({addTodo},dispatch)
 }
 
 

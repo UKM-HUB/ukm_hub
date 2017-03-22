@@ -68,17 +68,20 @@ const CompanyList = (props) => {
                 <span>{props.email}</span>
               </li>
               <li className="list-group-item"><span style={companyDetailStyle}>Request List</span>
-                  <ul style={requestDetailStyle}>
+                  <ul style={{display:'inline-block', paddingLeft: 16}}>
                     {
+                      props.request.length === 0 ? <p>-</p> :
                       props.request.map((x,index)=>{return(<li key={index}><a href='http://google.com'>{x.title}</a></li>)})
                     }
-
-
                   </ul>
               </li>
               <li className="list-group-item"><span style={companyDetailStyle}>Website</span>
                 <span>
-                  <a href='https://facebook.github.io/react/'>{props.website}</a>
+                  {
+                    props.website === '' ? <p>-</p> :
+                    <a href={props.website}>{props.website}</a>
+                  }
+
                 </span>
               </li>
               <li className="list-group-item"><span style={companyDetailStyle}>Address</span>
