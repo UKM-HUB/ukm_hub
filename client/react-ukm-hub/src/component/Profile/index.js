@@ -6,6 +6,7 @@ import { updateCompanyProfile, fetchProfile } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
+import defaultCompanyImage from '../../../public/assets/img/company_icon.png'
 
 import profileInfo from '../../../public/assets/js/profileInfoMessageBox.js'
 
@@ -50,14 +51,14 @@ class Profile extends Component {
         description: that.props.profile.description,
         website: that.props.profile.website,
         phone: that.props.profile.phone ? that.props.profile.phone : '',
-        image: that.props.profile.images ? that.props.profile.images : ''
+        image: that.props.profile.images ? that.props.profile.images : defaultCompanyImage
       }
 
       const newData = Object.assign({}, that.state.data, newState);
       that.setState({
         data: newData
       })
-    }, 250)
+    }, 1000)
 
     setTimeout(function(){
       let map = new GMaps({
@@ -102,7 +103,7 @@ class Profile extends Component {
           }
         })
       })
-    },500)
+    },1500)
   }
 
   geolocate(e) {
@@ -332,7 +333,7 @@ class Profile extends Component {
                               </label>
                             </div>
                               { ['fashion', 'food', 'beauty', 'office', 'souvenir', 'electronic', 'book', 'automotive', 'entertainment', 'furniture', 'gadget', 'game'].map((category,index) => (
-                                <div className='col-md-2' key={index}>
+                                <div className='col-md-3' key={index}>
                                   <div className='form-group' style={{marginTop: -20}}>
                                     <label style={{cursor: 'pointer'}}>
                                       <input
@@ -355,7 +356,7 @@ class Profile extends Component {
                               Location
                             </label>
                             <div className="row" style={{marginBottom:25}}>
-                              <div className="col-md-2">
+                              <div className="col-md-3">
                                 <button
                                   type='submit'
                                   className='btn btn-primary btn-fill'
@@ -364,7 +365,7 @@ class Profile extends Component {
                                   Find your location
                                 </button>
                               </div>
-                              <div className="col-md-10">
+                              <div className="col-md-9">
                                 <input
                                   type='text'
                                   name='searchLocation'
