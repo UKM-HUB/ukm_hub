@@ -313,7 +313,16 @@ module.exports={
                 res.send(err)
               }
               else{
-                sendEmail(datas.email, "You received a new message",`dear ${datas.name}, ${data.name} have send you a message with title ${data.letter[data.letter.length-1].title} please check your message box, regards UKM-HUB team `,"Your received new message", res)
+                sendEmail(datas.email,
+                   "You received a new message",
+                   `  <div style="text-align:center"><img src='https://raw.githubusercontent.com/UKM-HUB/ukm_hub/master/ukmhub.png' style="width:30%;"/></div>
+                      <P>Dear <b>${datas.name}</b>,</P>
+                      <p>to respond your request with subject <i><b>${datas.requestTitle}</b></i>, <b>${data.name}</b> have send you a message with title <b>"<i>${data.letter[data.letter.length-1].title}</i>"</b> .</p>
+                      <p>please check your message box immediately to accept or refused the offer, Thank you for your attention </p>
+                      <br/>
+                    <p>regards,</p>
+                      <p>UKM HUB teams</p> `,
+                    "Your received new message", res)
               }
             }
           )
@@ -348,7 +357,16 @@ module.exports={
                                 res.send(err)
                               }
                               else{
-                                sendEmail(result2.email, "Accepted request",`dear ${result2.name}, ${result.name} have accepted your request with title ${sender.title} and message ${sender.message} from ${result.name} request of ${receptor.title}, contact ${result.name} for futher information, regards UKM-HUB team `,"Your request have been accepted", res)
+                                sendEmail(result2.email, "Accepted request",
+                                `  <div style="text-align:center"><img src='https://raw.githubusercontent.com/UKM-HUB/ukm_hub/master/ukmhub.png' style="width:40%;"/></div>
+                                  <P>Dear <b>${result2.name}</b>,</P>
+                                  <p><b>${result.name}</b> have <b>Accepted</b> your offer with title <b><i>"${sender.title}"</i></b> with message of "${sender.message}".</p>
+                                  <p>for the request of <i><b>${receptor.title}</b></i>, contact <b>${result.name}</b> for futher information.</p>
+                                  <br/>
+                                  <p>regards,</p>
+                                  <p>UKM HUB teams</p> `,
+                                  "Your request have been accepted"
+                                  , res)
 
                               }
                             })
@@ -393,7 +411,16 @@ module.exports={
                                 res.send(err)
                               }
                               else{
-                                sendEmail(result2.email, "refused request",`dear ${result2.name}, ${result.name} have refused your request with title ${sender.title} and message ${sender.message} from ${result.name} request of ${receptor.title}, contact ${result.name} for futher information, regards UKM-HUB team `,"Your request have been refused", res)
+                                sendEmail(result2.email,
+                                  "refused request",
+                                  `  <div style="text-align:center"><img src='https://raw.githubusercontent.com/UKM-HUB/ukm_hub/master/ukmhub.png' style="width:40%;"/></div>
+                                    <P>Dear <b>${result2.name}</b>,</P>
+                                    <p><b>${result.name}</b> have refused your offer with title <b><i>"${sender.title}"</i></b> with message of "${sender.message}".</p>
+                                    <p>for the request of <i><b>${receptor.title}</b></i>, contact <b>${result.name}</b> for futher information.</p>
+                                    <br/>
+                                    <p>regards,</p>
+                                    <p>UKM HUB teams</p> `
+                                   ,"Your request have been refused", res)
 
                               }
                             })
