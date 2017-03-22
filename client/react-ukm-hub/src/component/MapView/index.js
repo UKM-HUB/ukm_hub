@@ -36,9 +36,25 @@ class MapView extends Component {
 
       for (let i = 0; i < otherCompany.length; i++) {
         let requestList = '';
+        let categoryList = '';
+
         otherCompany[i].request.filter((x)=> x.open === true).map(function(data){
           return requestList +=
           '<li class="list-group-item"><button onclick="redirectToList()">' + data.title + '</button></li>'
+        })
+
+        otherCompany[i].category
+
+        otherCompany[i].category.map(function(data,index){
+          console.log(otherCompany[i].category.length);
+          if(index === otherCompany[i].category.length-1) {
+            categoryList +=
+            '<em>' + data + '</em>'
+          } else {
+            categoryList +=
+            '<em>' + data + ', </em>'
+          }
+
         })
 
         temp[temp.length] =
@@ -60,8 +76,9 @@ class MapView extends Component {
                 </div>
                 <div class="col-sm-9" style="margin-top: -20px; padding-left:50px">
                   <h2><b>${otherCompany[i].name}</b></h2>
-                  <p><b>Alamat : </b>${otherCompany[i].address}</p>
-                  <p><b>Telepon : </b>${otherCompany[i].phone}</p>
+                  <p><b>Address : </b>${otherCompany[i].address}</p>
+                  <p><b>Phone : </b>${otherCompany[i].phone}</p>
+                  <p><b>Category : </b>${categoryList}</p>
                 </div>
               </div>
               <hr />
