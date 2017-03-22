@@ -72,6 +72,7 @@ class MessageList extends Component {
             <tr>
               <th>Company Name</th>
               <th>Title</th>
+              <th>Replied for</th>
               <th>Message</th>
               <th>Created At</th>
               <th>Action</th>
@@ -81,8 +82,9 @@ class MessageList extends Component {
             {
               this.props.messages.filter((filterMessage)=> filterMessage.status === 'waiting').map((message,index)=>{return(
                 <tr key={message._id}>
-                  <td>PT. MEDIA TEKNOLOGI</td>
+                  <td>{message.sender}</td>
                   <td>{message.title}</td>
+                  <td>{message.requestTitle}</td>
                   <td>{message.message}</td>
                   <td>{message.date}</td>
                   <td>

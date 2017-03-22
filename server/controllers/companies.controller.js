@@ -14,7 +14,8 @@ Module._extensions['.png'] = function(module, fn) {
 var sendEmail = require('../helpers/sendEmail')
 var defaultCompanyImage = require ('../public/image/company_icon.png')
 var defaultReqImage = require ('../public/image/box-outline-filled.png')
-var validationEditProfile = require('../helpers/validationEditProfile')
+var validationEditProfile = require('../helpers/validations/validationEditProfile')
+var validationRequest = require('../helpers/validations/validationRequest')
 
 function generatePassword() {
     var length = 5,
@@ -151,52 +152,62 @@ module.exports={
     })
   },
   createBuyRequest: function(req,res){
-    Company.findByIdAndUpdate(req.params.id,{
-      $push:{
-            'request':{
-              types:"buy",
-              title:req.body.title,
-              price:Number(req.body.price),
-              description:req.body.description,
-              images:req.body.images||defaultReqImage,
-              open:true
+
+    validationRequest(req.body.title, req.body.price, req.body.description,  res, function(){
+      // save buy request to database
+      Company.findByIdAndUpdate(req.params.id,{
+        $push:{
+              'request':{
+                types:"buy",
+                title:req.body.title,
+                price:Number(req.body.price),
+                description:req.body.description,
+                images:req.body.images||defaultReqImage,
+                open:true
+              }
             }
+        },{
+          new:true
+        }, (err,data)=>{
+          if(err){
+            res.send(err)
           }
-      },{
-        new:true
-      }, (err,data)=>{
-        if(err){
-          res.send(err)
+          else{
+            res.send(data)
+          }
         }
-        else{
-          res.send(data)
-        }
-      }
-    )
+      )
+
+    })
   },
   createSellRequest: function(req,res){
-    Company.findByIdAndUpdate(req.params.id,{
-      $push:{
-            'request':{
-              types:"sell",
-              title:req.body.title,
-              price:Number(req.body.price),
-              description:req.body.description,
-              images:req.body.images||defaultReqImage,
-              open:true
+
+    validationRequest(req.body.title, req.body.price, req.body.description,  res, function(){
+      // save sell request to database
+      Company.findByIdAndUpdate(req.params.id,{
+        $push:{
+              'request':{
+                types:"sell",
+                title:req.body.title,
+                price:Number(req.body.price),
+                description:req.body.description,
+                images:req.body.images||defaultReqImage,
+                open:true
+              }
             }
+        },{
+          new:true
+        }, (err,data)=>{
+          if(err){
+            res.send(err)
           }
-      },{
-        new:true
-      }, (err,data)=>{
-        if(err){
-          res.send(err)
+          else{
+            res.send(data)
+          }
         }
-        else{
-          res.send(data)
-        }
-      }
-    )
+      )
+    })
+
   },
   showRequest: function(req,res){
     var requestArray =[]
@@ -283,8 +294,10 @@ module.exports={
             $push:{
                   'acceptedMessages':{
                     from:req.params.id,
+                    sender:data.name,
                     letterId: data.letter[data.letter.length-1]._id,
-                    title:`${data.name} Answer your request : "${req.body.requestTitle} (id: ${req.params.requestId})" , with message title : "${data.letter[data.letter.length-1].title}"`,
+                    title:data.letter[data.letter.length-1].title,
+                    requestTitle: req.body.requestTitle,
                     date: new Date(),
                     status:'waiting',
                     message:req.body.message
