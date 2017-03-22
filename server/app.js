@@ -8,6 +8,9 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var cors = require('cors')
 
+// add pack for validation
+var expressValidator = require('express-validator')
+
 // add pack for login
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -75,7 +78,6 @@ passport.serializeUser(function(user, callback){
 app.use(passport.initialize())
 app.use(passport.session())
 
-
 var dbURI = process.env.MONGO_URL || 'mongodb://localhost/ukmhub'
 // setup database target
 mongoose.connect(dbURI);
@@ -91,6 +93,8 @@ app.set('view engine', 'ejs');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
+// use express-validation
+app.use(expressValidator());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
