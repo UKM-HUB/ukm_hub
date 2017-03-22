@@ -111,7 +111,6 @@ export const fetchCompanyByCategory = (id) => {
 }
 
 export const fetchCompanyByCategoryGmaps = (id, cb) => {
-
   return (dispatch) => {
     fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchByCategory')
       .then(res => res.json())
@@ -121,8 +120,16 @@ export const fetchCompanyByCategoryGmaps = (id, cb) => {
           .then(res => res.json())
           .then(comp => dispatch(fetchingCompanyProfile(comp)))
           .then(result2 => cb(result.payload,result2.payload))
-
       })
+  }
+}
+
+export const fetchProfileGmaps = (id, cb, that) => {
+  return (dispatch) => {
+    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
+      .then(res => res.json())
+      .then(comp => dispatch(fetchingCompanyProfile(comp)))
+      .then(result => cb(result.payload, that))
   }
 }
 
