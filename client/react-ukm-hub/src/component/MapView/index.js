@@ -66,25 +66,47 @@ class MapView extends Component {
               </div>
               <hr />
               <div class="row">
-                <div class="col-sm-12">
-                  <p>${otherCompany[i].description}</p>
+                <div class="col-sm-offset-2 col-sm-8" style="text-align:center">
                   <div class="list-group">
-                    <a href="#" class="list-group-item active">
-                      <h4 class="list-group-item-heading">Category</h4>
-                      <p class="list-group-item-text">...</p>
-                    </a>
+
+                      <h4 class="list-group-item-heading" style='font-weight:900'>Description</h4>
+                      <p class="list-group-item-text">${otherCompany[i].description}</p>
+
                   </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="list-group">
+                    <div class='mapView'>
+                      <h4 class="list-group-item-heading">Description</h4>
+                      <p class="list-group-item-text">${otherCompany[i].description}</p>
+                    </div>
+                  </div>
+                  <div class="list-group">
+                    <div class='mapView'>
+                      <h4 class="list-group-item-heading">Description</h4>
+                      <p class="list-group-item-text">${otherCompany[i].description}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="list-group">
+                    <div class='mapView'>
+                      <h4 class="list-group-item-heading">Description</h4>
+                      <p class="list-group-item-text">${otherCompany[i].description}</p>
+                    </div>
+                  </div>
+                  <div class="list-group">
+                    <div class='mapView'>
+                      <h4 class="list-group-item-heading">Description</h4>
+                      <p class="list-group-item-text">${otherCompany[i].description}</p>
+                    </div>
+                  </div>
+                </div>
                     ${ otherCompany[i].category.map(function(data){ return `${data}` }) }
                   </p>
-                  <p><b>Request : </b>
-                    <div class="card">
-                      <ul class="list-group list-group-flush">
-                        ${requestList}
-                      </ul>
-                    </div>
-                  </p>
+
                   <a href="${otherCompany[i].website}" target="_blank">${otherCompany[i].website}</a>
-                </div>
+
               </div>
             </div>
             `
@@ -135,6 +157,14 @@ class MapView extends Component {
     )
   }
 }
+
+// <p><b>Request : </b>
+//   <div class="card">
+//     <ul class="list-group list-group-flush">
+//       ${requestList}
+//     </ul>
+//   </div>
+// </p>
 
 const mapStateToProps = (state) => {
   return {

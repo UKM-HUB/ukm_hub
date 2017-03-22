@@ -9,7 +9,7 @@ class Sidebar extends Component {
   componentDidMount(){
     this.props.fetchProfile(compId)
   }
-  
+
   render(){
     return (
       <div className="sidebar">

@@ -28,6 +28,12 @@
 .request_list_image img {
   width: 100px
 }
+
+.mapView {
+  background-color: rgba(205,205,205,0.8);
+  padding:20px;
+  box-shadow: 4px 4px 2px #888888;
+}
 /* ================================= */
 
 @keyframes spin {
