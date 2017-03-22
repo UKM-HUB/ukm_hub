@@ -8,9 +8,18 @@ chai.use(chaiHttp);
 
 
 describe('tes routing company',function(){
+  it('Test API when delete api/company/',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').delete(`/api/company`)
+    .end(function (err, res) {
+    res.text.should.equal("data berhasil dihapus")
+    done()
+    })
+  })
   it('should return email of the registered company when post api/company/auth/register',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').post('/api/company/auth/register').send({email:'timogio99@gmail.com',password:'yes123'}).end(function (err, res) {
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').post('/api/company/auth/register').send({email:'timogio99@gmail.com',password:'123456'}).end(function (err, res) {
     res.body.should.have.deep.property('email','timogio99@gmail.com')
+    res.body.should.have.deep.property('edited',false)
+    res.body.should.have.deep.property('verified',false)
     tampung = res.body.companyId
     done()
     })
@@ -26,7 +35,7 @@ describe('tes routing company',function(){
     chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
     name:'PT.SENTOSA',
     type:'corporate',
-    category:'["sepatu","baju"]',
+    category:["sepatu","baju"],
     lat:'-12.043333',
     lng:'-77.028333',
     website:'timocodex.com',
@@ -43,7 +52,7 @@ describe('tes routing company',function(){
     chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}`).send({
     name:'SANTOSA jaya',
     type:'ukm',
-    category:'["sepatu"]',
+    category:["sepatu"],
     lat:'-12.043333',
     lng:'-77.028333',
     website:'santosa.com',
@@ -122,6 +131,4 @@ describe('tes routing company',function(){
     done()
     })
   })
-
-
 })
