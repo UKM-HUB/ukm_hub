@@ -14,6 +14,7 @@ Module._extensions['.png'] = function(module, fn) {
 var sendEmail = require('../helpers/sendEmail')
 var defaultCompanyImage = require ('../public/image/company_icon.png')
 var defaultReqImage = require ('../public/image/box-outline-filled.png')
+var validationEditProfile = require('../helpers/validationEditProfile')
 
 function generatePassword() {
     var length = 5,
@@ -66,34 +67,39 @@ module.exports={
   )
   },
   editProfile: function(req,res){
-    Company.findOne({_id:req.params.id},function(err,company){
-      if(err){
-        res.send(err)
-      }
-      else{
-        company.name = req.body.name
-        company.type = req.body.type
-        company.category = req.body.category
-        company.location.lat = req.body.lat
-        company.location.lng = req.body.lng
-        company.website = req.body.website
-        company.address = req.body.address
-        company.phone = req.body.phone
-        company.description = req.body.description
-        company.images = req.body.images||defaultCompanyImage
-        company.updated_at = new Date()
-        edited = true
-        company.save(function(err){
-          if(err){
-            res.send(err)
-          }
-          else{
-            res.json(company)
-          }
-        })
 
-      }
+    validationEditProfile(req.body.name, req.body.type, req.body.category, req.body.lat, req.body.lng, req.body.address, req.body.phone, req.body.description, res, function(){
+
+      Company.findOne({_id:req.params.id},function(err,company){
+        if(err){
+          res.send(err)
+        }
+        else{
+          company.name = req.body.name
+          company.type = req.body.type
+          company.category = req.body.category
+          company.location.lat = req.body.lat
+          company.location.lng = req.body.lng
+          company.website = req.body.website
+          company.address = req.body.address
+          company.phone = req.body.phone
+          company.description = req.body.description
+          company.images = req.body.images||defaultCompanyImage
+          company.updated_at = new Date()
+          edited = true
+          company.save(function(err){
+            if(err){
+              res.send(err)
+            }
+            else{
+              res.json(company)
+            }
+          })
+        }
+      })
+
     })
+
   },
   showByCategories: function(req,res){
     Company.findOne({_id:req.params.id}).then(function(result){
