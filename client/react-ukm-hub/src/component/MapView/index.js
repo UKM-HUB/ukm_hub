@@ -12,8 +12,8 @@ class MapView extends Component {
     this.state = {
       topbarTitle: 'Map View',
       activeNavigation: ['active', '', '', '', ''],
-      corporateIcon: 'https://s21.postimg.org/8hrapdesn/building.png',
-      ukmIcon: 'https://s4.postimg.org/jlidgjun1/store.png',
+      companyIcon: 'https://s4.postimg.org/jlidgjun1/store.png',
+      otherCompanyIcon: 'https://s21.postimg.org/8hrapdesn/building.png',
       dataMapCompany: []
     }
   }
@@ -25,7 +25,13 @@ class MapView extends Component {
     // if(this.props.profile.category)
 
     setTimeout(function(){
-      console.log(that.props.profile.type);
+      if (that.props.profile.type === 'corporate') {
+        that.setState({
+          companyIcon: 'https://s21.postimg.org/8hrapdesn/building.png',
+          otherCompanyIcon: 'https://s4.postimg.org/jlidgjun1/store.png'
+        })
+      }
+
       for (let i = 0; i < that.props.otherCompany.length; i++) {
         pathTemp[pathTemp.length] = [ that.props.profile.location.lat, that.props.profile.location.lng ]
         pathTemp[pathTemp.length] = [ that.props.otherCompany[i].location.lat, that.props.otherCompany[i].location.lng ]
@@ -41,7 +47,7 @@ class MapView extends Component {
         temp[temp.length] =
         {
           title: that.props.otherCompany[i].name,
-          icon: that.state.ukmIcon,
+          icon: that.state.otherCompanyIcon,
           lat: that.props.otherCompany[i].location.lat,
           lng: that.props.otherCompany[i].location.lng,
           infoWindow: {
@@ -92,14 +98,14 @@ class MapView extends Component {
         el: '#map',
         lat: that.props.profile.location.lat,
         lng: that.props.profile.location.lng,
-        zoom: 6
+        zoom: 10
       });
 
       // add login marker, on maps(it maybe corporate or ukm)
 
       map.addMarkers([{
         title: that.props.profile.name,
-        icon: that.state.corporateIcon,
+        icon: that.state.companyIcon,
         lat: that.props.profile.location.lat,
         lng: that.props.profile.location.lng,
         details: that.props.profile.name
