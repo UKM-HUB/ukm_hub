@@ -79,7 +79,7 @@ class MessageList extends Component {
           </thead>
           <tbody style={tableDataStyle}>
             {
-              this.props.messages.filter((filterMessage)=> filterMessage.status === 'waiting'  ).map((message,index)=>{return(
+              this.props.messages.filter((filterMessage)=> filterMessage.status === 'waiting').map((message,index)=>{return(
                 <tr key={message._id}>
                   <td>PT. MEDIA TEKNOLOGI</td>
                   <td>{message.title}</td>

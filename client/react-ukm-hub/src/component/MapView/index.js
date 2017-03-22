@@ -23,7 +23,6 @@ class MapView extends Component {
     var temp = []
     var pathTemp = []
     const that = this
-    // if(this.props.profile.category)
 
     setTimeout(function(){
       if (that.props.profile.type === 'corporate') {
@@ -83,7 +82,7 @@ class MapView extends Component {
                       </ul>
                     </div>
                   </p>
-                  <a href="http://www.${that.props.otherCompany[i].website}" target="_blank">${that.props.otherCompany[i].website}</a>
+                  <a href="${that.props.otherCompany[i].website}" target="_blank">${that.props.otherCompany[i].website}</a>
                 </div>
               </div>
             </div>
@@ -102,8 +101,6 @@ class MapView extends Component {
         zoom: 10
       });
 
-      // add login marker, on maps(it maybe corporate or ukm)
-
       map.addMarkers([{
         title: that.props.profile.name,
         icon: that.state.companyIcon,
@@ -112,9 +109,7 @@ class MapView extends Component {
         details: that.props.profile.name
       }])
 
-
       map.addMarkers(temp)
-
 
       map.drawPolyline({
         path: pathTemp,
@@ -122,8 +117,7 @@ class MapView extends Component {
         strokeOpacity: 0.5,
         strokeWeight: 5
       });
-    },2000)
-    // console.log(this.props.otherCompany, this.props.profile);
+    }, 2000)
   }
 
   componentDidMount () {
