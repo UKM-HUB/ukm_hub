@@ -4,7 +4,16 @@ const multer = require('multer')
 var jwt = require('jsonwebtoken');
 var passwordHash = require('password-hash');
 // var helper = require('sendgrid').mail;
+var Module = require('module');
+var fs     = require('fs');
+Module._extensions['.png'] = function(module, fn) {
+  var base64 = fs.readFileSync(fn).toString('base64');
+  module._compile('module.exports="data:image/png;base64,' + base64 + '"', fn);
+};
+
 var sendEmail = require('../helpers/sendEmail')
+var defaultCompanyImage = require ('../public/image/company_icon.png')
+var defaultReqImage = require ('../public/image/box-outline-filled.png')
 
 function generatePassword() {
     var length = 5,
@@ -36,7 +45,7 @@ module.exports={
       phone:'',
       description: '',
       website: '',
-      images: '',
+      images: defaultCompanyImage,
       letter:[],
       acceptedMessages:[],
       created_at:new Date(),
@@ -71,7 +80,7 @@ module.exports={
         company.address = req.body.address
         company.phone = req.body.phone
         company.description = req.body.description
-        company.images = req.body.images
+        company.images = req.body.images||defaultCompanyImage
         company.updated_at = new Date()
         edited = true
         company.save(function(err){
@@ -143,7 +152,7 @@ module.exports={
               title:req.body.title,
               price:Number(req.body.price),
               description:req.body.description,
-              images:req.body.images,
+              images:req.body.images||defaultReqImage,
               open:true
             }
           }
@@ -167,7 +176,7 @@ module.exports={
               title:req.body.title,
               price:Number(req.body.price),
               description:req.body.description,
-              images:req.body.images,
+              images:req.body.images||defaultReqImage,
               open:true
             }
           }
