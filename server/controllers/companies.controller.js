@@ -14,8 +14,11 @@ Module._extensions['.png'] = function(module, fn) {
 var sendEmail = require('../helpers/sendEmail')
 var defaultCompanyImage = require ('../public/image/company_icon.png')
 var defaultReqImage = require ('../public/image/box-outline-filled.png')
-var validationEditProfile = require('../helpers/validations/validationEditProfile')
-var validationRequest = require('../helpers/validations/validationRequest')
+
+// function validation
+var validationEditProfile = require('../helpers/validation/validationEditProfile')
+var validationRequest = require('../helpers/validation/validationRequest')
+var validationCreateLetter = require('../helpers/validation/validationCreateLetter')
 
 function generatePassword() {
     var length = 5,
