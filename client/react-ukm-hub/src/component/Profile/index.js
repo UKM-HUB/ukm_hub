@@ -6,7 +6,6 @@ import { updateCompanyProfile, fetchProfile } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
-import defaultCompanyImage from '../../../public/assets/img/company_icon.png'
 
 import profileInfo from '../../../public/assets/js/profileInfoMessageBox.js'
 
@@ -51,7 +50,7 @@ class Profile extends Component {
         description: that.props.profile.description,
         website: that.props.profile.website,
         phone: that.props.profile.phone ? that.props.profile.phone : '',
-        image: that.props.profile.images ? that.props.profile.images : defaultCompanyImage
+        image: that.props.profile.images ? that.props.profile.images : ''
       }
 
       const newData = Object.assign({}, that.state.data, newState);
@@ -516,7 +515,6 @@ const mapDispatchToProps = (dispatch) => {
     fetchProfile: (id) => dispatch(fetchProfile(id)),
     updateCompanyProfile: (data,id) => dispatch(updateCompanyProfile(data,id))
   }
-  //return bindActionCreators({addTodo},dispatch)
 }
 
 

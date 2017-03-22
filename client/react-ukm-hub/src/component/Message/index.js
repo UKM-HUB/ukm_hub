@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 import MessageList from './MessageList'
-import {connect} from 'react-redux'
-import {fetchProfile} from '../../actions/index.js'
+import { connect } from 'react-redux'
+import { fetchProfile } from '../../actions/index.js'
 const compId = localStorage.getItem('companyId')
 
 class Message extends Component {

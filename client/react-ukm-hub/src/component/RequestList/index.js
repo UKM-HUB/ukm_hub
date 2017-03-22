@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import '../../App.css'
-import {connect} from 'react-redux'
-import {otherCompanyRequestFetch} from '../../actions/index.js'
+import { connect } from 'react-redux'
+import { otherCompanyRequestFetch } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 import ListOfRequest from './ListOfRequest'
+import RequestEmpty from './RequestEmpty'
 const compId = localStorage.getItem('companyId')
 
 class RequestList extends Component {
@@ -26,7 +26,7 @@ class RequestList extends Component {
         <div className="main-panel">
           <Topbar title={this.state.topbarTitle} />
             {
-              this.props.otherCompanyRequest < 1 ? <p>waiting...</p> :
+              this.props.otherCompanyRequest < 1 ? <RequestEmpty /> :
               <ListOfRequest requests={this.props.otherCompanyRequest}/>
             }
 
