@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import $ from 'jquery'
 import '../../../public/assets/js/jquery.dataTables.min.js'
 import '../../../public/assets/js/dataTables.bootstrap.min.js'
-import {acceptMessageFetch} from '../../actions/index.js'
+import {acceptMessageFetch,rejectMessageFetch} from '../../actions/index.js'
 import {connect} from 'react-redux'
 const compId = localStorage.getItem('companyId')
 
@@ -17,11 +17,9 @@ class MessageList extends Component {
 
   handleAccept(id,acceptedMessagesId){
     this.props.acceptMessageFetch(id,acceptedMessagesId)
-    this.forceUpdate()
   }
   handleReject(id,rejectedMessagesId){
     this.props.rejectMessageFetch(id,rejectedMessagesId)
-    this.forceUpdate()
   }
   componentDidMount(){
     $(document).ready(function() {
@@ -94,7 +92,7 @@ class MessageList extends Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     acceptMessageFetch: (id,acceptedMessagesId) => dispatch(acceptMessageFetch(id,acceptedMessagesId)),
-    rejectMessageFetch: (id,rejectedMessagesId) => dispatch(acceptMessageFetch(id,rejectedMessagesId))
+    rejectMessageFetch: (id,rejectedMessagesId) => dispatch(rejectMessageFetch(id,rejectedMessagesId))
   }
 }
 
