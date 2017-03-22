@@ -18,6 +18,9 @@ class MessageList extends Component {
   handleAccept(id,acceptedMessagesId){
     this.props.acceptMessageFetch(id,acceptedMessagesId)
   }
+  handleReject(id,rejectedMessagesId){
+    this.props.rejectMessageFetch(id,rejectedMessagesId)
+  }
   componentDidMount(){
     $(document).ready(function() {
         $('#requestTable').DataTable();
@@ -45,7 +48,7 @@ class MessageList extends Component {
           </thead>
           <tbody style={tableDataStyle}>
             {
-              this.props.messages.map((message,index)=>{return(
+              this.props.messages.filter((filterMessage)=> filterMessage.status === 'waiting'  ).map((message,index)=>{return(
                 <tr key={message._id}>
                   <td>PT. MEDIA TEKNOLOGI</td>
                   <td>{message.title}</td>
@@ -59,7 +62,7 @@ class MessageList extends Component {
                       onClick={(e) => {
                         e.preventDefault()
                         this.handleAccept(compId,message._id)
-                        alert('Accept masukin ke reducer')}}>
+                        alert('you accept the mesage')}}>
                       Accept
                     </button>
                     <button
@@ -68,16 +71,14 @@ class MessageList extends Component {
                       style={{marginRight: 20}}
                       onClick={(e) => {
                         e.preventDefault()
-                        this.setState({})
-                        alert('Accept masukin ke reducer')}}>
+                        this.handleReject(compId,message._id)
+                        alert('you refused the message')}}>
                       Decline
                     </button>
                   </td>
                 </tr>
               )})
             }
-
-
 
           </tbody>
           </table>
@@ -90,7 +91,8 @@ class MessageList extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    acceptMessageFetch: (id,acceptedMessagesId) => dispatch(acceptMessageFetch(id,acceptedMessagesId))
+    acceptMessageFetch: (id,acceptedMessagesId) => dispatch(acceptMessageFetch(id,acceptedMessagesId)),
+    rejectMessageFetch: (id,rejectedMessagesId) => dispatch(acceptMessageFetch(id,rejectedMessagesId))
   }
 }
 

@@ -192,3 +192,17 @@ export const acceptMessageFetch = (id,acceptedMessagesId) => {
 
   }
 }
+
+export const rejectMessageFetch = (id,rejectedMessagesId) => {
+
+  return (dispatch) => {
+
+      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/'+rejectedMessagesId+'/rejectMessage',
+      {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+      })
+      .then(res => console.log(res))
+
+  }
+}

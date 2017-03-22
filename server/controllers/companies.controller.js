@@ -278,7 +278,7 @@ module.exports={
                   'acceptedMessages':{
                     from:req.params.id,
                     letterId: data.letter[data.letter.length-1]._id,
-                    title:`${data.name} Answer your request with title: ${req.body.requestTitle} (id: ${req.params.requestId})- ${data.letter[data.letter.length-1].title}`,
+                    title:`${data.name} Answer your request : "${req.body.requestTitle} (id: ${req.params.requestId})" , with message title : "${data.letter[data.letter.length-1].title}"`,
                     date: new Date(),
                     status:'waiting',
                     message:req.body.message
@@ -291,7 +291,7 @@ module.exports={
                 res.send(err)
               }
               else{
-                res.send(data)
+                sendEmail(data.email, "You received a new message",`dear ${datas.name}, ${data.name} have send you a message with title ${data.letter[data.letter.length-1].title} please check your message box, regards UKM-HUB team `,"Your received new message", res)
               }
             }
           )
@@ -326,7 +326,7 @@ module.exports={
                                 res.send(err)
                               }
                               else{
-                                sendEmail('timogio99@gmail.com', "tes", `tes`, "Email found, and we are send you a new password to your email", res)
+                                sendEmail(result2.email, "Accepted request",`dear ${result2.name}, ${result.name} have accepted your request with title ${sender.title} and message ${sender.message} from ${result.name} request of ${receptor.title}, contact ${result.name} for futher information, regards UKM-HUB team `,"Your request have been accepted", res)
 
                               }
                             })
@@ -345,23 +345,45 @@ module.exports={
     })
   },
   rejectMessage: function(req,res){
-    Company.findOne({_id:req.params.id},function(result){
-      result.acceptedMessages.status = 'refused'
-      result.save(function(err){
-        if(err){
-          res.send(err)
-        }
-        else{
-          Company.findOne({_id:result.acceptedMessages.from},function(result2){
-            result2.letter.status = 'refused'
-            result2.save(function(err){
-              if(err){
-                res.send(err)
-              }
-              else{
-                sendEmail(result2.email,`dear ${result2.name}, ${result.name} has refused your answer to this request (${result3.title}), please contact ${result.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
-              }
-            })
+    Company.findOne({_id:req.params.id}).then(function(result){
+      result.acceptedMessages.forEach(function(receptor){
+        if(receptor.id === req.params.acceptedMessagesId){
+          receptor.status = 'refused'
+          result.save(function(err){
+            if(err){
+              res.send(err)
+            }
+            else{
+              Company.findOne({_id:receptor.from}).then(function(result2){
+                result2.letter.forEach(function(sender){
+                  if(sender.id === receptor.letterId){
+                    sender.status = 'refused'
+                    result2.save(function(err){
+                      if(err){
+                        res.send(err)
+                      }
+                      else{
+                        result.request.forEach(function(compRequest){
+                          if(compRequest.id === sender.requestId){
+                            compRequest.open = true
+                            result.save(function(err){
+                              if(err){
+                                res.send(err)
+                              }
+                              else{
+                                sendEmail(result2.email, "refused request",`dear ${result2.name}, ${result.name} have refused your request with title ${sender.title} and message ${sender.message} from ${result.name} request of ${receptor.title}, contact ${result.name} for futher information, regards UKM-HUB team `,"Your request have been refused", res)
+
+                              }
+                            })
+                          }
+                        })
+                      }
+                    })
+                  }
+                })
+              })
+            }
+
           })
         }
       })
