@@ -2,14 +2,15 @@ import React, { Component } from 'react'
 import logo from '../../../public/assets/logo/ukmhub_sidebar.png'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { fetchProfile } from '../../actions/index.js'
+const compId = localStorage.getItem('companyId')
 
 class Sidebar extends Component {
-  constructor(){
-    super()
+  componentDidMount(){
+    this.props.fetchProfile(compId)
   }
-
+  
   render(){
-    console.log(this.props.profile.type);
     return (
       <div className="sidebar">
       	<div className="sidebar-wrapper" style={{background:'rgba(45,45,45,0.8)'}}>
@@ -91,4 +92,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(Sidebar)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchProfile: (id) => dispatch(fetchProfile(id))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)

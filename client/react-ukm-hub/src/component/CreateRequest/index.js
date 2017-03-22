@@ -126,9 +126,6 @@ class CreateRequest extends Component {
               <div className='row'>
                 <div className='col-md-12'>
                   <div className='card'>
-                    <div className='header'>
-                      <h4 className='title'>Message</h4>
-                    </div>
                     <div className='content'>
                       <form>
                         <div className='row'>

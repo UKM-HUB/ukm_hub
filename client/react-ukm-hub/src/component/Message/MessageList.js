@@ -2,9 +2,38 @@ import React, { Component } from 'react'
 import $ from 'jquery'
 import '../../../public/assets/js/jquery.dataTables.min.js'
 import '../../../public/assets/js/dataTables.bootstrap.min.js'
-import {acceptMessageFetch} from '../../actions/index.js'
+import {acceptMessageFetch,rejectMessageFetch} from '../../actions/index.js'
 import {connect} from 'react-redux'
 const compId = localStorage.getItem('companyId')
+
+let messageInfo = {
+  showAcceptMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-like2',
+      message: '<p style="margin-top:8px">Accept request sent</p>'
+    }, {
+      type: 'info',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showDeclineMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-attention',
+      message: '<p style="margin-top:8px">You have decline the offer</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  }
+}
 
 class MessageList extends Component {
   constructor(){
@@ -17,6 +46,11 @@ class MessageList extends Component {
 
   handleAccept(id,acceptedMessagesId){
     this.props.acceptMessageFetch(id,acceptedMessagesId)
+    messageInfo.showAcceptMessage('top','center')
+  }
+  handleReject(id,rejectedMessagesId){
+    this.props.rejectMessageFetch(id,rejectedMessagesId)
+    messageInfo.showDeclineMessage('top','center')
   }
   componentDidMount(){
     $(document).ready(function() {
@@ -45,7 +79,7 @@ class MessageList extends Component {
           </thead>
           <tbody style={tableDataStyle}>
             {
-              this.props.messages.map((message,index)=>{return(
+              this.props.messages.filter((filterMessage)=> filterMessage.status === 'waiting'  ).map((message,index)=>{return(
                 <tr key={message._id}>
                   <td>PT. MEDIA TEKNOLOGI</td>
                   <td>{message.title}</td>
@@ -58,8 +92,7 @@ class MessageList extends Component {
                       style={{marginRight: 20}}
                       onClick={(e) => {
                         e.preventDefault()
-                        this.handleAccept(compId,message._id)
-                        alert('Accept masukin ke reducer')}}>
+                        this.handleAccept(compId,message._id)}}>
                       Accept
                     </button>
                     <button
@@ -68,16 +101,13 @@ class MessageList extends Component {
                       style={{marginRight: 20}}
                       onClick={(e) => {
                         e.preventDefault()
-                        this.setState({})
-                        alert('Accept masukin ke reducer')}}>
+                        this.handleReject(compId,message._id)}}>
                       Decline
                     </button>
                   </td>
                 </tr>
               )})
             }
-
-
 
           </tbody>
           </table>
@@ -90,7 +120,8 @@ class MessageList extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    acceptMessageFetch: (id,acceptedMessagesId) => dispatch(acceptMessageFetch(id,acceptedMessagesId))
+    acceptMessageFetch: (id,acceptedMessagesId) => dispatch(acceptMessageFetch(id,acceptedMessagesId)),
+    rejectMessageFetch: (id,rejectedMessagesId) => dispatch(rejectMessageFetch(id,rejectedMessagesId))
   }
 }
 
