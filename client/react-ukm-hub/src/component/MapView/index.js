@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import GMaps from '../../../public/assets/js/gmaps.min.js'
 import {connect} from 'react-redux'
+import { Link } from 'react-router-dom'
 import {fetchCompanyByCategory, fetchProfile} from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
@@ -39,9 +40,9 @@ class MapView extends Component {
 
       for (let i = 0; i < that.props.otherCompany.length; i++) {
         let requestList = '';
-        that.props.otherCompany[i].request.map(function(data){
+        that.props.otherCompany[i].request.filter((x)=> x.open === true).map(function(data){
           return requestList +=
-          '<li class="list-group-item"><a href="https://www.google.com">' + data.title + '</a></li>'
+          '<li class="list-group-item"><Link to="/request-list"}><a>' + data.title + '</a></Link></li>'
         })
 
         temp[temp.length] =
@@ -82,7 +83,7 @@ class MapView extends Component {
                       </ul>
                     </div>
                   </p>
-                  <a href="https://www.google.com" target="_blank">${that.props.otherCompany[i].website}</a>
+                  <a href="http://www.${that.props.otherCompany[i].website}" target="_blank">${that.props.otherCompany[i].website}</a>
                 </div>
               </div>
             </div>

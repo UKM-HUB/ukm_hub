@@ -77,6 +77,7 @@ class ListOfRequest extends Component {
   }
 
   handleOpenMessage(title,id,seller){
+    console.log('a');
     this.setState({
       requestTitle:title,
       requestId:id,
@@ -90,7 +91,6 @@ class ListOfRequest extends Component {
       fontSize: 14,
       textAlign: 'center'
     }
-    console.log(this.props.requests.length);
     return (
       <div className='content'>
         <div className='container-fluid'>

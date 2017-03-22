@@ -12,8 +12,11 @@ Module._extensions['.png'] = function(module, fn) {
 };
 
 var sendEmail = require('../helpers/sendEmail')
+var validationEditProfile = require('../helpers/validationEditProfile')
 var defaultCompanyImage = require ('../public/image/company_icon.png')
 var defaultReqImage = require ('../public/image/box-outline-filled.png')
+var validator = require('express-validator');
+var util = require('util')
 
 function generatePassword() {
     var length = 5,
@@ -66,33 +69,49 @@ module.exports={
   )
   },
   editProfile: function(req,res){
-    Company.findOne({_id:req.params.id},function(err,company){
-      if(err){
-        res.send(err)
-      }
-      else{
-        company.name = req.body.name
-        company.type = req.body.type
-        company.category = req.body.category
-        company.location.lat = req.body.lat
-        company.location.lng = req.body.lng
-        company.website = req.body.website
-        company.address = req.body.address
-        company.phone = req.body.phone
-        company.description = req.body.description
-        company.images = req.body.images||defaultCompanyImage
-        company.updated_at = new Date()
-        edited = true
-        company.save(function(err){
-          if(err){
-            res.send(err)
-          }
-          else{
-            res.json(company)
-          }
-        })
 
-      }
+    /*
+      validationEditProfile can be found in helpers folder
+      ====================================================
+      USAGE
+      ====================================================
+      validationEditProfile(
+        name,
+        type,
+        category,
+        lat,
+        lng,
+        address,
+        phone,
+        description,
+        res,
+        callback
+      )
+
+    */
+    validationEditProfile(req.body.name, req.body.type, req.body.category, req.body.lat, req.body.lng, req.body.address, req.body.phone, req.body.description, res, function(){
+
+      company.name = req.body.name
+      company.type = req.body.type
+      company.category = req.body.category
+      company.location.lat = req.body.lat
+      company.location.lng = req.body.lng
+      company.website = req.body.website
+      company.address = req.body.address
+      company.phone = req.body.phone
+      company.description = req.body.description
+      company.images = req.body.images||defaultCompanyImage
+      company.updated_at = new Date()
+      edited = true
+      company.save(function(err){
+        if(err){
+          res.send(err)
+        }
+        else{
+          res.json(company)
+        }
+      })
+
     })
   },
   showByCategories: function(req,res){
@@ -196,7 +215,7 @@ module.exports={
     var requestArray =[]
     Company.findOne({_id:req.params.id}).then(function(result){
       if(result.type === 'corporate'){
-        Company.find({type:'ukm',category: { $in:result.category} },{ password:0}).then(function(result){
+        Company.find({type:'ukm',category: { $in:result.category} },{request:1, password:0}).then(function(result){
           result.forEach(function(data){
             data.request.forEach(function(dats){
               if(dats.open==true){
@@ -209,7 +228,7 @@ module.exports={
         })
       }
       else{
-        Company.find({type:'corporate',category: { $in:result.category} },{ request: 1}).then(function(result){
+        Company.find({type:'corporate',category: { $in:result.category} },{ request: 1,password:0}).then(function(result){
           result.forEach(function(data){
             data.request.forEach(function(dats){
               if(dats.open==true){
