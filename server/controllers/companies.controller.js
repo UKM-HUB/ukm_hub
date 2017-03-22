@@ -15,7 +15,7 @@ var sendEmail = require('../helpers/sendEmail')
 var defaultCompanyImage = require ('../public/image/company_icon.png')
 var defaultReqImage = require ('../public/image/box-outline-filled.png')
 var validationEditProfile = require('../helpers/validations/validationEditProfile')
-var validationCreateRequest = require('../helpers/validations/validationCreateRequest')
+var validationRequest = require('../helpers/validations/validationRequest')
 
 function generatePassword() {
     var length = 5,
@@ -153,7 +153,7 @@ module.exports={
   },
   createBuyRequest: function(req,res){
 
-    validationCreateRequest(req.body.title, req.body.price, req.body.description,  res, function(){
+    validationRequest(req.body.title, req.body.price, req.body.description,  res, function(){
       // save buy request to database
       Company.findByIdAndUpdate(req.params.id,{
         $push:{
@@ -182,28 +182,31 @@ module.exports={
   },
   createSellRequest: function(req,res){
 
-    Company.findByIdAndUpdate(req.params.id,{
-      $push:{
-            'request':{
-              types:"sell",
-              title:req.body.title,
-              price:Number(req.body.price),
-              description:req.body.description,
-              images:req.body.images||defaultReqImage,
-              open:true
+    validationRequest(req.body.title, req.body.price, req.body.description,  res, function(){
+      // save sell request to database
+      Company.findByIdAndUpdate(req.params.id,{
+        $push:{
+              'request':{
+                types:"sell",
+                title:req.body.title,
+                price:Number(req.body.price),
+                description:req.body.description,
+                images:req.body.images||defaultReqImage,
+                open:true
+              }
             }
+        },{
+          new:true
+        }, (err,data)=>{
+          if(err){
+            res.send(err)
           }
-      },{
-        new:true
-      }, (err,data)=>{
-        if(err){
-          res.send(err)
+          else{
+            res.send(data)
+          }
         }
-        else{
-          res.send(data)
-        }
-      }
-    )
+      )
+    })
 
   },
   showRequest: function(req,res){
