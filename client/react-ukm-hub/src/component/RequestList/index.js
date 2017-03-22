@@ -19,9 +19,6 @@ class RequestList extends Component {
   componentWillReceiveProps(nextProps){
     nextProps.otherCompanyRequestFetch(compId)
   }
-  componentDidMount(){
-    this.props.otherCompanyRequestFetch(compId)
-  }
 
   render () {
     return (
@@ -30,7 +27,7 @@ class RequestList extends Component {
         <div className="main-panel">
           <Topbar title={this.state.topbarTitle} />
             {
-              this.props.otherCompanyRequest < 1 ? <RequestEmpty /> :
+              this.props.otherCompanyRequest.length < 1 ? <RequestEmpty /> :
               <ListOfRequest requests={this.props.otherCompanyRequest}/>
             }
 
