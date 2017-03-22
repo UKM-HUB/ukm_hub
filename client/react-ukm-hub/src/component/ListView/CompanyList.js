@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { Link } from 'react-router-dom'
 const CompanyList = (props) => {
   const panelStyle = {
     margin: 20,
@@ -71,7 +71,7 @@ const CompanyList = (props) => {
                   <ul style={{display:'inline-block', paddingLeft: 16}}>
                     {
                       props.request.length === 0 ? <p>-</p> :
-                      props.request.filter((y)=> y.open === true ).map((x,index)=>{return(<li key={index}><a href='http://google.com'>{x.title}</a></li>)})
+                      props.request.filter((y)=> y.open === true ).map((x,index)=>{return(<li key={index}><Link to='/request-list' perop={x.title}>{x.title}</Link></li>)})
 
                     }
                   </ul>

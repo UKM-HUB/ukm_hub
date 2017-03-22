@@ -22,7 +22,7 @@ class RequestList extends Component {
   componentDidMount(){
     this.props.otherCompanyRequestFetch(compId)
   }
-  
+
   render () {
     return (
       <div className="wrapper">
