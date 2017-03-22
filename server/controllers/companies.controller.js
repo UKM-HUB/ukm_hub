@@ -251,7 +251,7 @@ module.exports={
               to:req.params.otherId,
               from:req.params.id,
               requestId:req.params.requestId,
-              title:req.body.title,
+              title:req.body.title||'my offer',
               date: new Date(),
               status:'waiting',
               message:req.body.message
@@ -269,7 +269,7 @@ module.exports={
                   'acceptedMessages':{
                     from:req.params.id,
                     letterId: data.letter[data.letter.length-1]._id,
-                    title:`${data.name} Answer your request with title: ${req.body.requestTitle} (id: ${req.params.requestId})- ${req.body.title}`,
+                    title:`${data.name} Answer your request with title: ${req.body.requestTitle} (id: ${req.params.requestId})- ${data.letter[data.letter.length-1].title}`,
                     date: new Date(),
                     status:'waiting',
                     message:req.body.message
@@ -282,7 +282,7 @@ module.exports={
                 res.send(err)
               }
               else{
-                sendEmail(datas.email,`dear ${datas.name}, ${data.name} has answer your request (${req.body.title}), please contact ${data.name} for further information. may your business going well , happy to help you . regards UKMHUB team `, res)
+                res.send(data)
               }
             }
           )
@@ -292,20 +292,46 @@ module.exports={
   },
   acceptMessage: function(req,res){
     Company.findOne({_id:req.params.id}).then(function(result){
-      result.acceptedMessages.forEach(function(x){
-        if(x._id === req.params.acceptedMessagesId){
-          x.status = 'accepted'
+      result.acceptedMessages.forEach(function(receptor){
+        if(receptor.id === req.params.acceptedMessagesId){
+          receptor.status = 'accepted'
           result.save(function(err){
             if(err){
               res.send(err)
             }
             else{
-              res.send('success')
+              Company.findOne({_id:receptor.from}).then(function(result2){
+                result2.letter.forEach(function(sender){
+                  if(sender.id === receptor.letterId){
+                    sender.status = 'accepted'
+                    result2.save(function(err){
+                      if(err){
+                        res.send(err)
+                      }
+                      else{
+                        result.request.forEach(function(compRequest){
+                          if(compRequest.id === sender.requestId){
+                            compRequest.open = false
+                            result.save(function(err){
+                              if(err){
+                                res.send(err)
+                              }
+                              else{
+                                sendEmail('timogio99@gmail.com', "tes", `tes`, "Email found, and we are send you a new password to your email", res)
+
+                              }
+                            })
+                          }
+                        })
+                      }
+                    })
+                  }
+                })
+              })
             }
+
           })
         }
-
-
       })
     })
   },
