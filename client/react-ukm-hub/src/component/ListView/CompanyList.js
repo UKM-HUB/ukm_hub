@@ -70,7 +70,7 @@ const CompanyList = (props) => {
               <li className="list-group-item"><span style={companyDetailStyle}>Request List</span>
                   <ul style={requestDetailStyle}>
                     {
-                      props.request.map((x,index)=>{return(<li key={index}><a href='http://google.com'>{x.title}</a></li>)})
+                      props.request.filter((y)=> y.open === true).map((x,index)=>{return(<li key={index}><a href='http://google.com'>{x.title}</a></li>)})
                     }
 
 

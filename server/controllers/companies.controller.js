@@ -291,7 +291,7 @@ module.exports={
                 res.send(err)
               }
               else{
-                sendEmail(data.email, "You received a new message",`dear ${datas.name}, ${data.name} have send you a message with title ${data.letter[data.letter.length-1].title} please check your message box, regards UKM-HUB team `,"Your received new message", res)
+                sendEmail(datas.email, "You received a new message",`dear ${datas.name}, ${data.name} have send you a message with title ${data.letter[data.letter.length-1].title} please check your message box, regards UKM-HUB team `,"Your received new message", res)
               }
             }
           )

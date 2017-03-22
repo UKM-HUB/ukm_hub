@@ -16,9 +16,13 @@ class RequestList extends Component {
     }
   }
 
-  componentWillMount(){
+  componentWillReceiveProps(nextProps){
+    nextProps.otherCompanyRequestFetch(compId)
+  }
+  componentDidMount(){
     this.props.otherCompanyRequestFetch(compId)
   }
+  
   render () {
     return (
       <div className="wrapper">
