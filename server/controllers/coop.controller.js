@@ -2,13 +2,27 @@ var modelCoop = require('../models/model_coop.js')
 var modelCompany = require('../models/model_company.js')
 var jwt = require('jsonwebtoken');
 var passwordHash = require('password-hash');
+const assert = require('assert');
 
 const coopController = {
   login: function(req, res, next){
-    var token = jwt.sign({ email: req.body.email }, 'ukmhub');
-    res.send({ token: token })
+    /*
+      expiresIn : 60 * 60
+      60 * 60 = 3600 = 1 hour
+      60 * 1 = 60 = 1 minute
+    */
+    modelCoop.findOne({}, 'name email ' ,function(err, data){
+      if (err) throw err
+      let token = jwt.sign({data}, 'ukmhub', { expiresIn: 60 * 60 });
+      res.send({ token: token })
+    })
   },
   register: function(req, res, next){
+    // prevent to create coop with null password
+    if (req.body.password == '') {
+      res.json("you must insert your password")
+    }
+
     // create model data
     var newCoop = modelCoop({
       email: req.body.email,
@@ -16,7 +30,16 @@ const coopController = {
     })
     // model data save to database
     newCoop.save(function(err, data){
-      if (err) throw err
+      // validation email
+      if(err){
+        if (err.errors['email'].message) {
+          res.json(err.errors['email'].message)
+        }
+      }
+
+      // validation password
+
+      // if (err) throw err
       res.json(data)
     })
   },
