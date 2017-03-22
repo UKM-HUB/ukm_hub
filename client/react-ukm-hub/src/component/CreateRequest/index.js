@@ -5,6 +5,62 @@ import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 import defaultImageRequest from '../../../public/assets/img/box-outline-filled.png'
 const compId = localStorage.getItem('companyId')
+import $ from 'jquery'
+
+let requestInfo = {
+  showTitleMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-close',
+      message: '<p style="margin-top:8px">Please input the title</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showRequestMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-close',
+      message: '<p style="margin-top:8px">Request message is required</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showTypeMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-close',
+      message: '<p style="margin-top:8px">Please update your company profile type</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showSubmitMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-cloud-download',
+      message: '<p style="margin-top:8px">Request has been sent</p>'
+    }, {
+      type: 'info',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  }
+}
 
 class CreateRequest extends Component {
   constructor(){
@@ -27,23 +83,29 @@ class CreateRequest extends Component {
 
 
   onHandleSubmitRequest(data,id,companyType){
-    if(companyType === 'ukm'){
-      this.props.createSellRequestFetch(data,id)
-    }
-    else if(companyType === 'corporate'){
-      this.props.createBuyRequestFetch(data,id)
-    }
-    else{
-      alert('you are not completed your profile yet, please complete your profile in company profile menu')
-    }
-    this.setState({
-      requestData:{
-        request: '',
-        title: '',
-        price: '',
-        image: ''
+    if (this.state.requestData.title === '') {
+      requestInfo.showTitleMessage('top','center')
+    } else if (this.state.requestData.request === '') {
+      requestInfo.showRequestMessage('top','center')
+    } else {
+      if (companyType === 'ukm'){
+        this.props.createSellRequestFetch(data,id)
+      } else if (companyType === 'corporate'){
+        this.props.createBuyRequestFetch(data,id)
+      } else {
+        requestInfo.showTypeMessage('top','center')
       }
-    })
+      requestInfo.showSubmitMessage('top','center')
+      this.setState({
+        requestData:{
+          request: '',
+          title: '',
+          price: '',
+          image: ''
+        }
+      })
+    }
+
   }
 
   onHandleChange (e) {
