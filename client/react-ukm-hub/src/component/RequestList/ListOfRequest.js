@@ -22,7 +22,7 @@ let requestListInfo = {
   },
   showSubmitMessage: function (from, align) {
     $.notify({
-      icon: 'pe-7s-cloud-download',
+      icon: 'pe-7s-cloud-upload',
       message: '<p style="margin-top:8px">Reply message has been sent</p>'
     }, {
       type: 'info',

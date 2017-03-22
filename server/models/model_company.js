@@ -1,19 +1,21 @@
 // grab the things we need
 var mongoose = require('mongoose');
+var validate = require('mongoose-validator');
 var Schema = mongoose.Schema;
+
+// model validation
+var emailValidator = [
+  validate({
+    validator: 'isEmail',
+    message: 'your email seem not valid'
+  })
+];
 
 // create a schema
 var companySchema =  new Schema({
   name: String,
-  email: {
-    type: String,
-    trim: true,
-    lowercase: true,
-    unique: true,
-    required: 'Email address is required',
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
-  },
-  password: { type: String, required: true},
+  email: { type: String, required: [true, 'you must insert your email'], validate: emailValidator},
+  password: { type: String, required: [true, 'you must insert your password'] },
   category: [],
   verified:Boolean,
   edited:Boolean,

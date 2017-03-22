@@ -1,7 +1,7 @@
 module.exports = {
   showNameMessage: function (from, align) {
     $.notify({
-      icon: 'pe-7s-id',
+      icon: 'pe-7s-attention',
       message: '<p style="margin-top:8px">Company name required</p>'
     }, {
       type: 'danger',
@@ -14,7 +14,7 @@ module.exports = {
   },
   showTypeMessage: function (from, align) {
     $.notify({
-      icon: 'pe-7s-id',
+      icon: 'pe-7s-attention',
       message: '<p style="margin-top:8px">Please choose your company type</p>'
     }, {
       type: 'danger',
@@ -27,7 +27,7 @@ module.exports = {
   },
   showCategoryMessage: function (from, align) {
     $.notify({
-      icon: 'pe-7s-id',
+      icon: 'pe-7s-attention',
       message: '<p style="margin-top:8px">Company must have at least 1 category</p>'
     }, {
       type: 'danger',
@@ -40,8 +40,21 @@ module.exports = {
   },
   showMarkerMessage: function (from, align) {
     $.notify({
-      icon: 'pe-7s-id',
+      icon: 'pe-7s-attention',
       message: '<p style="margin-top:8px">Please update your company location in the Google Maps</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showWebsiteMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-attention',
+      message: '<p style="margin-top:8px">Please input your full URL with http/https</p>'
     }, {
       type: 'danger',
       timer: 4000,
@@ -53,7 +66,7 @@ module.exports = {
   },
   showAddressMessage: function (from, align) {
     $.notify({
-      icon: 'pe-7s-id',
+      icon: 'pe-7s-attention',
       message: '<p style="margin-top:8px">Company address detail required</p>'
     }, {
       type: 'danger',
@@ -66,7 +79,7 @@ module.exports = {
   },
   showDescriptionMessage: function (from, align) {
     $.notify({
-      icon: 'pe-7s-id',
+      icon: 'pe-7s-attention',
       message: '<p style="margin-top:8px">Company description detail required</p>'
     }, {
       type: 'danger',
@@ -79,7 +92,7 @@ module.exports = {
   },
   showPhoneMessage: function (from, align) {
     $.notify({
-      icon: 'pe-7s-id',
+      icon: 'pe-7s-attention',
       message: '<p style="margin-top:8px">Company phone number required</p>'
     }, {
       type: 'danger',
@@ -93,7 +106,7 @@ module.exports = {
   showUpdateSuccessMessage: function (from, align) {
     $.notify({
       icon: 'pe-7s-id',
-      message: '<p style="margin-top:8px">Company update Success</p>'
+      message: '<p style="margin-top:8px">Update Success</p>'
     }, {
       type: 'info',
       timer: 4000,
