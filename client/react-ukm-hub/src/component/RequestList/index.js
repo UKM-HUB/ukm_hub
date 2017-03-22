@@ -16,8 +16,8 @@ class RequestList extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    nextProps.otherCompanyRequestFetch(compId)
+  componentDidMount() {
+    this.props.otherCompanyRequestFetch(compId)
   }
 
   render () {

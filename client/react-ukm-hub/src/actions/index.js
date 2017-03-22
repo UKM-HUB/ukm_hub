@@ -74,7 +74,7 @@ export const fetchProfile = (id) => {
   return (dispatch) => {
     fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
       .then(res => res.json())
-      .then(todos => dispatch(fetchingCompanyProfile(todos)))
+      .then(profile => dispatch(fetchingCompanyProfile(profile)))
   }
 }
 
@@ -110,10 +110,24 @@ export const fetchCompanyByCategory = (id) => {
   }
 }
 
-export const createBuyRequestFetch = (data,id) => {
+export const fetchCompanyByCategoryGmaps = (id, cb) => {
 
   return (dispatch) => {
+    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchByCategory')
+      .then(res => res.json())
+      .then(company => dispatch(searchCompanyByCategory(company)))
+      .then(function(result){
+        fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
+          .then(res => res.json())
+          .then(comp => dispatch(fetchingCompanyProfile(comp)))
+          .then(result2 => cb(result.payload,result2.payload))
 
+      })
+  }
+}
+
+export const createBuyRequestFetch = (data,id) => {
+  return (dispatch) => {
       fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/buyRequest',
       {
         method: 'PUT',
@@ -127,7 +141,6 @@ export const createBuyRequestFetch = (data,id) => {
       })
       .then(res => res.json())
       // .then(edited => dispatch(loginCompany(edited)))
-
   }
 }
 

@@ -22,11 +22,6 @@ const CompanyList = (props) => {
     fontFamily: 'Peddana'
   }
 
-  const requestDetailStyle = {
-    display:'inline-block',
-    paddingLeft: 16
-  }
-
   const companyTitleFontStyle = {
     fontFamily: 'open sans',
     textDecoration: 'underline',
@@ -68,11 +63,10 @@ const CompanyList = (props) => {
                 <span>{props.email}</span>
               </li>
               <li className="list-group-item"><span style={companyDetailStyle}>Request List</span>
-                  <ul style={{display:'inline-block', paddingLeft: 16}}>
+                  <ul style={{display:'inline-block'}}>
                     {
-                      props.request.length === 0 ? <p>-</p> :
-                      props.request.filter((y)=> y.open === true ).map((x,index)=>{return(<li key={index}><Link to='/request-list' perop={x.title}>{x.title}</Link></li>)})
-
+                      props.request.length === 0 ? <p style={{marginLeft: -38}}>-</p> :
+                      props.request.filter((y)=> y.open === true ).map((x,index)=>{return(<li key={index}><Link to='/request-list' onClick={()=>alert('HALO')}>{x.title}</Link></li>)})
                     }
                   </ul>
               </li>

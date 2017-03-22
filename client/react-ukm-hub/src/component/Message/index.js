@@ -15,8 +15,8 @@ class Message extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps){
-    nextProps.fetchProfile(compId)
+  componentDidMount(){
+    this.props.fetchProfile(compId)
   }
 
   render () {
@@ -29,7 +29,6 @@ class Message extends Component {
               this.props.profile === '' ? <p></p> :
               <MessageList messages={this.props.profile.acceptedMessages}/>
             }
-
         </div>
       </div>
     )

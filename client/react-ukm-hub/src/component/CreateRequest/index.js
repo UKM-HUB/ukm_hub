@@ -83,6 +83,7 @@ class CreateRequest extends Component {
 
 
   onHandleSubmitRequest(data,id,companyType){
+    console.log(data,id,companyType);
     if (this.state.requestData.title === '') {
       requestInfo.showTitleMessage('top','center')
     } else if (this.state.requestData.request === '') {

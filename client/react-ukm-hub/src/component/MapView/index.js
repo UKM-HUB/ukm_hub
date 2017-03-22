@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import GMaps from '../../../public/assets/js/gmaps.min.js'
 import {connect} from 'react-redux'
 import { Link } from 'react-router-dom'
-import {fetchCompanyByCategory, fetchProfile} from '../../actions/index.js'
+import { fetchCompanyByCategoryGmaps, fetchProfile } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
@@ -13,43 +13,42 @@ class MapView extends Component {
     this.state = {
       topbarTitle: 'Map View',
       activeNavigation: ['active', '', '', '', ''],
-      companyIcon: 'https://s4.postimg.org/jlidgjun1/store.png',
-      otherCompanyIcon: 'https://s21.postimg.org/8hrapdesn/building.png',
       dataMapCompany: []
     }
   }
 
-  componentWillReceiveProps(){
-    var temp = []
-    var pathTemp = []
+  createGmapsMarkers(otherCompany, company){
+
+    let temp = []
+    let pathTemp = []
+    let otherCompanyIcon = 'https://s21.postimg.org/8hrapdesn/building.png'
+    let companyIcon = 'https://s4.postimg.org/jlidgjun1/store.png'
     const that = this
 
-    setTimeout(function(){
-      if (that.props.profile.type === 'corporate') {
-        that.setState({
-          companyIcon: 'https://s21.postimg.org/8hrapdesn/building.png',
-          otherCompanyIcon: 'https://s4.postimg.org/jlidgjun1/store.png'
-        })
+
+      if (company.type === 'corporate') {
+        companyIcon = 'https://s21.postimg.org/8hrapdesn/building.png',
+        otherCompanyIcon = 'https://s4.postimg.org/jlidgjun1/store.png'
       }
 
-      for (let i = 0; i < that.props.otherCompany.length; i++) {
-        pathTemp[pathTemp.length] = [ that.props.profile.location.lat, that.props.profile.location.lng ]
-        pathTemp[pathTemp.length] = [ that.props.otherCompany[i].location.lat, that.props.otherCompany[i].location.lng ]
+      for (let i = 0; i < otherCompany.length; i++) {
+        pathTemp[pathTemp.length] = [ company.location.lat, company.location.lng ]
+        pathTemp[pathTemp.length] = [ otherCompany[i].location.lat, otherCompany[i].location.lng ]
       }
 
-      for (let i = 0; i < that.props.otherCompany.length; i++) {
+      for (let i = 0; i < otherCompany.length; i++) {
         let requestList = '';
-        that.props.otherCompany[i].request.filter((x)=> x.open === true).map(function(data){
+        otherCompany[i].request.filter((x)=> x.open === true).map(function(data){
           return requestList +=
-          '<li class="list-group-item"><Link to="/request-list"}><a>' + data.title + '</a></Link></li>'
+          '<li class="list-group-item"><button onclick="redirectToList()">' + data.title + '</button></li>'
         })
 
         temp[temp.length] =
         {
-          title: that.props.otherCompany[i].name,
-          icon: that.state.otherCompanyIcon,
-          lat: that.props.otherCompany[i].location.lat,
-          lng: that.props.otherCompany[i].location.lng,
+          title: otherCompany[i].name,
+          icon: otherCompanyIcon,
+          lat: otherCompany[i].location.lat,
+          lng: otherCompany[i].location.lng,
           infoWindow: {
             content:
             `
@@ -57,23 +56,23 @@ class MapView extends Component {
               <div class="row">
                 <div class="col-sm-3">
                   <img
-                    src=${that.props.otherCompany[i].images}
+                    src=${otherCompany[i].images}
                     style="width: 118px; height:100px; border-radius: 5px; filter:grayscale(0.3) opacity(0.9)"
                   />
                 </div>
                 <div class="col-sm-9" style="margin-top: -20px; padding-left:30px">
-                  <h3><b>${that.props.otherCompany[i].name}</b></h3>
-                  <p><b>Alamat : </b>${that.props.otherCompany[i].address}</p>
-                  <p><b>Telepon : </b>${that.props.otherCompany[i].phone}</p>
+                  <h3><b>${otherCompany[i].name}</b></h3>
+                  <p><b>Alamat : </b>${otherCompany[i].address}</p>
+                  <p><b>Telepon : </b>${otherCompany[i].phone}</p>
                 </div>
               </div>
               <hr />
               <div class="row">
                 <div class="col-sm-12">
                   <p><b>Detail : </b></p>
-                  <p>${that.props.otherCompany[i].description}</p>
+                  <p>${otherCompany[i].description}</p>
                   <p><b>Category : </b>
-                    ${ that.props.otherCompany[i].category.map(function(data){ return `${data}` }) }
+                    ${ otherCompany[i].category.map(function(data){ return `${data}` }) }
                   </p>
                   <p><b>Request : </b>
                     <div class="card">
@@ -82,7 +81,7 @@ class MapView extends Component {
                       </ul>
                     </div>
                   </p>
-                  <a href="${that.props.otherCompany[i].website}" target="_blank">${that.props.otherCompany[i].website}</a>
+                  <a href="${otherCompany[i].website}" target="_blank">${otherCompany[i].website}</a>
                 </div>
               </div>
             </div>
@@ -90,23 +89,20 @@ class MapView extends Component {
           }
         }
       }
-    }, 1500)
 
-
-    setTimeout(function(){
       var map = new GMaps({
         el: '#map',
-        lat: that.props.profile.location.lat,
-        lng: that.props.profile.location.lng,
+        lat: company.location.lat,
+        lng: company.location.lng,
         zoom: 10
       });
 
       map.addMarkers([{
-        title: that.props.profile.name,
-        icon: that.state.companyIcon,
-        lat: that.props.profile.location.lat,
-        lng: that.props.profile.location.lng,
-        details: that.props.profile.name
+        title: company.name,
+        icon: companyIcon,
+        lat: company.location.lat,
+        lng: company.location.lng,
+        details: company.name
       }])
 
       map.addMarkers(temp)
@@ -117,11 +113,11 @@ class MapView extends Component {
         strokeOpacity: 0.5,
         strokeWeight: 5
       });
-    }, 2000)
+
   }
 
   componentDidMount () {
-    this.props.fetchCompanyByCategory(compId)
+    this.props.fetchCompanyByCategoryGmaps(compId, this.createGmapsMarkers)
     this.props.fetchProfile(compId)
   }
 
@@ -148,7 +144,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProfile: (id) => dispatch(fetchProfile(id)),
-    fetchCompanyByCategory: (id) => dispatch(fetchCompanyByCategory(id))
+    fetchCompanyByCategoryGmaps: (id, cb) => dispatch(fetchCompanyByCategoryGmaps(id, cb))
   }
   //return bindActionCreators({addTodo},dispatch)
 }
