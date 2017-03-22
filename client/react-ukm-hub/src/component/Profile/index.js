@@ -8,6 +8,7 @@ import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
 
 import profileInfo from '../../../public/assets/js/profileInfoMessageBox.js'
+const wesiteRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
 
 class Profile extends Component {
   constructor (props) {
@@ -170,6 +171,8 @@ class Profile extends Component {
       profileInfo.showCategoryMessage('top','center')
     } else if (this.state.data.updatedlat === '-6.260745364770679') {
       profileInfo.showMarkerMessage('top','center')
+    } else if (!wesiteRegex.test(this.state.data.website) && this.state.data.website !== '') {
+      profileInfo.showWebsiteMessage('top','center')
     } else if (this.state.data.address === '') {
       profileInfo.showAddressMessage('top','center')
     } else if (this.state.data.description === '') {
@@ -180,7 +183,6 @@ class Profile extends Component {
       profileInfo.showUpdateSuccessMessage('top','center')
       this.props.updateCompanyProfile(data,companyId)
     }
-
   }
 
   onHandleChange (e) {

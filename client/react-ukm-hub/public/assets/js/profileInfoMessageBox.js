@@ -51,6 +51,19 @@ module.exports = {
       }
     })
   },
+  showWebsiteMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-attention',
+      message: '<p style="margin-top:8px">Please input your full URL with http/https</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
   showAddressMessage: function (from, align) {
     $.notify({
       icon: 'pe-7s-attention',
@@ -93,7 +106,7 @@ module.exports = {
   showUpdateSuccessMessage: function (from, align) {
     $.notify({
       icon: 'pe-7s-id',
-      message: '<p style="margin-top:8px">Company update Success</p>'
+      message: '<p style="margin-top:8px">Update Success</p>'
     }, {
       type: 'info',
       timer: 4000,
