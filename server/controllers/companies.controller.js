@@ -210,7 +210,7 @@ module.exports={
     var requestArray =[]
     Company.findOne({_id:req.params.id}).then(function(result){
       if(result.type === 'corporate'){
-        Company.find({type:'ukm',category: { $in:result.category} },{request:1}).then(function(result){
+        Company.find({type:'ukm',category: { $in:result.category} },{ password:0}).then(function(result){
           result.forEach(function(data){
             data.request.forEach(function(dats){
               if(dats.open==true){
@@ -223,7 +223,7 @@ module.exports={
         })
       }
       else{
-        Company.find({type:'corporate',category: { $in:result.category} },{ request: 1}).then(function(result){
+        Company.find({type:'corporate',category: { $in:result.category} },{ password:0}).then(function(result){
           result.forEach(function(data){
             data.request.forEach(function(dats){
               if(dats.open==true){
