@@ -6,6 +6,35 @@ import {acceptMessageFetch,rejectMessageFetch} from '../../actions/index.js'
 import {connect} from 'react-redux'
 const compId = localStorage.getItem('companyId')
 
+let messageInfo = {
+  showAcceptMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-like2',
+      message: '<p style="margin-top:8px">Accept request sent</p>'
+    }, {
+      type: 'info',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showDeclineMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-attention',
+      message: '<p style="margin-top:8px">You have decline the offer</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  }
+}
+
 class MessageList extends Component {
   constructor(){
     super()
@@ -17,9 +46,11 @@ class MessageList extends Component {
 
   handleAccept(id,acceptedMessagesId){
     this.props.acceptMessageFetch(id,acceptedMessagesId)
+    messageInfo.showAcceptMessage('top','center')
   }
   handleReject(id,rejectedMessagesId){
     this.props.rejectMessageFetch(id,rejectedMessagesId)
+    messageInfo.showDeclineMessage('top','center')
   }
   componentDidMount(){
     $(document).ready(function() {
@@ -61,8 +92,7 @@ class MessageList extends Component {
                       style={{marginRight: 20}}
                       onClick={(e) => {
                         e.preventDefault()
-                        this.handleAccept(compId,message._id)
-                        alert('you accept the mesage')}}>
+                        this.handleAccept(compId,message._id)}}>
                       Accept
                     </button>
                     <button
@@ -71,8 +101,7 @@ class MessageList extends Component {
                       style={{marginRight: 20}}
                       onClick={(e) => {
                         e.preventDefault()
-                        this.handleReject(compId,message._id)
-                        alert('you refused the message')}}>
+                        this.handleReject(compId,message._id)}}>
                       Decline
                     </button>
                   </td>
