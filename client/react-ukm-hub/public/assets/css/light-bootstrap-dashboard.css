@@ -24,6 +24,10 @@
 .modal-backdrop {
   z-index:-1
 }
+
+.request_list_image img {
+  width: 100px
+}
 /* ================================= */
 
 @keyframes spin {

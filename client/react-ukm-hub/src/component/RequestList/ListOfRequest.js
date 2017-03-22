@@ -113,7 +113,7 @@ class ListOfRequest extends Component {
                   <td>{otherRequest.request.title}</td>
                   <td style={{textAlign:'justify'}}>{otherRequest.request.description}</td>
                   <td>{otherRequest.request.price}</td>
-                  <td><img className='avatar border-gray' src={otherRequest.request.images} alt='request' /></td>
+                  <td className='request_list_image'><img className='avatar border-gray' src={otherRequest.request.images} alt='' /></td>
                   <td>
                     <button
                       type='submit'
