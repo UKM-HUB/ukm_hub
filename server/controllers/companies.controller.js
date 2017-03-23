@@ -274,7 +274,6 @@ module.exports={
     })
   },
   createLetter:function(req,res){
-    validationCreateLetter(req.body.messge, res, function(){
       Company.findByIdAndUpdate(req.params.id,{
         $push:{
               'letter':{
@@ -333,7 +332,6 @@ module.exports={
           }
         }
       )
-    })
   },
   acceptMessage: function(req,res){
     Company.findOne({_id:req.params.id}).then(function(result){
