@@ -274,7 +274,7 @@ module.exports={
     })
   },
   createLetter:function(req,res){
-    validationCreateLetter(req.body.messge, res, function(){
+    validationCreateLetter(req.body.message, res, function(){
       Company.findByIdAndUpdate(req.params.id,{
         $push:{
               'letter':{

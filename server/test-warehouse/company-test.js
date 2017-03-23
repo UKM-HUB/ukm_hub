@@ -164,14 +164,16 @@ describe('tes routing company', function () {
       description: 'timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook'
     })
     .end(function (err, res) {
-      res.body.should.have.deep.property('name', 'TIMO GAME SHOP')
-      res.body.should.have.deep.property('type', 'corporate')
-      res.body.location.should.have.deep.property('lat', '-12.043333')
-      res.body.location.should.have.deep.property('lng', '-77.028333')
-      res.body.should.have.deep.property('website', 'timocodex.com')
-      res.body.should.have.deep.property('address', 'Taman bukit indah raya IV no 45, Bukin Indah Sukajadi')
-      res.body.should.have.deep.property('description', 'timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook')
-      done()
+
+    res.body.should.have.deep.property('name','TIMO GAME SHOP')
+    res.body.should.have.deep.property('type','corporate')
+    res.body.location.should.have.deep.property('lat','-12.043333')
+    res.body.location.should.have.deep.property('lng','-77.028333')
+    res.body.should.have.deep.property('website','http://www.timocodex.com')
+    res.body.should.have.deep.property('address','Taman bukit indah raya IV no 45, Bukin Indah Sukajadi')
+    res.body.should.have.deep.property('description','timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook')
+    done()
+
     })
   })
   it('should update second registered company type to ukm when put api/company/:id', function (done) {
@@ -187,14 +189,16 @@ describe('tes routing company', function () {
       description: 'Gana Game dev adalah pengembang game konsol dan web'
     })
     .end(function (err, res) {
-      res.body.should.have.deep.property('name', 'GANA GAME DEVELOPER')
-      res.body.should.have.deep.property('type', 'ukm')
-      res.body.location.should.have.deep.property('lat', '-12.043333')
-      res.body.location.should.have.deep.property('lng', '-77.028333')
-      res.body.should.have.deep.property('website', 'dhegana.com')
-      res.body.should.have.deep.property('address', 'Jalan wastu kencana no 100 blok Z')
-      res.body.should.have.deep.property('description', 'Gana Game dev adalah pengembang game konsol dan web')
-      done()
+
+      res.body.should.have.deep.property('name','GANA GAME DEVELOPER')
+      res.body.should.have.deep.property('type','ukm')
+      res.body.location.should.have.deep.property('lat','-12.043333')
+      res.body.location.should.have.deep.property('lng','-77.028333')
+      res.body.should.have.deep.property('website','http://www.dhegana.com')
+      res.body.should.have.deep.property('address','Jalan wastu kencana no 100 blok Z')
+      res.body.should.have.deep.property('description','Gana Game dev adalah pengembang game konsol dan web')
+    done()
+
     })
   })
   it('should return all company with type ukm with same category when corporate search By Category with get api/company/:id/searchByCategory', function (done) {
