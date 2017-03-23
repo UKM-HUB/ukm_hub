@@ -1,4 +1,4 @@
-module.exports = function(to, from, requestId, message,  res, callback){
+module.exports = function(message,  res, callback){
  if (message == '' || message == null) {
     res.json("Message required")
   } else{
