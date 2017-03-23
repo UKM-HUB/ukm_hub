@@ -113,7 +113,7 @@ class Login extends Component {
 
   handleForgetPassword(e){
     e.preventDefault()
-    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/resetPassword', {
+    fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/resetPassword', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
