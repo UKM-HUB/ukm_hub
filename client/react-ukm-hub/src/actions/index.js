@@ -44,7 +44,7 @@ export const searchRequestByClick = (data) => {
 
 export const registerCompanyFetch = (email,password) => {
   return (dispatch) => {
-    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/auth/register/', {
+    fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/auth/register/', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -63,7 +63,7 @@ export const registerCompanyFetch = (email,password) => {
 
 export const loginCompanyFetch = (email,password) => {
   return (dispatch) => {
-    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/auth/login/', {
+    fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/auth/login/', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -81,7 +81,7 @@ export const loginCompanyFetch = (email,password) => {
 
 export const fetchProfile = (id) => {
   return (dispatch) => {
-    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
+    fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
       .then(res => res.json())
       .then(profile => dispatch(fetchingCompanyProfile(profile)))
   }
@@ -90,7 +90,7 @@ export const fetchProfile = (id) => {
 export const updateCompanyProfile = (data,id) => {
   return (dispatch) => {
     console.log(data);
-    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id, {
+    fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -113,7 +113,7 @@ export const updateCompanyProfile = (data,id) => {
 
 export const fetchCompanyByCategory = (id) => {
   return (dispatch) => {
-    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchByCategory')
+    fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchByCategory')
       .then(res => res.json())
       .then(company => dispatch(searchCompanyByCategory(company)))
   }
@@ -121,11 +121,11 @@ export const fetchCompanyByCategory = (id) => {
 
 export const fetchCompanyByCategoryGmaps = (id, cb) => {
   return (dispatch) => {
-    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchByCategory')
+    fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchByCategory')
       .then(res => res.json())
       .then(company => dispatch(searchCompanyByCategory(company)))
       .then(function(result){
-        fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
+        fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
           .then(res => res.json())
           .then(comp => dispatch(fetchingCompanyProfile(comp)))
           .then(result2 => cb(result.payload,result2.payload))
@@ -135,7 +135,7 @@ export const fetchCompanyByCategoryGmaps = (id, cb) => {
 
 export const fetchProfileGmaps = (id, cb, that) => {
   return (dispatch) => {
-    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
+    fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
       .then(res => res.json())
       .then(comp => dispatch(fetchingCompanyProfile(comp)))
       .then(result => cb(result.payload, that))
@@ -144,7 +144,7 @@ export const fetchProfileGmaps = (id, cb, that) => {
 
 export const createBuyRequestFetch = (data,id) => {
   return (dispatch) => {
-      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/buyRequest',
+      fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/buyRequest',
       {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
@@ -161,10 +161,8 @@ export const createBuyRequestFetch = (data,id) => {
 }
 
 export const createSellRequestFetch = (data,id) => {
-
   return (dispatch) => {
-
-      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/sellRequest',
+      fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/sellRequest',
       {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
@@ -177,23 +175,20 @@ export const createSellRequestFetch = (data,id) => {
       })
       .then(res => res.json())
       // .then(edited => dispatch(loginCompany(edited)))
-
   }
 }
 
 export const otherCompanyRequestFetch = (id) => {
   return (dispatch) => {
-    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchRequest')
+    fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchRequest')
       .then(res => res.json())
       .then(company => dispatch(searchOtherCompanyRequest(company)))
   }
 }
 
 export const createMessageFetch = (title,message,requestTitle,id,otherId,requestId) => {
-
   return (dispatch) => {
-
-      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/'+otherId+'/'+requestId+'/message',
+      fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/'+otherId+'/'+requestId+'/message',
       {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
@@ -204,34 +199,27 @@ export const createMessageFetch = (title,message,requestTitle,id,otherId,request
         })
       })
       .then(res => res.json())
-
   }
 }
 
 export const acceptMessageFetch = (id,acceptedMessagesId) => {
-
   return (dispatch) => {
-
-      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/'+acceptedMessagesId+'/acceptMessage',
+      fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/'+acceptedMessagesId+'/acceptMessage',
       {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
       })
       .then(res => console.log(res))
-
   }
 }
 
 export const rejectMessageFetch = (id,rejectedMessagesId) => {
-
   return (dispatch) => {
-
-      fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/'+rejectedMessagesId+'/rejectMessage',
+      fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/'+rejectedMessagesId+'/rejectMessage',
       {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
       })
       .then(res => console.log(res))
-
   }
 }
