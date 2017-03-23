@@ -78,7 +78,7 @@ const CompanyList = (props) => {
                 <span>
                   {
                     props.website === '' ? <p>-</p> :
-                    <a href={props.website}>{props.website}</a>
+                    <a href={props.website} target="_blank">{props.website}</a>
                   }
 
                 </span>

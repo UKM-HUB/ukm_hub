@@ -22,6 +22,7 @@ class MapView extends Component {
     let pathTemp = []
     let otherCompanyIcon = 'https://s21.postimg.org/8hrapdesn/building.png'
     let companyIcon = 'https://s4.postimg.org/jlidgjun1/store.png'
+
     const that = this
 
       if (company.type === 'corporate') {
@@ -37,16 +38,24 @@ class MapView extends Component {
       for (let i = 0; i < otherCompany.length; i++) {
         let requestList = '';
         let categoryList = '';
+        let website = otherCompany[i].website
 
         otherCompany[i].request.filter((x)=> x.open === true).map(function(data){
           return requestList +=
-          '<li class="list-group-item"><button onclick="redirectToList()">' + data.title + '</button></li>'
+          '<li style="font-size:16px"><a href="/request-list" style="color: rgb(30, 30, 30); font-size: 15px; text-decoration: underline;">' + data.title + '</a></li>'
         })
+        let requestEmpty = otherCompany[i].request.filter((x)=> x.open === true)
 
-        otherCompany[i].category
+        if(requestEmpty.length === 0) {
+          requestList +=
+          '<li style="font-size:16px">No request list</li>'
+        }
+
+        if (otherCompany[i].website === '') {
+          website = "No Website"
+        }
 
         otherCompany[i].category.map(function(data,index){
-          console.log(otherCompany[i].category.length);
           if(index === otherCompany[i].category.length-1) {
             categoryList +=
             '<em>' + data + '</em>'
@@ -79,51 +88,29 @@ class MapView extends Component {
                   <p><b>Address : </b>${otherCompany[i].address}</p>
                   <p><b>Phone : </b>${otherCompany[i].phone}</p>
                   <p><b>Category : </b>${categoryList}</p>
+                  <p><b>Website : </b><a href=${website} target="_blank">${website}</a></p>
                 </div>
               </div>
               <hr />
               <div class="row">
-                <div class="col-sm-offset-2 col-sm-8" style="text-align:center">
-                  <div class="list-group">
-
-                      <h4 class="list-group-item-heading" style='font-weight:900'>Description</h4>
-                      <p class="list-group-item-text">${otherCompany[i].description}</p>
-
-                  </div>
-                </div>
-                <div class="col-sm-6">
+                <div class="col-sm-12" style="text-align:left">
                   <div class="list-group">
                     <div class='mapView'>
-                      <h4 class="list-group-item-heading">Description</h4>
-                      <p class="list-group-item-text">${otherCompany[i].description}</p>
-                    </div>
-                  </div>
-                  <div class="list-group">
-                    <div class='mapView'>
-                      <h4 class="list-group-item-heading">Description</h4>
+                      <h4 class="list-group-item-heading" style='font-weight:600; margin-bottom:10px;'>Description</h4>
                       <p class="list-group-item-text">${otherCompany[i].description}</p>
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                   <div class="list-group">
                     <div class='mapView'>
-                      <h4 class="list-group-item-heading">Description</h4>
-                      <p class="list-group-item-text">${otherCompany[i].description}</p>
-                    </div>
-                  </div>
-                  <div class="list-group">
-                    <div class='mapView'>
-                      <h4 class="list-group-item-heading">Description</h4>
-                      <p class="list-group-item-text">${otherCompany[i].description}</p>
+                      <h4 class="list-group-item-heading" style='font-weight:600; margin-bottom:10px;'>Request</h4>
+                      <ul style="padding-left: 16px; list-style-type: square;">
+                        ${requestList}
+                      </ul>
                     </div>
                   </div>
                 </div>
-                    ${ otherCompany[i].category.map(function(data){ return `${data}` }) }
-                  </p>
-
-                  <a href="${otherCompany[i].website}" target="_blank">${otherCompany[i].website}</a>
-
               </div>
             </div>
             `
