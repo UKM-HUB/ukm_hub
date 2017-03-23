@@ -78,27 +78,52 @@ export const fetchProfile = (id) => {
 }
 
 export const updateCompanyProfile = (data,id,img) => {
-  return (dispatch) => {
-    console.log('ACTION : ' + data);
-    fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id, {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        name : data.name,
-        type : data.type,
-        category : data.category,
-        lat : data.updatedlat,
-        lng : data.updatedlng,
-        website : data.website,
-        address : data.address,
-        phone : data.phone,
-        description : data.description,
-        images : 'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img,
+  if(!img){
+    return (dispatch) => {
+      console.log('ACTION : ' + data);
+      fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          name : data.name,
+          type : data.type,
+          category : data.category,
+          lat : data.updatedlat,
+          lng : data.updatedlng,
+          website : data.website,
+          address : data.address,
+          phone : data.phone,
+          description : data.description,
+          // images : 'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img,
+        })
       })
-    })
-    .then(res => res.json())
-    .then(edited => dispatch(updateCompanyProfileSuccess(edited)))
+      .then(res => res.json())
+      .then(edited => dispatch(updateCompanyProfileSuccess(edited)))
+    }
+  } else {
+    return (dispatch) => {
+      console.log('ACTION : ' + data);
+      fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          name : data.name,
+          type : data.type,
+          category : data.category,
+          lat : data.updatedlat,
+          lng : data.updatedlng,
+          website : data.website,
+          address : data.address,
+          phone : data.phone,
+          description : data.description,
+          images : 'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img,
+        })
+      })
+      .then(res => res.json())
+      .then(edited => dispatch(updateCompanyProfileSuccess(edited)))
+    }
   }
+
 }
 export const fetchCompanyByCategory = (id) => {
   return (dispatch) => {
@@ -130,38 +155,76 @@ export const fetchProfileGmaps = (id, cb, that) => {
 }
 export const createBuyRequestFetch = (data,id, img) => {
   console.log(img);
-  return (dispatch) => {
-      fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/buyRequest',
-      {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          title:data.title,
-          price:data.price,
-          description:data.request,
-          images:'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img//ganti dlu di backend nya
+  if(!img) {
+    return (dispatch) => {
+        fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/buyRequest',
+        {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            title:data.title,
+            price:data.price,
+            description:data.request,
+            // images:'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img//ganti dlu di backend nya
+          })
         })
-      })
-      .then(res => res.json())
-      // .then(edited => dispatch(loginCompany(edited)))
+        .then(res => res.json())
+        // .then(edited => dispatch(loginCompany(edited)))
+    }
+  } else {
+    return (dispatch) => {
+        fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/buyRequest',
+        {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            title:data.title,
+            price:data.price,
+            description:data.request,
+            images:'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img//ganti dlu di backend nya
+          })
+        })
+        .then(res => res.json())
+        // .then(edited => dispatch(loginCompany(edited)))
+    }
   }
+
 }
 export const createSellRequestFetch = (data,id, img) => {
-  return (dispatch) => {
-      fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/sellRequest',
-      {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          title:data.title,
-          price:data.price,
-          description:data.request,
-          images:'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img//ganti dlu di backend nya
+  if(!img){
+    return (dispatch) => {
+        fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/sellRequest',
+        {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            title:data.title,
+            price:data.price,
+            description:data.request,
+            // images:'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img//ganti dlu di backend nya
+          })
         })
-      })
-      .then(res => res.json())
-      // .then(edited => dispatch(loginCompany(edited)))
+        .then(res => res.json())
+        // .then(edited => dispatch(loginCompany(edited)))
+    }
+  } else {
+    return (dispatch) => {
+        fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/sellRequest',
+        {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            title:data.title,
+            price:data.price,
+            description:data.request,
+            images:'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img//ganti dlu di backend nya
+          })
+        })
+        .then(res => res.json())
+        // .then(edited => dispatch(loginCompany(edited)))
+    }
   }
+
 }
 export const otherCompanyRequestFetch = (id) => {
   return (dispatch) => {

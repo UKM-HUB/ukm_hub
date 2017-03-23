@@ -199,15 +199,19 @@ class Profile extends Component {
     } else if (this.state.data.phone === '') {
       profileInfo.showPhoneMessage('top','center')
     } else {
-      // passing that
-      superagent.post('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/upload/editProfile/'+this.state.randomImageKey)
-      .attach('filePic', this.state.files[0])
-      .end((err, data) => {
-        if (err) console.log(err)
-      })
-
+      if(this.state.files[0]){
+        // passing that
+        superagent.post('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/upload/editProfile/'+this.state.randomImageKey)
+        .attach('filePic', this.state.files[0])
+        .end((err, data) => {
+          if (err) console.log(err)
+        })
+        this.props.updateCompanyProfile(data,companyId, this.state.randomImageKey + this.state.files[0].name)
+      }else{
+        this.props.updateCompanyProfile(data,companyId)
+      }
       profileInfo.showUpdateSuccessMessage('top','center')
-      this.props.updateCompanyProfile(data,companyId, this.state.randomImageKey + this.state.files[0].name)
+
 
     }
   }
