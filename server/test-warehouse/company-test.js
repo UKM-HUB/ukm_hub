@@ -9,14 +9,14 @@ chai.use(chaiHttp);
 
 describe('tes routing company',function(){
   it('Test API when delete api/company/',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').delete(`/api/company`)
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').delete(`/api/company`)
     .end(function (err, res) {
     res.text.should.equal("data berhasil dihapus")
     done()
     })
   })
   it('should return email of the registered company when post api/company/auth/register',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').post('/api/company/auth/register').send({email:'timogio99@gmail.com',password:'123456'}).end(function (err, res) {
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').post('/api/company/auth/register').send({email:'timogio99@gmail.com',password:'123456'}).end(function (err, res) {
     res.body.should.have.deep.property('email','timogio99@gmail.com')
     res.body.should.have.deep.property('edited',false)
     res.body.should.have.deep.property('verified',false)
@@ -25,14 +25,14 @@ describe('tes routing company',function(){
     })
   })
   it('should return email of the second registered company when post api/company/auth/register',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').post('/api/company/auth/register').send({email:'dhegana@gmail.com',password:'123456'}).end(function (err, res) {
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').post('/api/company/auth/register').send({email:'dhegana@gmail.com',password:'123456'}).end(function (err, res) {
     res.body.should.have.deep.property('email','dhegana@gmail.com')
     tampung2 = res.body.companyId
     done()
     })
   })
   it('should not update  registered company type to corporate when user does not input the name of company put api/company/:id',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
     name:'',
     type:'corporate',
     category:["book","game"],
@@ -49,7 +49,7 @@ describe('tes routing company',function(){
     })
   })
   it('should not update  registered company type to corporate when user does not select the type of company put api/company/:id',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
     name:'Timo GAME SHOP',
     type:'',
     category:["book","game"],
@@ -66,7 +66,7 @@ describe('tes routing company',function(){
     })
   })
   it('should not update  registered company type to corporate when user does not select the category of company put api/company/:id',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
     name:'TIMO GAME SHOP',
     type:'corporate',
     category:'',
@@ -83,7 +83,7 @@ describe('tes routing company',function(){
     })
   })
   it('should not update  registered company type to corporate when user does not select the latitude of company put api/company/:id',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
     name:'Timocodex shop',
     type:'corporate',
     category:["book","game"],
@@ -100,7 +100,7 @@ describe('tes routing company',function(){
     })
   })
   it('should not update  registered company type to corporate when user does not select the longitude of company put api/company/:id',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
     name:'Timocodex shop',
     type:'corporate',
     category:["book","game"],
@@ -117,7 +117,7 @@ describe('tes routing company',function(){
     })
   })
   it('should not update  registered company type to corporate when user does not input the full address of company put api/company/:id',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
     name:'Timocodex shop',
     type:'corporate',
     category:["book","game"],
@@ -134,7 +134,7 @@ describe('tes routing company',function(){
     })
   })
   it('should not update  registered company type to corporate when user does not input the full address of company put api/company/:id',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
     name:'Timocodex shop',
     type:'corporate',
     category:["book","game"],
@@ -151,7 +151,7 @@ describe('tes routing company',function(){
     })
   })
   it('should update first registered company type to corporate when put api/company/:id',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
     name:'TIMO GAME SHOP',
     type:'corporate',
     category:["book","game"],
@@ -174,7 +174,7 @@ describe('tes routing company',function(){
     })
   })
   it('should update second registered company type to ukm when put api/company/:id',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}`).send({
       name:'GANA GAME DEVELOPER',
       type:'ukm',
       category:["game"],
@@ -197,21 +197,21 @@ describe('tes routing company',function(){
     })
   })
   it('should return all company with type ukm with same category when corporate search By Category with get api/company/:id/searchByCategory',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').get(`/api/company/${tampung}/searchByCategory`)
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').get(`/api/company/${tampung}/searchByCategory`)
     .end(function (err, res) {
     res.body[0].should.have.deep.property('type','ukm')
     done()
     })
   })
   it('should return all company with type corporate with same category when ukm search By Category with get api/company/:id/searchByCategory',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').get(`/api/company/${tampung2}/searchByCategory`)
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').get(`/api/company/${tampung2}/searchByCategory`)
     .end(function (err, res) {
     res.body[0].should.have.deep.property('type','corporate')
     done()
     })
   })
   it('ukm should not create buy request when  put api/company/:id/buyRequest',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}/buyRequest`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}/buyRequest`).send({
       title:"coba coba",
       price:500000,
       description:"nyoba terus",
@@ -223,7 +223,7 @@ describe('tes routing company',function(){
   })
 
   it('corporate should not create sell request when  put api/company/:id/sellRequest',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/sellRequest`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/sellRequest`).send({
       title:"coba coba",
       price:500000,
       description:"nyoba terus",
@@ -234,7 +234,7 @@ describe('tes routing company',function(){
     })
   })
   it('corporate should not create buy Request if the title is blank when put api/company/:id/buyRequest',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/buyRequest`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/buyRequest`).send({
       title:'',
       price:9999,
       description:"dibutuhkan ukm yang bergerak di bidang game developer untuk mengembangkan sebuah game konsol ps4 ber genre RPG yang sudah kami buat konsepnya",
@@ -245,7 +245,7 @@ describe('tes routing company',function(){
     })
   })
   it('corporate should not create buy Request if the description is blank when put api/company/:id/buyRequest',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/buyRequest`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/buyRequest`).send({
       title:'COBA',
       price:9999,
       description:"",
@@ -256,7 +256,7 @@ describe('tes routing company',function(){
     })
   })
   it('corporate should create buy Request when put api/company/:id/buyRequest',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/buyRequest`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/buyRequest`).send({
       title:"dicari game developer sejati",
       price:9999,
       description:"dibutuhkan ukm yang bergerak di bidang game developer untuk mengembangkan sebuah game konsol ps4 ber genre RPG yang sudah kami buat konsepnya",
@@ -267,7 +267,7 @@ describe('tes routing company',function(){
     })
   })
   it('ukm should create sell Request when put api/company/:id/sellRequest',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}/sellRequest`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}/sellRequest`).send({
       title:"Menawarkan jasa game developer",
       price:9999,
       description:"jasa game developer konsol (xbox one , ps4) murah meriah, open for request",
@@ -279,21 +279,21 @@ describe('tes routing company',function(){
     })
   })
   it('change status of request(buy or sell) to false when put api/company/:companyId/:requestId',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}/${tampung3}`)
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}/${tampung3}`)
     .end(function (err, res) {
     res.body.request[0].should.have.deep.property('open',false)
     done()
     })
   })
   it('change status of request(buy or sell) to true when put api/company/:companyId/:requestId',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}/${tampung3}`)
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}/${tampung3}`)
     .end(function (err, res) {
     res.body.request[0].should.have.deep.property('open',true)
     done()
     })
   })
   it('should not create letter/message if message left blank when put api/company/:id/:otherId/:requestId/message',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/${tampung2}/${tampung3}/message`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/${tampung2}/${tampung3}/message`).send({
       title:"reply to - Menawarkan jasa game developer",
       requestTitle:"Menawarkan jasa game developer",
       message:'',
@@ -304,14 +304,14 @@ describe('tes routing company',function(){
     })
   })
   it('should create letter/message when put api/company/:id/:otherId/:requestId/message',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/${tampung2}/${tampung3}/message`).send({
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/${tampung2}/${tampung3}/message`).send({
       title:"reply to - Menawarkan jasa game developer",
       requestTitle:"Menawarkan jasa game developer",
       message:'saya tertarik dengan penawaran anda, berminat berkomunikasi lebih lanjut untuk bekerjasama dengan anda',
     })
-    console.log(res.body);
-    console.log(res.text);
     .end(function (err, res) {
+      console.log(res.body);
+      console.log(res.text);
     res.body.should.not.equal("")
     done()
     })

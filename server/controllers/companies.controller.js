@@ -333,7 +333,7 @@ module.exports={
           }
         }
       )
-    }
+    })
   },
   acceptMessage: function(req,res){
     Company.findOne({_id:req.params.id}).then(function(result){

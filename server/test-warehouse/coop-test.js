@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 
 describe('test routing coop',function(){
   it('Should return you dont have access token',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').get(`/api/coop`)
+    chai.request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com').get(`/api/coop`)
     .end(function (err, res) {
       res.should.be.an('object');
     done()
@@ -15,7 +15,7 @@ describe('test routing coop',function(){
   // testing register coop
   it('should return email of the register coop when post api/coop/register',function(done){
     chai
-    .request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com')
+    .request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com')
     .post('/api/coop/register')
     .send({email:'alexanderhendrawan@gmail.com', password: 'alexander'})
     .end(function (err, res) {
@@ -28,7 +28,7 @@ describe('test routing coop',function(){
   // testing login coop
   it('should return email of the login coop when post api/coop/login',function(done){
     chai
-    .request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com')
+    .request('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com')
     .post('/api/coop/login')
     .send({email:'alexanderhendrawan@gmail.com', password: 'alexander'})
     .end(function (err, res) {
