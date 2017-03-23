@@ -19,6 +19,7 @@ var defaultReqImage = require ('../public/image/box-outline-filled.png')
 var validationEditProfile = require('../helpers/validation/validationEditProfile')
 var validationRequest = require('../helpers/validation/validationRequest')
 var validationCreateLetter = require('../helpers/validation/validationCreateLetter')
+var validationChangePassword = require('../helpers/validation/validationChangePassword')
 
 function generatePassword() {
     var length = 5,
@@ -274,64 +275,66 @@ module.exports={
     })
   },
   createLetter:function(req,res){
-    Company.findByIdAndUpdate(req.params.id,{
-      $push:{
-            'letter':{
-              to:req.params.otherId,
-              from:req.params.id,
-              requestId:req.params.requestId,
-              title:req.body.title||'my offer',
-              date: new Date(),
-              status:'waiting',
-              message:req.body.message
-            },
-          }
-      },{
-        new:true
-      }, (err,data)=>{
-        if(err){
-          res.send(err)
-        }
-        else{
-          Company.findByIdAndUpdate(req.params.otherId,{
-            $push:{
-                  'acceptedMessages':{
-                    from:req.params.id,
-                    sender:data.name,
-                    letterId: data.letter[data.letter.length-1]._id,
-                    title:data.letter[data.letter.length-1].title,
-                    requestTitle: req.body.requestTitle,
-                    date: new Date(),
-                    status:'waiting',
-                    message:req.body.message
-                  },
-                }
-            },{
-              new:true
-            }, (err,datas)=>{
-              if(err){
-                res.send(err)
-              }
-              else{
-                sendEmail(datas.email,
-                   "You received a new message",
-                   `    <div style="border:1px solid black;width:400px;margin:auto"><div style="text-align:center"><img src='https://raw.githubusercontent.com/UKM-HUB/ukm_hub/master/ukmhub.png' style="width:30%;"/></div>
-                        <div style="margin-left:20%;margin-right:20%">
-                        <P>Dear <b>${datas.name}</b>,</P>
-                        <p>to respond your request with subject <i><b>${req.body.requestTitle}</b></i>, <b>${data.name}</b> have send you a message with title <b>"<i>${data.letter[data.letter.length-1].title}</i>"</b> .</p>
-                        <p>please check your message box immediately to accept or refused the offer, Thank you for your attention </p>
-                        <br/>
-                      <p>regards,</p>
-                        <p>UKM HUB teams</p>
-                        </div>
-                        </div> `,
-                    "Your received new message", res)
-              }
+    validationCreateLetter(req.body.message, res, function(){
+      Company.findByIdAndUpdate(req.params.id,{
+        $push:{
+              'letter':{
+                to:req.params.otherId,
+                from:req.params.id,
+                requestId:req.params.requestId,
+                title:req.body.title||'my offer',
+                date: new Date(),
+                status:'waiting',
+                message:req.body.message
+              },
             }
-          )
+        },{
+          new:true
+        }, (err,data)=>{
+          if(err){
+            res.send(err)
+          }
+          else{
+            Company.findByIdAndUpdate(req.params.otherId,{
+              $push:{
+                    'acceptedMessages':{
+                      from:req.params.id,
+                      sender:data.name,
+                      letterId: data.letter[data.letter.length-1]._id,
+                      title:data.letter[data.letter.length-1].title,
+                      requestTitle: req.body.requestTitle,
+                      date: new Date(),
+                      status:'waiting',
+                      message:req.body.message
+                    },
+                  }
+              },{
+                new:true
+              }, (err,datas)=>{
+                if(err){
+                  res.send(err)
+                }
+                else{
+                  sendEmail(datas.email,
+                     "You received a new message",
+                     `    <div style="border:1px solid black;width:400px;margin:auto"><div style="text-align:center"><img src='https://raw.githubusercontent.com/UKM-HUB/ukm_hub/master/ukmhub.png' style="width:30%;"/></div>
+                          <div style="margin-left:20%;margin-right:20%">
+                          <P>Dear <b>${datas.name}</b>,</P>
+                          <p>to respond your request with subject <i><b>${req.body.requestTitle}</b></i>, <b>${data.name}</b> have send you a message with title <b>"<i>${data.letter[data.letter.length-1].title}</i>"</b> .</p>
+                          <p>please check your message box immediately to accept or refused the offer, Thank you for your attention </p>
+                          <br/>
+                        <p>regards,</p>
+                          <p>UKM HUB teams</p>
+                          </div>
+                          </div> `,
+                      "Your received new message", res)
+                }
+              }
+            )
+          }
         }
-      }
-    )
+      )
+    })
   },
   acceptMessage: function(req,res){
     Company.findOne({_id:req.params.id}).then(function(result){
@@ -448,27 +451,30 @@ module.exports={
     })
   },
   changePassword: function(req,res){
-    Company.findOne({_id:req.params.body}).then(function(result){
-      if(passwordHash.verify(req.body.password, result.password)){
-        if(req.body.confirmNewPassword ===req.body.newPassword){
-          result.password = passwordHash.generate(req.body.newPassword)
-          result.save(function(err){
-            if(err){
-              res.send(err)
-            }
-            else{
-              res.send('Your password has been changed!')
-            }
-          })
+    validationChangePassword(req.body.oldPassword,req.body.newPassword,req.body.confirmNewPassword, res, function(){
+      Company.findOne({_id:req.params.id}).then(function(result){
+        console.log(passwordHash.verify(req.body.oldPassword, result.password));
+        if(passwordHash.verify(req.body.oldPassword, result.password)){
+          if(req.body.confirmNewPassword === req.body.newPassword){
+            result.password = passwordHash.generate(req.body.newPassword)
+            result.save(function(err){
+              if(err){
+                res.send(err)
+              }
+              else{
+                res.send('Your password has been changed!')
+              }
+            })
+          }
+          else{
+            res.send('your new password not match with the confirmation password!')
+          }
         }
-        else{
-          res.send('your new password not match with the confirmation password!')
-        }
-      }
 
-      else{
-        res.send('Your old password is not the same as your input!')
-      }
+        else{
+          res.send('Your old password is not the same as your input!')
+        }
+      })
     })
   },
   resetPassword: function(req, res){
