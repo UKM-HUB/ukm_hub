@@ -8,11 +8,11 @@ const compId = localStorage.getItem('companyId')
 
 // image upload
 import Dropzone from 'react-dropzone'
-import upload from 'superagent'
+// import upload from 'superagent'
 import superagent from 'superagent'
 
 import profileInfo from '../../../public/assets/js/profileInfoMessageBox.js'
-const wesiteRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+const wesiteRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/
 
 function generateRandomString() {
     var length = 5,
@@ -313,10 +313,6 @@ class Profile extends Component {
     const that = this
 
     let randomString = generateRandomString()
-    let newState = {
-      image: 'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+randomString + acceptedFiles[0].name
-    }
-    const newImage = Object.assign({}, this.state.data, newState);
 
     setTimeout(function(){
       that.setState({
@@ -330,6 +326,16 @@ class Profile extends Component {
     const checkboxStyle = {
       marginRight: 20,
       cursor: 'pointer'
+    }
+
+    const profilePicture = {
+      width:'100%',
+      border:'1px dotted rgb(50,50,50)',
+      height:200, cursor:'pointer',
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
+      fontFamily:'open sans'
     }
 
     return (
@@ -506,13 +512,13 @@ class Profile extends Component {
                                 Profile picture (optional)
                               </label>
                               {/* file upload */}
-                              <Dropzone style={{width:'100%', border:'1px dotted rgb(50,50,50)', height:200, cursor:'pointer', display:'flex',justifyContent:'center',alignItems:'center',fontSize:'16',fontFamily:'open sans'}} ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
-                                  <div style={{}}>Try dropping some files here, or click to select files to upload.</div>
+                              <Dropzone style={profilePicture} ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
+                                  <div>Try dropping some files here, or click to select files to upload.</div>
                               </Dropzone>
                               {
                                 this.state.files.length > 0 ? <div>
                                 <h2>Uploading {this.state.files.length} files...</h2>
-                                <div>{this.state.files.map((file,index) => <img src={file.preview} key={index} /> )}</div>
+                                <div>{this.state.files.map((file,index) => <img src={file.preview} key={index} alt="" /> )}</div>
                                 </div> : null
                               }
                               {/* file upload */}

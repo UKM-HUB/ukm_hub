@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import GMaps from '../../../public/assets/js/gmaps.min.js'
 import {connect} from 'react-redux'
-import { Link } from 'react-router-dom'
 import { fetchCompanyByCategoryGmaps, fetchProfile } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
@@ -23,10 +22,8 @@ class MapView extends Component {
     let otherCompanyIcon = 'https://s21.postimg.org/8hrapdesn/building.png'
     let companyIcon = 'https://s4.postimg.org/jlidgjun1/store.png'
 
-    const that = this
-
       if (company.type === 'corporate') {
-        companyIcon = 'https://s21.postimg.org/8hrapdesn/building.png',
+        companyIcon = 'https://s21.postimg.org/8hrapdesn/building.png'
         otherCompanyIcon = 'https://s4.postimg.org/jlidgjun1/store.png'
       }
 
@@ -59,10 +56,10 @@ class MapView extends Component {
 
         otherCompany[i].category.map(function(data,index){
           if(index === otherCompany[i].category.length-1) {
-            categoryList +=
+            return categoryList +=
             '<em>' + data + '</em>'
           } else {
-            categoryList +=
+            return categoryList +=
             '<em>' + data + ', </em>'
           }
 
