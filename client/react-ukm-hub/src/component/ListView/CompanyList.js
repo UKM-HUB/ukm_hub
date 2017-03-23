@@ -54,9 +54,6 @@ const CompanyList = (props) => {
               <h4 className="media-heading" style={companyTitleFontStyle}>{props.name}</h4>
               <p style={{textAlign:'justify'}}>{props.description}
               </p>
-              <strong style={distanceStyle}>
-                1 KM away from your location
-              </strong>
             </div>
           </div>
         </div>
