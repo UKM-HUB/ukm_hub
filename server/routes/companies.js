@@ -22,5 +22,7 @@ router.get('/',company.showAll)
 router.delete('/',company.deleteAll)
 // reset password
 router.post('/resetPassword',company.resetPassword)
+//change password
+router.put('/:id/changePassword',company.changePassword)
 
 module.exports = router;

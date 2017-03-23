@@ -447,6 +447,30 @@ module.exports={
       })
     })
   },
+  changePassword: function(req,res){
+    Company.findOne({_id:req.params.body}).then(function(result){
+      if(passwordHash.verify(req.body.password, result.password)){
+        if(req.body.confirmNewPassword ===req.body.newPassword){
+          result.password = passwordHash.generate(req.body.newPassword)
+          result.save(function(err){
+            if(err){
+              res.send(err)
+            }
+            else{
+              res.send('Your password has been changed!')
+            }
+          })
+        }
+        else{
+          res.send('your new password not match with the confirmation password!')
+        }
+      }
+
+      else{
+        res.send('Your old password is not the same as your input!')
+      }
+    })
+  },
   resetPassword: function(req, res){
     // find email from data base
     Company.findOne({ email: req.body.email }, function(err, data){

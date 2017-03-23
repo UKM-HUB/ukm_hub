@@ -25,43 +25,174 @@ describe('tes routing company',function(){
     })
   })
   it('should return email of the second registered company when post api/company/auth/register',function(done){
-    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').post('/api/company/auth/register').send({email:'alex@gmail.com',password:'yes123'}).end(function (err, res) {
-    res.body.should.have.deep.property('email','alex@gmail.com')
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').post('/api/company/auth/register').send({email:'dhegana@gmail.com',password:'123456'}).end(function (err, res) {
+    res.body.should.have.deep.property('email','dhegana@gmail.com')
     tampung2 = res.body.companyId
+    done()
+    })
+  })
+  it('should not update  registered company type to corporate when user does not input the name of company put api/company/:id',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    name:'',
+    type:'corporate',
+    category:["book","game"],
+    lat:'-12.043333',
+    lng:'-77.028333',
+    website:'timocodex.com',
+    address:'Taman bukit indah raya IV no 45, Bukin Indah Sukajadi',
+    phone:'081276861447',
+    description:'timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook ',
+    })
+    .end(function (err, res) {
+    res.text.should.equal('"name required"')
+    done()
+    })
+  })
+  it('should not update  registered company type to corporate when user does not select the type of company put api/company/:id',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    name:'Timo GAME SHOP',
+    type:'',
+    category:["book","game"],
+    lat:'-12.043333',
+    lng:'-77.028333',
+    website:'timocodex.com',
+    address:'Taman bukit indah raya IV no 45, Bukin Indah Sukajadi',
+    phone:'081276861447',
+    description:'timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook ',
+    })
+    .end(function (err, res) {
+    res.text.should.equal('"type required"')
+    done()
+    })
+  })
+  it('should not update  registered company type to corporate when user does not select the category of company put api/company/:id',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    name:'TIMO GAME SHOP',
+    type:'corporate',
+    category:'',
+    lat:'-12.043333',
+    lng:'-77.028333',
+    website:'timocodex.com',
+    address:'Taman bukit indah raya IV no 45, Bukin Indah Sukajadi',
+    phone:'081276861447',
+    description:'timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook ',
+    })
+    .end(function (err, res) {
+    res.text.should.equal('"category required"')
+    done()
+    })
+  })
+  it('should not update  registered company type to corporate when user does not select the latitude of company put api/company/:id',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    name:'Timocodex shop',
+    type:'corporate',
+    category:["book","game"],
+    lat:'',
+    lng:'-77.028333',
+    website:'timocodex.com',
+    address:'Taman bukit indah raya IV no 45, Bukin Indah Sukajadi',
+    phone:'081276861447',
+    description:'timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook ',
+    })
+    .end(function (err, res) {
+    res.text.should.equal('"lat required"')
+    done()
+    })
+  })
+  it('should not update  registered company type to corporate when user does not select the longitude of company put api/company/:id',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    name:'Timocodex shop',
+    type:'corporate',
+    category:["book","game"],
+    lat:'-12.043333',
+    lng:'',
+    website:'timocodex.com',
+    address:'Taman bukit indah raya IV no 45, Bukin Indah Sukajadi',
+    phone:'081276861447',
+    description:'timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook ',
+    })
+    .end(function (err, res) {
+    res.text.should.equal('"lng required"')
+    done()
+    })
+  })
+  it('should not update  registered company type to corporate when user does not input the full address of company put api/company/:id',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    name:'Timocodex shop',
+    type:'corporate',
+    category:["book","game"],
+    lat:'-12.043333',
+    lng:'-77.028333',
+    website:'timocodex.com',
+    address:'',
+    phone:'081276861447',
+    description:'timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook ',
+    })
+    .end(function (err, res) {
+    res.text.should.equal('"address required"')
+    done()
+    })
+  })
+  it('should not update  registered company type to corporate when user does not input the full address of company put api/company/:id',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
+    name:'Timocodex shop',
+    type:'corporate',
+    category:["book","game"],
+    lat:'-12.043333',
+    lng:'-77.028333',
+    website:'timocodex.com',
+    address:'Bukit indah raya',
+    phone:'081276861447',
+    description:'',
+    })
+    .end(function (err, res) {
+    res.text.should.equal('"description required"')
     done()
     })
   })
   it('should update first registered company type to corporate when put api/company/:id',function(done){
     chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}`).send({
-    name:'PT.SENTOSA',
+    name:'TIMO GAME SHOP',
     type:'corporate',
-    category:["sepatu","baju"],
+    category:["book","game"],
     lat:'-12.043333',
     lng:'-77.028333',
     website:'timocodex.com',
-    address:'taman bukit indah raya',
+    address:'Taman bukit indah raya IV no 45, Bukin Indah Sukajadi',
     phone:'081276861447',
-    description:'ini adalah toko',
+    description:'timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook',
     })
     .end(function (err, res) {
+    res.body.should.have.deep.property('name','TIMO GAME SHOP')
     res.body.should.have.deep.property('type','corporate')
+    res.body.location.should.have.deep.property('lat','-12.043333')
+    res.body.location.should.have.deep.property('lng','-77.028333')
+    res.body.should.have.deep.property('website','timocodex.com')
+    res.body.should.have.deep.property('address','Taman bukit indah raya IV no 45, Bukin Indah Sukajadi')
+    res.body.should.have.deep.property('description','timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook')
     done()
     })
   })
   it('should update second registered company type to ukm when put api/company/:id',function(done){
     chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}`).send({
-    name:'SANTOSA jaya',
-    type:'ukm',
-    category:["sepatu"],
-    lat:'-12.043333',
-    lng:'-77.028333',
-    website:'santosa.com',
-    address:'taman bukit indah raya',
-    phone:'081276861447',
-    description:'ini adalah toko',
+      name:'GANA GAME DEVELOPER',
+      type:'ukm',
+      category:["game"],
+      lat:'-12.043333',
+      lng:'-77.028333',
+      website:'dhegana.com',
+      address:'Jalan wastu kencana no 100 blok Z',
+      phone:'081346758765',
+      description:'Gana Game dev adalah pengembang game konsol dan web',
     })
     .end(function (err, res) {
-    res.body.should.have.deep.property('type','ukm')
+      res.body.should.have.deep.property('name','GANA GAME DEVELOPER')
+      res.body.should.have.deep.property('type','ukm')
+      res.body.location.should.have.deep.property('lat','-12.043333')
+      res.body.location.should.have.deep.property('lng','-77.028333')
+      res.body.should.have.deep.property('website','dhegana.com')
+      res.body.should.have.deep.property('address','Jalan wastu kencana no 100 blok Z')
+      res.body.should.have.deep.property('description','Gana Game dev adalah pengembang game konsol dan web')
     done()
     })
   })
@@ -90,6 +221,7 @@ describe('tes routing company',function(){
     done()
     })
   })
+
   it('corporate should not create sell request when  put api/company/:id/sellRequest',function(done){
     chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/sellRequest`).send({
       title:"coba coba",
@@ -101,11 +233,33 @@ describe('tes routing company',function(){
     done()
     })
   })
+  it('corporate should not create buy Request if the title is blank when put api/company/:id/buyRequest',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/buyRequest`).send({
+      title:'',
+      price:9999,
+      description:"dibutuhkan ukm yang bergerak di bidang game developer untuk mengembangkan sebuah game konsol ps4 ber genre RPG yang sudah kami buat konsepnya",
+    })
+    .end(function (err, res) {
+    res.text.should.equal('"title required"')
+    done()
+    })
+  })
+  it('corporate should not create buy Request if the description is blank when put api/company/:id/buyRequest',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/buyRequest`).send({
+      title:'COBA',
+      price:9999,
+      description:"",
+    })
+    .end(function (err, res) {
+    res.text.should.equal('"description required"')
+    done()
+    })
+  })
   it('corporate should create buy Request when put api/company/:id/buyRequest',function(done){
     chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/buyRequest`).send({
-      title:"dicari bahan kulit murah",
-      price:500000,
-      description:"dibutuhkan bahan kulit murah berkualitas internasional",
+      title:"dicari game developer sejati",
+      price:9999,
+      description:"dibutuhkan ukm yang bergerak di bidang game developer untuk mengembangkan sebuah game konsol ps4 ber genre RPG yang sudah kami buat konsepnya",
     })
     .end(function (err, res) {
     res.body.request.should.lengthOf(1)
@@ -114,9 +268,9 @@ describe('tes routing company',function(){
   })
   it('ukm should create sell Request when put api/company/:id/sellRequest',function(done){
     chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}/sellRequest`).send({
-      title:"dijual bahan kulit murah",
-      price:500000,
-      description:"dijual bahan kulit murah berkualitas internasional",
+      title:"Menawarkan jasa game developer",
+      price:9999,
+      description:"jasa game developer konsol (xbox one , ps4) murah meriah, open for request",
     })
     .end(function (err, res) {
     res.body.request.should.lengthOf(1)
@@ -124,10 +278,17 @@ describe('tes routing company',function(){
     done()
     })
   })
-  it('change status of request(buy or sell) when put api/company/:companyId/:requestId',function(done){
+  it('change status of request(buy or sell) to false when put api/company/:companyId/:requestId',function(done){
     chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}/${tampung3}`)
     .end(function (err, res) {
     res.body.request[0].should.have.deep.property('open',false)
+    done()
+    })
+  })
+  it('change status of request(buy or sell) to true when put api/company/:companyId/:requestId',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung2}/${tampung3}`)
+    .end(function (err, res) {
+    res.body.request[0].should.have.deep.property('open',true)
     done()
     })
   })
