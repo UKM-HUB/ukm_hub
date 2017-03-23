@@ -1,5 +1,5 @@
 var mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/ukmhub')
+
 var modelCoop = require('../models/model_coop.js')
 var modelCompany = require('../models/model_company.js')
 

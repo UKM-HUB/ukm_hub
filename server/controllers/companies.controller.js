@@ -19,6 +19,7 @@ var defaultReqImage = require ('../public/image/box-outline-filled.png')
 var validationEditProfile = require('../helpers/validation/validationEditProfile')
 var validationRequest = require('../helpers/validation/validationRequest')
 var validationCreateLetter = require('../helpers/validation/validationCreateLetter')
+var validationChangePassword = require('../helpers/validation/validationChangePassword')
 
 function generatePassword() {
     var length = 5,
@@ -326,7 +327,7 @@ module.exports={
                           <p>UKM HUB teams</p>
                           </div>
                           </div> `,
-                      "Your received new message", res.send(datas.id))
+                      "Your received new message", res)
                 }
               }
             )
@@ -374,7 +375,7 @@ module.exports={
                                     </div>
                                     </div> `,
                                   "Your request have been accepted"
-                                  , res.send(receptor.status))
+                                  , res)
 
                               }
                             })
@@ -431,7 +432,7 @@ module.exports={
                                     <p>UKM HUB teams</p>
                                     </div>
                                     </div>`
-                                   ,"Your request have been refused", res.send(receptor.status))
+                                   ,"Your request have been refused", res)
 
                               }
                             })
@@ -450,27 +451,30 @@ module.exports={
     })
   },
   changePassword: function(req,res){
-    Company.findOne({_id:req.params.body}).then(function(result){
-      if(passwordHash.verify(req.body.password, result.password)){
-        if(req.body.confirmNewPassword ===req.body.newPassword){
-          result.password = passwordHash.generate(req.body.newPassword)
-          result.save(function(err){
-            if(err){
-              res.send(err)
-            }
-            else{
-              res.send('Your password has been changed!')
-            }
-          })
+    validationChangePassword(req.body.oldPassword,req.body.newPassword,req.body.confirmNewPassword, res, function(){
+      Company.findOne({_id:req.params.id}).then(function(result){
+        console.log(passwordHash.verify(req.body.oldPassword, result.password));
+        if(passwordHash.verify(req.body.oldPassword, result.password)){
+          if(req.body.confirmNewPassword === req.body.newPassword){
+            result.password = passwordHash.generate(req.body.newPassword)
+            result.save(function(err){
+              if(err){
+                res.send(err)
+              }
+              else{
+                res.send('Your password has been changed!')
+              }
+            })
+          }
+          else{
+            res.send('your new password not match with the confirmation password!')
+          }
         }
-        else{
-          res.send('your new password not match with the confirmation password!')
-        }
-      }
 
-      else{
-        res.send('Your old password is not the same as your input!')
-      }
+        else{
+          res.send('Your old password is not the same as your input!')
+        }
+      })
     })
   },
   resetPassword: function(req, res){

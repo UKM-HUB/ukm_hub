@@ -22,6 +22,7 @@ const upload = multer({
   // file size limitation in bytes
   limits: { fileSize: 52428800 },
 });
+router.put('/:id/changePassword',company.changePassword)
 //register company
 router.post('/auth/register',company.register)
 //login company
@@ -52,8 +53,7 @@ router.get('/',company.showAll)
 router.delete('/',company.deleteAll)
 // reset password
 router.post('/resetPassword',company.resetPassword)
-//change password
-router.put('/:id/changePassword',company.changePassword)
+
 // upload profile image
 router.put('/upload/editProfile', upload.single('filePic'), (req, res) => {
 // req.file is the 'theseNamesMustMatch' file

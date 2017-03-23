@@ -4,9 +4,10 @@ var chaiHttp = require('chai-http')
 var tampung = ''
 var tampung2 = ''
 var tampung3 = ''
+var tampung4 =''
 chai.use(chaiHttp)
 
-const app = '../app'
+const app = require ('../app')
 
 describe('tes routing company', function () {
   it('Test API when delete api/company/', function (done) {
@@ -304,10 +305,11 @@ describe('tes routing company', function () {
       message: ''
     })
     .end(function (err, res) {
-      res.text.should.equal('"message required"')
+      res.text.should.equal('"Message required"')
       done()
     })
   })
+
   it('should create letter/message when put api/company/:id/:otherId/:requestId/message', function (done) {
     chai.request(app).put(`/api/company/${tampung}/${tampung2}/${tampung3}/message`).send({
       title: 'reply to - Menawarkan jasa game developer',
@@ -315,9 +317,105 @@ describe('tes routing company', function () {
       message: 'saya tertarik dengan penawaran anda, berminat berkomunikasi lebih lanjut untuk bekerjasama dengan anda'
     })
     .end(function (err, res) {
-      console.log(res.body)
-      console.log(res.text)
-      res.body.should.not.equal('')
+      res.body.should.have.deep.property('message', "Email has been sent")
+      done()
+    })
+  })
+  it('should get company details when get api/company/:id/', function (done) {
+    chai.request(app).get(`/api/company/${tampung2}`)
+    .end(function (err, res) {
+      tampung4 = res.body.acceptedMessages[0]._id
+      res.body.should.have.deep.property('email', "dhegana@gmail.com")
+      done()
+    })
+  })
+  it('should accept the message from another company  when put api/company/:id/:acceptedMessagesId/acceptMessage', function (done) {
+    chai.request(app).put(`/api/company/${tampung2}/${tampung4}/acceptMessage`)
+    .end(function (err, res) {
+      res.body.should.have.deep.property('message', "Email has been sent")
+      done()
+    })
+  })
+  it('should reject the message from another company  when put api/company/:id/:acceptedMessagesId/rejecttMessage', function (done) {
+    chai.request(app).put(`/api/company/${tampung2}/${tampung4}/rejectMessage`)
+    .end(function (err, res) {
+      res.body.should.have.deep.property('message', "Email has been sent")
+      done()
+    })
+  })
+  it('should reset password of company when  when post api/company/resetPassword', function (done) {
+    chai.request(app).post(`/api/company/resetPassword`).send({
+      email:"timogio99@gmail.com"
+    })
+    .end(function (err, res) {
+
+      res.body.should.have.deep.property('message', "Email has been sent")
+      done()
+    })
+  })
+  it('should not change password of company if old password is left blank when  when put api/company/:id/changePassword', function (done) {
+    chai.request(app).put(`/api/company/${tampung2}/changePassword`).send({
+      oldPassword:"",
+      newPassword:"234567",
+      confirmNewPassword:"234567"
+    })
+    .end(function (err, res) {
+      res.text.should.equal('"old password required"')
+      done()
+    })
+  })
+  it('should not change password of company if new password is left blank when  when put api/company/:id/changePassword', function (done) {
+    chai.request(app).put(`/api/company/${tampung2}/changePassword`).send({
+      oldPassword:"123456",
+      newPassword:"",
+      confirmNewPassword:"234567"
+    })
+    .end(function (err, res) {
+      res.text.should.equal('"new password required"')
+      done()
+    })
+  })
+  it('should not change password of company if confirm new password is left blank when  when put api/company/:id/changePassword', function (done) {
+    chai.request(app).put(`/api/company/${tampung2}/changePassword`).send({
+      oldPassword:"123456",
+      newPassword:"234567",
+      confirmNewPassword:""
+    })
+    .end(function (err, res) {
+      res.text.should.equal('"confirm new password required"')
+      done()
+    })
+  })
+  it('should not change password of company if old password is wrong when  when put api/company/:id/changePassword', function (done) {
+    chai.request(app).put(`/api/company/${tampung2}/changePassword`).send({
+      oldPassword:"12345678",
+      newPassword:"234567",
+      confirmNewPassword:"234567"
+    })
+    .end(function (err, res) {
+      res.text.should.equal('Your old password is not the same as your input!')
+      done()
+    })
+  })
+  it('should not change password of company if confirmation of new password is wrong when  when put api/company/:id/changePassword', function (done) {
+    chai.request(app).put(`/api/company/${tampung2}/changePassword`).send({
+      oldPassword:"123456",
+      newPassword:"23456789",
+      confirmNewPassword:"234567"
+    })
+    .end(function (err, res) {
+      res.text.should.equal('your new password not match with the confirmation password!')
+      done()
+    })
+  })
+  it('should change password of company when  when put api/company/:id/changePassword', function (done) {
+    chai.request(app).put(`/api/company/${tampung2}/changePassword`).send({
+      oldPassword:"123456",
+      newPassword:"234567",
+      confirmNewPassword:"234567"
+    })
+    .end(function (err, res) {
+      res.text.should.equal('Your password has been changed!')
       done()
     })
   })
