@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import GMaps from '../../../public/assets/js/gmaps.min.js'
 import { connect } from 'react-redux'
 import { updateCompanyProfile, fetchProfileGmaps } from '../../actions/index.js'
@@ -7,8 +6,23 @@ import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
 
+// image upload
+import Dropzone from 'react-dropzone'
+import upload from 'superagent'
+import superagent from 'superagent'
+
 import profileInfo from '../../../public/assets/js/profileInfoMessageBox.js'
 const wesiteRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+
+function generateRandomString() {
+    var length = 5,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
 
 class Profile extends Component {
   constructor (props) {
@@ -31,7 +45,9 @@ class Profile extends Component {
         website: '',
         phone: '',
         image: ''
-      }
+      },
+      files: [],
+      randomImageKey: ''
     }
   }
 
@@ -162,6 +178,9 @@ class Profile extends Component {
     })
   }
 
+  /*
+   UPDATE PROFILE
+  */
   submitUpdate(data,companyId){
     if (this.state.data.name === '') {
       profileInfo.showNameMessage('top','center')
@@ -180,8 +199,27 @@ class Profile extends Component {
     } else if (this.state.data.phone === '') {
       profileInfo.showPhoneMessage('top','center')
     } else {
+      // passing that
+      const that = this
+
+      // generate password
+
+      console.log(that.state.randomImageKey);
+      console.log(this.state.files[0].name);
+
+
+      superagent.post('http://localhost:3001/api/company/upload/editProfile/'+this.state.randomImageKey)
+      .attach('filePic', this.state.files[0])
+      .end((err, data) => {
+        if (err) console.log(err)
+        console.log('kembalian dari upload file');
+        console.log(data);
+      })
+
+      console.log(this.state.randomImageKey + this.state.files[0].name);
       profileInfo.showUpdateSuccessMessage('top','center')
-      this.props.updateCompanyProfile(data,companyId)
+      this.props.updateCompanyProfile(data,companyId, this.state.randomImageKey + this.state.files[0].name)
+
     }
   }
 
@@ -266,6 +304,32 @@ class Profile extends Component {
     }
     const newData = Object.assign({}, this.state.data, newState);
     this.setState({data: newData})
+  }
+
+  /*
+    image upload
+  */
+  onDrop(acceptedFiles) {
+    const that = this
+
+    let randomString = generateRandomString()
+    let newState = {
+      image: 'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+randomString + acceptedFiles[0].name
+    }
+    const newImage = Object.assign({}, this.state.data, newState);
+
+    console.log(newImage);
+    setTimeout(function(){
+      that.setState({
+        files: acceptedFiles,
+        randomImageKey: randomString
+      });
+
+    }, 500)
+  }
+
+  onOpenClick() {
+    this.dropzone.open();
   }
 
   render () {
@@ -447,13 +511,20 @@ class Profile extends Component {
                               <label>
                                 Profile picture (optional)
                               </label>
-                              <input
-                                type='text'
-                                name='image'
-                                className='form-control'
-                                value={this.state.data.image}
-                                placeholder='Input your photo URL'
-                                onChange={this.onHandleChange.bind(this)} />
+                              {/* file upload */}
+                              <Dropzone ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
+                                  <div>Try dropping some files here, or click to select files to upload.</div>
+                              </Dropzone>
+                              <button type="button" onClick={this.onOpenClick.bind(this)}>
+                                  Open Dropzone
+                              </button>
+                              {
+                                this.state.files.length > 0 ? <div>
+                                <h2>Uploading {this.state.files.length} files...</h2>
+                                <div>{this.state.files.map((file,index) => <img src={file.preview} key={index} /> )}</div>
+                                </div> : null
+                              }
+                              {/* file upload */}
                             </div>
                           </div>
                         </div>
@@ -515,7 +586,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProfileGmaps: (id, cb, that) => dispatch(fetchProfileGmaps(id, cb, that)),
-    updateCompanyProfile: (data,id) => dispatch(updateCompanyProfile(data,id))
+    updateCompanyProfile: (data,id,img) => dispatch(updateCompanyProfile(data,id,img))
   }
 }
 

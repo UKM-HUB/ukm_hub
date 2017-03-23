@@ -41,16 +41,20 @@ router.delete('/',company.deleteAll)
 router.post('/resetPassword',company.resetPassword)
 //change password
 router.put('/:id/changePassword',company.changePassword)
-// upload profile image
-router.put('/upload/editProfile', upload.single('filePic'), (req, res) => {
+/* upload profile image */
+router.post('/upload/editProfile/:randomImageKey', upload.single('filePic'), (req, res) => {
 // req.file is the 'theseNamesMustMatch' file
-s3.putObject({
+  console.log("masuk api");
+  console.log(req.file.originalname);
+    s3.putObject({
       Bucket: process.env.BUCKET_NAME,
-      Key: 'images/halloworld.png',
+      Key: 'images/'+req.params.randomImageKey + req.file.originalname,
       Body: req.file.buffer,
       ACL: 'public-read', // your permisions
     }, (err, data) => {
       if (err) return res.status(400).send(err);
+      console.log('OK MASUK DATANYA');
+      console.log(data);
       res.send(data);
     })
 })

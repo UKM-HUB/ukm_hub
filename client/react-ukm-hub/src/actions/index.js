@@ -87,9 +87,9 @@ export const fetchProfile = (id) => {
   }
 }
 
-export const updateCompanyProfile = (data,id) => {
+export const updateCompanyProfile = (data,id,img) => {
   return (dispatch) => {
-    console.log(data);
+    console.log('ACTION : ' + data);
     fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
@@ -103,7 +103,7 @@ export const updateCompanyProfile = (data,id) => {
         address : data.address,
         phone : data.phone,
         description : data.description,
-        images : data.image,
+        images : 'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img,
       })
     })
     .then(res => res.json())
