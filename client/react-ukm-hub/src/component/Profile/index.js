@@ -1,11 +1,28 @@
 import React, { Component } from 'react'
-
 import GMaps from '../../../public/assets/js/gmaps.min.js'
 import { connect } from 'react-redux'
-import { updateCompanyProfile, fetchProfile } from '../../actions/index.js'
+import { updateCompanyProfile, fetchProfileGmaps } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 const compId = localStorage.getItem('companyId')
+
+// image upload
+import Dropzone from 'react-dropzone'
+// import upload from 'superagent'
+import superagent from 'superagent'
+
+import profileInfo from '../../../public/assets/js/profileInfoMessageBox.js'
+const wesiteRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/
+
+function generateRandomString() {
+    var length = 5,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
 
 class Profile extends Component {
   constructor (props) {
@@ -13,6 +30,7 @@ class Profile extends Component {
     this.state = {
       topbarTitle: 'Company Profile',
       activeNavigation: ['', '', '', '', ''],
+      searchLocation: '',
       data: {
         name: '',
         type: '',
@@ -27,61 +45,224 @@ class Profile extends Component {
         website: '',
         phone: '',
         image: ''
-      }
+      },
+      files: [],
+      randomImageKey: ''
     }
   }
 
   componentDidMount () {
-    let that = this
+    const that = this
+    this.props.fetchProfileGmaps(compId, this.createGmapsMarker, that)
+  }
 
-    this.props.fetchProfile(compId)
-    setTimeout(function(){;
-      console.log(that.props.profile);
+  createGmapsMarker(company, that){
+
+    let newState = {
+      name: company.name,
+      type: company.type,
+      email: company.email,
+      category: company.category,
+      address: company.address ? company.address : '',
+      currentlat:company.location.lat ? company.location.lat : '-6.260745364770679',
+      currentlng:company.location.lng ? company.location.lng : '106.78169667720795',
+      description: company.description,
+      website: company.website,
+      phone: company.phone ? company.phone : '',
+      image: company.images ? company.images : ''
+    }
+
+    const newData = Object.assign({}, that.state.data, newState);
+
+    that.setState({
+      data: newData
+    })
+
+    let map = new GMaps({
+      el: '#map',
+      lat: that.state.data.currentlat,
+      lng: that.state.data.currentlng,
+      zoom: 10
+    })
+
+    map.addMarker({
+      lat: that.state.data.currentlat,
+      lng: that.state.data.currentlng
+    })
+
+    let currentLocationState = {
+      updatedlat: that.state.data.currentlat,
+      updatedlng: that.state.data.currentlng
+    }
+
+    const currentData = Object.assign({}, that.state.data, currentLocationState);
+    that.setState({
+      data: currentData
+    })
+
+    GMaps.on('click', map.map, function (event) {
       let newState = {
-        name: that.props.profile.name,
-        type: that.props.profile.type,
-        email: that.props.profile.email,
-        category: that.props.profile.category,
-        address: that.props.profile.address ? that.props.profile.address : '',
-        currentlat:that.props.profile.location.lat,
-        currentlng:that.props.profile.location.lng,
-        description: that.props.profile.description,
-        website: that.props.profile.website,
-        phone: that.props.profile.phone ? that.props.profile.phone : '',
-        image: that.props.profile.images ? that.props.profile.images : ''
+        updatedlat: event.latLng.lat(),
+        updatedlng: event.latLng.lng()
       }
 
       const newData = Object.assign({}, that.state.data, newState);
       that.setState({
         data: newData
       })
-    }, 1000)
 
-    setTimeout(function(){
+      map.removeMarkers()
+      map.addMarker({
+        lat: that.state.data.updatedlat,
+        lng: that.state.data.updatedlng,
+        infoWindow: {
+          content: '<p>Your company location</p>'
+        }
+      })
+    })
+  }
+
+  geolocate(e) {
+    let that = this
+    e.preventDefault()
+    let map = new GMaps({
+      el: '#map',
+      lat: that.state.data.currentlat,
+      lng: that.state.data.currentlng,
+      zoom: 10
+    })
+
+    GMaps.geolocate({
+      success: function(position) {
+        let newState = {
+          updatedlat: position.coords.latitude,
+          updatedlng: position.coords.longitude
+        }
+        const newData = Object.assign({}, that.state.data, newState);
+        that.setState({
+          data: newData
+        })
+        map.addMarker({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        })
+        map.setCenter(position.coords.latitude, position.coords.longitude);
+      },
+      error: function(error) {
+        alert('Geolocation failed: '+error.message);
+      },
+      not_supported: function() {
+        alert("Your browser does not support geolocation");
+      }
+    });
+
+    GMaps.on('click', map.map, function (event) {
+      let newState = {
+        updatedlat: event.latLng.lat(),
+        updatedlng: event.latLng.lng()
+      }
+
+      const newData = Object.assign({}, that.state.data, newState);
+      that.setState({
+        data: newData
+      })
+
+      map.removeMarkers()
+      map.addMarker({
+        lat: that.state.data.updatedlat,
+        lng: that.state.data.updatedlng,
+        infoWindow: {
+          content: '<p>Your company location</p>'
+        }
+      })
+    })
+  }
+
+  /*
+   UPDATE PROFILE
+  */
+  submitUpdate(data,companyId){
+    if (this.state.data.name === '') {
+      profileInfo.showNameMessage('top','center')
+    } else if (this.state.data.type === '') {
+      profileInfo.showTypeMessage('top','center')
+    } else if (this.state.data.category.length === 0) {
+      profileInfo.showCategoryMessage('top','center')
+    } else if (this.state.data.updatedlat === '-6.260745364770679') {
+      profileInfo.showMarkerMessage('top','center')
+    } else if (!wesiteRegex.test(this.state.data.website) && this.state.data.website !== '') {
+      profileInfo.showWebsiteMessage('top','center')
+    } else if (this.state.data.address === '') {
+      profileInfo.showAddressMessage('top','center')
+    } else if (this.state.data.description === '') {
+      profileInfo.showDescriptionMessage('top','center')
+    } else if (this.state.data.phone === '') {
+      profileInfo.showPhoneMessage('top','center')
+    } else {
+      if(this.state.files[0]){
+        // passing that
+        superagent.post('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/upload/editProfile/'+this.state.randomImageKey)
+        .attach('filePic', this.state.files[0])
+        .end((err, data) => {
+          if (err) console.log(err)
+        })
+        this.props.updateCompanyProfile(data,companyId, this.state.randomImageKey + this.state.files[0].name)
+      }else{
+        this.props.updateCompanyProfile(data,companyId)
+      }
+      profileInfo.showUpdateSuccessMessage('top','center')
+
+
+    }
+  }
+
+  onHandleChange (e) {
+    let newState = {}
+    const that = this
+
+    if(e.target.name === 'type') {
+      this.setState({
+        selectStyle: 'rgb(50,50,50)'
+      })
+    }
+
+
+    if(e.target.name === 'searchLocation') {
+
+      newState[e.target.name] = e.target.value
+      this.setState({
+        searchLocation: e.target.value
+      })
+
       let map = new GMaps({
         el: '#map',
         lat: that.state.data.currentlat,
-        lng: that.state.data.currentlng
-      })
-
-
-      map.addMarker({
-        lat: that.state.data.currentlat,
         lng: that.state.data.currentlng,
-        click: function (e) {
-          alert('You clicked in this marker')
+        zoom: 10
+      })
+
+      GMaps.geocode({
+        address: e.target.value,
+        callback: function(results, status) {
+          if (status === 'OK') {
+            var latlng = results[0].geometry.location;
+            map.setCenter(latlng.lat(), latlng.lng());
+            map.addMarker({
+              lat: latlng.lat(),
+              lng: latlng.lng()
+            });
+            let newState = {
+              updatedlat: latlng.lat(),
+              updatedlng: latlng.lng()
+            }
+
+            const newData = Object.assign({}, that.state.data, newState);
+            that.setState({
+              data: newData
+            })
+          }
         }
-      })
-
-      let currentState = {
-        updatedlat: that.state.data.currentlat,
-        updatedlng: that.state.data.currentlng
-      }
-
-      const currentData = Object.assign({}, that.state.data, currentState);
-      that.setState({
-        data: currentData
-      })
+      });
 
       GMaps.on('click', map.map, function (event) {
         let newState = {
@@ -103,20 +284,6 @@ class Profile extends Component {
           }
         })
       })
-    },1500)
-  }
-
-  submitUpdate(data,companyId){
-    this.props.updateCompanyProfile(data,companyId)
-  }
-
-  onHandleChange (e) {
-    let newState = {}
-
-    if(e.target.name === 'type') {
-      this.setState({
-        selectStyle: 'rgb(50,50,50)'
-      })
     }
 
     if (e.target.name === 'category') {
@@ -132,10 +299,36 @@ class Profile extends Component {
     this.setState({data: newData})
   }
 
+  /*
+    image upload
+  */
+  onDrop(acceptedFiles) {
+    const that = this
+
+    let randomString = generateRandomString()
+
+    setTimeout(function(){
+      that.setState({
+        files: acceptedFiles,
+        randomImageKey: randomString
+      });
+    }, 1000)
+  }
+
   render () {
     const checkboxStyle = {
       marginRight: 20,
       cursor: 'pointer'
+    }
+
+    const profilePicture = {
+      width:'100%',
+      border:'1px dotted rgb(50,50,50)',
+      height:200, cursor:'pointer',
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
+      fontFamily:'open sans'
     }
 
     return (
@@ -198,7 +391,7 @@ class Profile extends Component {
                               </label>
                             </div>
                               { ['fashion', 'food', 'beauty', 'office', 'souvenir', 'electronic', 'book', 'automotive', 'entertainment', 'furniture', 'gadget', 'game'].map((category,index) => (
-                                <div className='col-md-2' key={index}>
+                                <div className='col-md-3' key={index}>
                                   <div className='form-group' style={{marginTop: -20}}>
                                     <label style={{cursor: 'pointer'}}>
                                       <input
@@ -217,13 +410,33 @@ class Profile extends Component {
                         </div>
                         <div className='row'>
                           <div className='col-md-12' style={{height: 500}}>
-                            <label style={{marginBottom: 25}}>
+                            <label style={{marginBottom: 25, display:'block'}}>
                               Location
                             </label>
-                            <div id='map' style={{width: '100%', height: '85%' }}></div>
+                            <div className="row" style={{marginBottom:25}}>
+                              <div className="col-md-3">
+                                <button
+                                  type='submit'
+                                  className='btn btn-primary btn-fill'
+                                  style={{marginRight: 20}}
+                                  onClick={this.geolocate.bind(this)}>
+                                  Find your location
+                                </button>
+                              </div>
+                              <div className="col-md-9">
+                                <input
+                                  type='text'
+                                  name='searchLocation'
+                                  className='form-control'
+                                  value={this.state.data.searchLocation}
+                                  placeholder='Search your company location'
+                                  onChange={this.onHandleChange.bind(this)} />
+                              </div>
+                            </div>
+                            <div id='map' style={{width: '100%', height: '85%'}}></div>
                           </div>
                         </div>
-                        <div className='row'>
+                        <div className='row' style={{marginTop:70}}>
                           <div className='col-md-6'>
                             <div className='form-group'>
                               <label>
@@ -259,7 +472,7 @@ class Profile extends Component {
                           <div className='col-md-6'>
                             <div className='form-group'>
                               <label>
-                                Website
+                                Website (optional)
                               </label>
                               <input
                                 type='text'
@@ -289,15 +502,19 @@ class Profile extends Component {
                           <div className='col-md-12'>
                             <div className='form-group'>
                               <label>
-                                Profile picture
+                                Profile picture (optional)
                               </label>
-                              <input
-                                type='text'
-                                name='image'
-                                className='form-control'
-                                value={this.state.data.image}
-                                placeholder='Input your photo URL'
-                                onChange={this.onHandleChange.bind(this)} />
+                              {/* file upload */}
+                              <Dropzone style={profilePicture} ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
+                                  <div>Try dropping some files here, or click to select files to upload.</div>
+                              </Dropzone>
+                              {
+                                this.state.files.length > 0 ? <div>
+                                <h2>Uploading {this.state.files.length} files...</h2>
+                                <div>{this.state.files.map((file,index) => <img src={file.preview} key={index} alt="" /> )}</div>
+                                </div> : null
+                              }
+                              {/* file upload */}
                             </div>
                           </div>
                         </div>
@@ -305,7 +522,7 @@ class Profile extends Component {
                         <button
                           type='submit'
                           className='btn btn-warning btn-fill'
-                          style={{marginRight: 20, display: this.state.updateButtonDisplay}}
+                          style={{marginRight: 20}}
                           onClick={(e) => {
                             e.preventDefault()
                             this.submitUpdate(this.state.data,compId)}}>
@@ -324,7 +541,7 @@ class Profile extends Component {
                     </div>
                     <div className='content'>
                       <div className='author'>
-                        <a href='#'><img className='avatar border-gray' src={this.state.data.image} alt='Company profile' />
+                        <a href='#'><img className='avatar border-gray' src={this.state.data.image} alt='' />
                           <h4 className='title'>{this.state.data.name}<br /> <small></small></h4></a>
                       </div>
                       <br />
@@ -334,11 +551,8 @@ class Profile extends Component {
                     </div>
                     <hr />
                     <div className='text-center'>
-                      <button href='#' className='btn btn-simple'>
+                      <button href={this.state.data.website} className='btn btn-simple'>
                         <i className='fa fa-institution'></i>
-                      </button>
-                      <button href='#' className='btn btn-simple'>
-                        <i className='fa fa-facebook'></i>
                       </button>
                     </div>
                   </div>
@@ -361,10 +575,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchProfile: (id) => dispatch(fetchProfile(id)),
-    updateCompanyProfile: (data,id) => dispatch(updateCompanyProfile(data,id))
+    fetchProfileGmaps: (id, cb, that) => dispatch(fetchProfileGmaps(id, cb, that)),
+    updateCompanyProfile: (data,id,img) => dispatch(updateCompanyProfile(data,id,img))
   }
-  //return bindActionCreators({addTodo},dispatch)
 }
 
 

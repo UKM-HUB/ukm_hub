@@ -1,4 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import {connect} from 'react-redux'
+import {searchRequestByClick} from '../../actions/index.js'
 
 const CompanyList = (props) => {
   const panelStyle = {
@@ -22,15 +25,11 @@ const CompanyList = (props) => {
     fontFamily: 'Peddana'
   }
 
-  const requestDetailStyle = {
-    display:'inline-block',
-    paddingLeft: 16
-  }
-
   const companyTitleFontStyle = {
     fontFamily: 'open sans',
     textDecoration: 'underline',
-    marginBottom: 15
+    marginBottom: 15,
+    fontSize: 27
   }
 
   const panelBodyStyle = {
@@ -67,19 +66,28 @@ const CompanyList = (props) => {
               <li className="list-group-item"><span style={companyDetailStyle}>Email</span>
                 <span>{props.email}</span>
               </li>
-              <li className="list-group-item"><span style={companyDetailStyle}>Request List</span>
-                  <ul style={requestDetailStyle}>
-                    <li><a href='http://google.com'>Request 1</a></li>
-                    <li><a href='http://facebook.com'>Request 2</a></li>
+              <li className="list-group-item" ><span style={companyDetailStyle}>Request List</span>
+                  <ul style={{display:'inline-block', paddingLeft:16, listStyleType: 'square'}}>
+                    {
+                      props.request.length === 0 ? <p></p> :
+                      props.request.filter((y)=> y.open === true ).map((x,index)=>{return(<li key={index}><Link to='/request-list' onClick={()=> props.searchRequestByClick(x.title)} style={{color:'rgb(30,30,30)',fontSize:15,textDecoration:'underline'}}>{x.title}</Link></li>)})
+                    }
                   </ul>
               </li>
               <li className="list-group-item"><span style={companyDetailStyle}>Website</span>
                 <span>
-                  <a href='https://facebook.github.io/react/'>{props.website}</a>
+                  {
+                    props.website === '' ? <p>-</p> :
+                    <a href={props.website} target="_blank">{props.website}</a>
+                  }
+
                 </span>
               </li>
               <li className="list-group-item"><span style={companyDetailStyle}>Address</span>
                 <span>{props.address}</span>
+              </li>
+              <li className="list-group-item"><span style={companyDetailStyle}>Phone</span>
+                <span>{props.phone}</span>
               </li>
             </ul>
         </div>
@@ -90,4 +98,11 @@ const CompanyList = (props) => {
   )
 }
 
-export default CompanyList
+const mapDispatchToProps = (dispatch) => {
+  return {
+    searchRequestByClick: (data) => dispatch(searchRequestByClick(data)),
+  }
+}
+
+
+export default connect(null,mapDispatchToProps)(CompanyList)

@@ -4,6 +4,7 @@ import {fetchCompanyByCategory} from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 import CompanyList from './CompanyList'
+import ListEmpty from './ListEmpty'
 const compId = localStorage.getItem('companyId')
 
 class ListView extends Component {
@@ -11,7 +12,7 @@ class ListView extends Component {
     super()
     this.state = {
       topbarTitle: 'List View',
-      activeNavigation: ['','active']
+      activeNavigation: ['','active', '', '', '']
     }
   }
 
@@ -19,12 +20,14 @@ class ListView extends Component {
     this.props.fetchCompanyByCategory(compId)
   }
   render () {
+    console.log(this.props.otherCompany.length);
     return (
       <div className="wrapper">
         <Sidebar activeNavigation={this.state.activeNavigation} />
         <div className="main-panel">
           <Topbar title={this.state.topbarTitle} />
             {
+              this.props.otherCompany.length === 0 ? <ListEmpty /> :
               this.props.otherCompany.map((company) => {
                 return(
                   <CompanyList key={company._id} {...company}/>

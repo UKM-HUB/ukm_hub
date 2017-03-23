@@ -59,6 +59,23 @@
   transition: all 0.3 ease;
   cursor: pointer;
 }
+
+#register {
+  outline: 0;
+  background: rgb(20, 95, 135);
+  width: 100%;
+  border: 0;
+  padding: 10px 15px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  color: #FFFFFF;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+  font-size: 14px;
+}
 .form .message {
   margin: 15px 0 0;
   color: #b3b3b3;
@@ -84,7 +101,7 @@
   clear: both;
 }
 .container .info {
-  margin: 50px auto;
+  margin: 35px auto;
   text-align: center;
 }
 .container .info h1 {

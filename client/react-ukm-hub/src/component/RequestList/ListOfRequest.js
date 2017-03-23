@@ -2,13 +2,48 @@ import React, { Component } from 'react'
 import $ from 'jquery'
 import '../../../public/assets/js/jquery.dataTables.min.js'
 import '../../../public/assets/js/dataTables.bootstrap.min.js'
+import {connect} from 'react-redux'
+import {createMessageFetch} from '../../actions/index.js'
+const compId = localStorage.getItem('companyId')
 
-export default class ListOfRequest extends Component {
-  constructor(){
-    super()
+let requestListInfo = {
+  showReplyMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-close',
+      message: '<p style="margin-top:8px">Reply message is required</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showSubmitMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-cloud-upload',
+      message: '<p style="margin-top:8px">Reply message has been sent</p>'
+    }, {
+      type: 'info',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  }
+}
+
+class ListOfRequest extends Component {
+  constructor(props){
+    super(props)
     this.state = {
       title: '',
-      message: ''
+      message: '',
+      requestTitle:'',
+      requestId:'',
+      otherId:'',
     }
   }
 
@@ -18,10 +53,40 @@ export default class ListOfRequest extends Component {
     this.setState(newState)
   }
 
-  componentDidMount(){
+  componentWillMount(){
+    const that = this
     $(document).ready(function() {
-        $('#requestTable').DataTable();
+        var table = $('#requestTable').DataTable();
+        table.search(that.props.searchKey).draw()
+
     });
+
+
+  }
+
+  onHandleSubmitMessage(title,message,requestTitle,id,otherId,requestId){
+    if (this.state.message === '') {
+      requestListInfo.showReplyMessage('top','center')
+    } else {
+      this.props.createMessageFetch(title,message,requestTitle,id,otherId,requestId)
+      requestListInfo.showSubmitMessage('top','center')
+      this.setState({
+          title: '',
+          message:'',
+          requestTitle:'',
+          requestId:'',
+          otherId:'',
+      })
+    }
+  }
+
+  handleOpenMessage(title,id,seller){
+    console.log('a');
+    this.setState({
+      requestTitle:title,
+      requestId:id,
+      otherId:seller
+    })
   }
 
   render() {
@@ -45,66 +110,32 @@ export default class ListOfRequest extends Component {
             </tr>
           </thead>
           <tbody style={tableDataStyle}>
-            <tr>
-              <td>PT. MEDIA TEKNOLOGI</td>
-              <td>Request teamwork</td>
-              <td style={{textAlign:'justify'}}>Our UKM need to collaborate with nearby corporate for brick distribution</td>
-              <td>100000</td>
-              <td><img className='avatar border-gray' src='http://lorempixel.com/200/100/food' alt='request' /></td>
-              <td>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  data-toggle="modal"
-                  data-target="#myModal"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})}}>
-                  Reply Message
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>PT. MAJU MUNDUR</td>
-              <td>Request to sell</td>
-              <td style={{textAlign:'justify'}}>WTS 100 sheets for batik</td>
-              <td>250000</td>
-              <td style={{textAlign:'center'}}><img className='avatar border-gray' src='http://lorempixel.com/200/100/food' alt='request' /></td>
-              <td style={{textAlign:'center'}}>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  data-toggle="modal"
-                  data-target="#myModal"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})}}>
-                  Reply Message
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>PT. SINARMAS</td>
-              <td>Request to sell</td>
-              <td style={{textAlign:'justify'}}>WTS 100kg of grain</td>
-              <td>200000</td>
-              <td><img className='avatar border-gray' src='http://lorempixel.com/200/100/food' alt='request' /></td>
-              <td>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  data-toggle="modal"
-                  data-target="#myModal"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})}}>
-                  Reply Message
-                </button>
-              </td>
-            </tr>
+            {
+              this.props.requests.map((otherRequest,index)=>{return(
+                <tr key={otherRequest.request._id}>
+                  <td>{otherRequest.seller.name}</td>
+                  <td>{otherRequest.request.title}</td>
+                  <td style={{textAlign:'justify'}}>{otherRequest.request.description}</td>
+                  <td>{otherRequest.request.price}</td>
+                  <td className='request_list_image'><img className='avatar border-gray' src={otherRequest.request.images} alt='' /></td>
+                  <td>
+                    <button
+                      type='submit'
+                      className='btn btn-primary btn-fill'
+                      style={{marginRight: 20}}
+                      data-toggle="modal"
+                      data-target="#myModal"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        this.handleOpenMessage(otherRequest.request.title,otherRequest.request._id,otherRequest.seller._id)
+                      }}>
+                      Reply Message
+                    </button>
+                  </td>
+                </tr>
+              )})
+            }
+
           </tbody>
           </table>
 
@@ -120,7 +151,7 @@ export default class ListOfRequest extends Component {
                     <div className='col-md-12'>
                       <div className='form-group'>
                         <label>
-                          Title
+                          Title (Optional)
                         </label>
                         <input
                           type='text'
@@ -153,7 +184,10 @@ export default class ListOfRequest extends Component {
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={()=>alert('Masukin ke reducer isi statenya')}>Save changes
+                    onClick={(e)=> {
+                      e.preventDefault()
+                      this.onHandleSubmitMessage(this.state.title,this.state.message,this.state.requestTitle,compId,this.state.otherId,this.state.requestId)
+                    }}>Save changes
                   </button>
                 </div>
               </div>
@@ -165,3 +199,17 @@ export default class ListOfRequest extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    searchKey : state.searchKey
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createMessageFetch: (title,message,requestTitle,id,otherId,requestId) => dispatch(createMessageFetch(title,message,requestTitle,id,otherId,requestId))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListOfRequest)

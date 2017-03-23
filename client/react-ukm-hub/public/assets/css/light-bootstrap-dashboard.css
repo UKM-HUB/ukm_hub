@@ -24,6 +24,17 @@
 .modal-backdrop {
   z-index:-1
 }
+
+.request_list_image img {
+  width: 100px
+}
+
+.mapView {
+  background-color: rgba(250,250,250,0.8);
+  padding:20px;
+  box-shadow: 2px 2px 1px #888888;
+}
+
 /* ================================= */
 
 @keyframes spin {

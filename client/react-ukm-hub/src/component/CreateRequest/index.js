@@ -3,20 +3,95 @@ import {connect} from 'react-redux'
 import {fetchProfile,createBuyRequestFetch,createSellRequestFetch} from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
+import defaultImageRequest from '../../../public/assets/img/box-outline-filled.png'
 const compId = localStorage.getItem('companyId')
+import $ from 'jquery'
+
+// image upload
+import Dropzone from 'react-dropzone'
+// import upload from 'superagent'
+import superagent from 'superagent'
+
+// generateRandomString
+function generateRandomString() {
+    var length = 5,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
+
+let requestInfo = {
+  showTitleMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-close',
+      message: '<p style="margin-top:8px">Please input the title</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showRequestMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-close',
+      message: '<p style="margin-top:8px">Request message is required</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showTypeMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-close',
+      message: '<p style="margin-top:8px">Please update your company profile type</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showSubmitMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-cloud-download',
+      message: '<p style="margin-top:8px">Request has been sent</p>'
+    }, {
+      type: 'info',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  }
+}
 
 class CreateRequest extends Component {
   constructor(){
     super()
     this.state = {
       topbarTitle: 'Create Request',
-      activeNavigation: ['','','active',''],
+      activeNavigation: ['','','active','', ''],
       requestData:{
         request: '',
         title: '',
         price: '',
-        image: ''
-      }
+        image: defaultImageRequest
+      },
+      files: [],
+      randomImageKey: ''
     }
   }
 
@@ -26,23 +101,38 @@ class CreateRequest extends Component {
 
 
   onHandleSubmitRequest(data,id,companyType){
-    if(companyType === 'ukm'){
-      this.props.createSellRequestFetch(data,id)
-    }
-    else if(companyType === 'corporate'){
-      this.props.createBuyRequestFetch(data,id)
-    }
-    else{
-      alert('you are not completed your profile yet, please complete your profile in company profile menu')
-    }
-    this.setState({
-      requestData:{
-        request: '',
-        title: '',
-        price: '',
-        image: ''
+    console.log(data,id,companyType);
+    if (this.state.requestData.title === '') {
+      requestInfo.showTitleMessage('top','center')
+    } else if (this.state.requestData.request === '') {
+      requestInfo.showRequestMessage('top','center')
+    } else {
+      console.log(this.state.files[0].name);
+      console.log(this.state.randomImageKey);
+      superagent.post('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/upload/editProfile/'+this.state.randomImageKey)
+      .attach('filePic', this.state.files[0])
+      .end((err, data) => {
+        if (err) console.log(err)
+      })
+
+      if (companyType === 'ukm'){
+        this.props.createSellRequestFetch(data,id, this.state.randomImageKey + this.state.files[0].name)
+      } else if (companyType === 'corporate'){
+        this.props.createBuyRequestFetch(data,id, this.state.randomImageKey + this.state.files[0].name)
+      } else {
+        requestInfo.showTypeMessage('top','center')
       }
-    })
+      requestInfo.showSubmitMessage('top','center')
+      this.setState({
+        requestData:{
+          request: '',
+          title: '',
+          price: '',
+          image: ''
+        }
+      })
+    }
+
   }
 
   onHandleChange (e) {
@@ -50,6 +140,22 @@ class CreateRequest extends Component {
     newState[e.target.name] = e.target.value
     const newData = Object.assign({}, this.state.requestData, newState);
     this.setState({requestData: newData})
+  }
+
+  /*
+    image upload
+  */
+  onDrop(acceptedFiles) {
+    const that = this
+
+    let randomString = generateRandomString()
+
+    setTimeout(function(){
+      that.setState({
+        files: acceptedFiles,
+        randomImageKey: randomString
+      });
+    }, 1000)
   }
 
   render () {
@@ -63,9 +169,6 @@ class CreateRequest extends Component {
               <div className='row'>
                 <div className='col-md-12'>
                   <div className='card'>
-                    <div className='header'>
-                      <h4 className='title'>Message</h4>
-                    </div>
                     <div className='content'>
                       <form>
                         <div className='row'>
@@ -106,20 +209,6 @@ class CreateRequest extends Component {
                           <div className='col-md-6'>
                             <div className='form-group'>
                               <label>
-                                Image (Optional)
-                              </label>
-                              <input
-                                type='text'
-                                className='form-control'
-                                name='image'
-                                value={this.state.requestData.image}
-                                placeholder='Request image URL'
-                                onChange={this.onHandleChange.bind(this)} />
-                            </div>
-                          </div>
-                          <div className='col-md-6'>
-                            <div className='form-group'>
-                              <label>
                                 Price (Optional)
                               </label>
                               <input
@@ -131,6 +220,25 @@ class CreateRequest extends Component {
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>
+                          <div className='col-md-6'>
+                            <div className='form-group'>
+                              <label>
+                                Image (Optional)
+                              </label>
+                              {/* file upload */}
+                              <Dropzone style={{width:'100%', border:'1px dotted rgb(50,50,50)', height:80, cursor:'pointer', display:'flex',justifyContent:'center',alignItems:'center',fontFamily:'open sans'}} ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
+                                  <div style={{}}>Try dropping some files here, or click to select files to upload.</div>
+                              </Dropzone>
+                              {
+                                this.state.files.length > 0 ? <div>
+                                <h2>Uploading {this.state.files.length} files...</h2>
+                                <div>{this.state.files.map((file,index) => <img src={file.preview} key={index} alt="" /> )}</div>
+                                </div> : null
+                              }
+                              {/* file upload */}
+                            </div>
+                          </div>
+
                         </div>
 
                         <hr />
@@ -167,8 +275,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProfile: (id) => dispatch(fetchProfile(id)),
-    createBuyRequestFetch: (data,id) => dispatch(createBuyRequestFetch(data,id)),
-    createSellRequestFetch: (data,id) => dispatch(createSellRequestFetch(data,id)),
+    createBuyRequestFetch: (data,id, img) => dispatch(createBuyRequestFetch(data,id, img)),
+    createSellRequestFetch: (data,id, img) => dispatch(createSellRequestFetch(data,id, img))
   }
 }
 

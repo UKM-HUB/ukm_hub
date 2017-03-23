@@ -2,8 +2,40 @@ import React, { Component } from 'react'
 import $ from 'jquery'
 import '../../../public/assets/js/jquery.dataTables.min.js'
 import '../../../public/assets/js/dataTables.bootstrap.min.js'
+import {acceptMessageFetch,rejectMessageFetch} from '../../actions/index.js'
+import {connect} from 'react-redux'
+const compId = localStorage.getItem('companyId')
 
-export default class MessageList extends Component {
+let messageInfo = {
+  showAcceptMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-like2',
+      message: '<p style="margin-top:8px">Accept request sent</p>'
+    }, {
+      type: 'info',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  },
+  showDeclineMessage: function (from, align) {
+    $.notify({
+      icon: 'pe-7s-attention',
+      message: '<p style="margin-top:8px">You have decline the offer</p>'
+    }, {
+      type: 'danger',
+      timer: 4000,
+      placement: {
+        from: from,
+        align: align
+      }
+    })
+  }
+}
+
+class MessageList extends Component {
   constructor(){
     super()
     this.state = {
@@ -12,12 +44,24 @@ export default class MessageList extends Component {
     }
   }
 
+  handleAccept(id,acceptedMessagesId){
+    this.props.acceptMessageFetch(id,acceptedMessagesId)
+    messageInfo.showAcceptMessage('top','center')
+  }
+  handleReject(id,rejectedMessagesId){
+    this.props.rejectMessageFetch(id,rejectedMessagesId)
+    messageInfo.showDeclineMessage('top','center')
+  }
   componentDidMount(){
     $(document).ready(function() {
         $('#requestTable').DataTable();
     });
   }
-
+  fullDate(date){
+    let fullDate = new Date(date)
+    let month = ['January','February','March','April','May','June','July','August','September','October','November']
+    return fullDate.getDate() + '/' + month[(fullDate.getMonth())] + '/' +  fullDate.getFullYear()
+  }
   render() {
     const tableDataStyle = {
       fontFamily: 'Peddana',
@@ -32,68 +76,45 @@ export default class MessageList extends Component {
             <tr>
               <th>Company Name</th>
               <th>Title</th>
+              <th>Replied for</th>
               <th>Message</th>
               <th>Created At</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody style={tableDataStyle}>
-            <tr>
-              <td>PT. MEDIA TEKNOLOGI</td>
-              <td>Teamwork Accepted</td>
-              <td>I need teamwork also for 5 years</td>
-              <td>17 April 2017</td>
-              <td>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Accept
-                </button>
-                <button
-                  type='submit'
-                  className='btn btn-danger btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Decline
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td>PT. SINARMAS</td>
-              <td>Send Respond</td>
-              <td>I will buy your sheet for 100000</td>
-              <td>25 April 2017</td>
-              <td>
-                <button
-                  type='submit'
-                  className='btn btn-primary btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Accept
-                </button>
-                <button
-                  type='submit'
-                  className='btn btn-danger btn-fill'
-                  style={{marginRight: 20}}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    this.setState({})
-                    alert('Accept masukin ke reducer')}}>
-                  Decline
-                </button>
-              </td>
-            </tr>
+            {
+              this.props.messages.filter((filterMessage)=> filterMessage.status === 'waiting').map((message,index)=>{return(
+                <tr key={message._id}>
+                  <td>{message.sender}</td>
+                  <td>{message.title}</td>
+                  <td>{message.requestTitle}</td>
+                  <td>{message.message}</td>
+                  <td>{this.fullDate(message.date)}</td>
+                  <td>
+                    <button
+                      type='submit'
+                      className='btn btn-primary btn-fill'
+                      style={{marginRight: 20}}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        this.handleAccept(compId,message._id)}}>
+                      Accept
+                    </button>
+                    <button
+                      type='submit'
+                      className='btn btn-danger btn-fill'
+                      style={{marginRight: 20}}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        this.handleReject(compId,message._id)}}>
+                      Decline
+                    </button>
+                  </td>
+                </tr>
+              )})
+            }
+
           </tbody>
           </table>
         </div>
@@ -102,3 +123,13 @@ export default class MessageList extends Component {
     )
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    acceptMessageFetch: (id,acceptedMessagesId) => dispatch(acceptMessageFetch(id,acceptedMessagesId)),
+    rejectMessageFetch: (id,rejectedMessagesId) => dispatch(rejectMessageFetch(id,rejectedMessagesId))
+  }
+}
+
+
+export default connect(null, mapDispatchToProps)(MessageList)

@@ -1,7 +1,6 @@
-
 export default (state = '', action) => {
   switch(action.type){
-    case 'LOGIN_COMPANY' :
+    case 'SEARCH_REQUEST_CLICK' :
       return action.payload
     default:
       return state
