@@ -200,23 +200,12 @@ class Profile extends Component {
       profileInfo.showPhoneMessage('top','center')
     } else {
       // passing that
-      const that = this
-
-      // generate password
-
-      console.log(that.state.randomImageKey);
-      console.log(this.state.files[0].name);
-
-
       superagent.post('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/upload/editProfile/'+this.state.randomImageKey)
       .attach('filePic', this.state.files[0])
       .end((err, data) => {
         if (err) console.log(err)
-        console.log('kembalian dari upload file');
-        console.log(data);
       })
 
-      console.log(this.state.randomImageKey + this.state.files[0].name);
       profileInfo.showUpdateSuccessMessage('top','center')
       this.props.updateCompanyProfile(data,companyId, this.state.randomImageKey + this.state.files[0].name)
 

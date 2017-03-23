@@ -128,7 +128,8 @@ export const fetchProfileGmaps = (id, cb, that) => {
       .then(result => cb(result.payload, that))
   }
 }
-export const createBuyRequestFetch = (data,id) => {
+export const createBuyRequestFetch = (data,id, img) => {
+  console.log(img);
   return (dispatch) => {
       fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/buyRequest',
       {
@@ -138,14 +139,14 @@ export const createBuyRequestFetch = (data,id) => {
           title:data.title,
           price:data.price,
           description:data.request,
-          // images:req.file,//ganti dlu di backend nya
+          images:'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img//ganti dlu di backend nya
         })
       })
       .then(res => res.json())
       // .then(edited => dispatch(loginCompany(edited)))
   }
 }
-export const createSellRequestFetch = (data,id) => {
+export const createSellRequestFetch = (data,id, img) => {
   return (dispatch) => {
       fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/sellRequest',
       {
@@ -155,7 +156,7 @@ export const createSellRequestFetch = (data,id) => {
           title:data.title,
           price:data.price,
           description:data.request,
-          // images:req.file,//ganti dlu di backend nya
+          images:'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+img//ganti dlu di backend nya
         })
       })
       .then(res => res.json())

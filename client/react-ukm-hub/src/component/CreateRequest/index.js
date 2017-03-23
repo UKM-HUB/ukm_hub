@@ -9,7 +9,7 @@ import $ from 'jquery'
 
 // image upload
 import Dropzone from 'react-dropzone'
-import upload from 'superagent'
+// import upload from 'superagent'
 import superagent from 'superagent'
 
 // generateRandomString
@@ -90,7 +90,8 @@ class CreateRequest extends Component {
         price: '',
         image: defaultImageRequest
       },
-      files: []
+      files: [],
+      randomImageKey: ''
     }
   }
 
@@ -106,10 +107,18 @@ class CreateRequest extends Component {
     } else if (this.state.requestData.request === '') {
       requestInfo.showRequestMessage('top','center')
     } else {
+      console.log(this.state.files[0].name);
+      console.log(this.state.randomImageKey);
+      superagent.post('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/upload/editProfile/'+this.state.randomImageKey)
+      .attach('filePic', this.state.files[0])
+      .end((err, data) => {
+        if (err) console.log(err)
+      })
+
       if (companyType === 'ukm'){
-        this.props.createSellRequestFetch(data,id)
+        this.props.createSellRequestFetch(data,id, this.state.randomImageKey + this.state.files[0].name)
       } else if (companyType === 'corporate'){
-        this.props.createBuyRequestFetch(data,id)
+        this.props.createBuyRequestFetch(data,id, this.state.randomImageKey + this.state.files[0].name)
       } else {
         requestInfo.showTypeMessage('top','center')
       }
@@ -140,10 +149,6 @@ class CreateRequest extends Component {
     const that = this
 
     let randomString = generateRandomString()
-    let newState = {
-      image: 'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+randomString + acceptedFiles[0].name
-    }
-    const newImage = Object.assign({}, this.state.data, newState);
 
     setTimeout(function(){
       that.setState({
@@ -204,24 +209,6 @@ class CreateRequest extends Component {
                           <div className='col-md-6'>
                             <div className='form-group'>
                               <label>
-                                Image (Optional)
-                              </label>
-                              {/* file upload */}
-                              <Dropzone style={{width:'100%', border:'1px dotted rgb(50,50,50)', height:200, cursor:'pointer', display:'flex',justifyContent:'center',alignItems:'center',fontFamily:'open sans'}} ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
-                                  <div style={{}}>Try dropping some files here, or click to select files to upload.</div>
-                              </Dropzone>
-                              {
-                                this.state.files.length > 0 ? <div>
-                                <h2>Uploading {this.state.files.length} files...</h2>
-                                <div>{this.state.files.map((file,index) => <img src={file.preview} key={index} /> )}</div>
-                                </div> : null
-                              }
-                              {/* file upload */}
-                            </div>
-                          </div>
-                          <div className='col-md-6'>
-                            <div className='form-group'>
-                              <label>
                                 Price (Optional)
                               </label>
                               <input
@@ -233,6 +220,25 @@ class CreateRequest extends Component {
                                 onChange={this.onHandleChange.bind(this)} />
                             </div>
                           </div>
+                          <div className='col-md-6'>
+                            <div className='form-group'>
+                              <label>
+                                Image (Optional)
+                              </label>
+                              {/* file upload */}
+                              <Dropzone style={{width:'100%', border:'1px dotted rgb(50,50,50)', height:80, cursor:'pointer', display:'flex',justifyContent:'center',alignItems:'center',fontFamily:'open sans'}} ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
+                                  <div style={{}}>Try dropping some files here, or click to select files to upload.</div>
+                              </Dropzone>
+                              {
+                                this.state.files.length > 0 ? <div>
+                                <h2>Uploading {this.state.files.length} files...</h2>
+                                <div>{this.state.files.map((file,index) => <img src={file.preview} key={index} alt="" /> )}</div>
+                                </div> : null
+                              }
+                              {/* file upload */}
+                            </div>
+                          </div>
+
                         </div>
 
                         <hr />
@@ -269,8 +275,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProfile: (id) => dispatch(fetchProfile(id)),
-    createBuyRequestFetch: (data,id) => dispatch(createBuyRequestFetch(data,id)),
-    createSellRequestFetch: (data,id) => dispatch(createSellRequestFetch(data,id)),
+    createBuyRequestFetch: (data,id, img) => dispatch(createBuyRequestFetch(data,id, img)),
+    createSellRequestFetch: (data,id, img) => dispatch(createSellRequestFetch(data,id, img))
   }
 }
 
