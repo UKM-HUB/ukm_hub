@@ -208,7 +208,7 @@ class Profile extends Component {
       console.log(this.state.files[0].name);
 
 
-      superagent.post('http://localhost:3001/api/company/upload/editProfile/'+this.state.randomImageKey)
+      superagent.post('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/upload/editProfile/'+this.state.randomImageKey)
       .attach('filePic', this.state.files[0])
       .end((err, data) => {
         if (err) console.log(err)
@@ -318,18 +318,12 @@ class Profile extends Component {
     }
     const newImage = Object.assign({}, this.state.data, newState);
 
-    console.log(newImage);
     setTimeout(function(){
       that.setState({
         files: acceptedFiles,
         randomImageKey: randomString
       });
-
-    }, 500)
-  }
-
-  onOpenClick() {
-    this.dropzone.open();
+    }, 1000)
   }
 
   render () {
@@ -512,12 +506,9 @@ class Profile extends Component {
                                 Profile picture (optional)
                               </label>
                               {/* file upload */}
-                              <Dropzone ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
-                                  <div>Try dropping some files here, or click to select files to upload.</div>
+                              <Dropzone style={{width:'100%', border:'1px dotted rgb(50,50,50)', height:200, cursor:'pointer', display:'flex',justifyContent:'center',alignItems:'center',fontSize:'16',fontFamily:'open sans'}} ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
+                                  <div style={{}}>Try dropping some files here, or click to select files to upload.</div>
                               </Dropzone>
-                              <button type="button" onClick={this.onOpenClick.bind(this)}>
-                                  Open Dropzone
-                              </button>
                               {
                                 this.state.files.length > 0 ? <div>
                                 <h2>Uploading {this.state.files.length} files...</h2>
