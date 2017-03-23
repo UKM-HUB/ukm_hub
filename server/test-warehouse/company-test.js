@@ -157,7 +157,7 @@ describe('tes routing company',function(){
     category:["book","game"],
     lat:'-12.043333',
     lng:'-77.028333',
-    website:'timocodex.com',
+    website:'http://www.timocodex.com',
     address:'Taman bukit indah raya IV no 45, Bukin Indah Sukajadi',
     phone:'081276861447',
     description:'timo corp menjual segala kebutuhan gamer mulai dari konsol sampai guidebook',
@@ -180,7 +180,7 @@ describe('tes routing company',function(){
       category:["game"],
       lat:'-12.043333',
       lng:'-77.028333',
-      website:'dhegana.com',
+      website:'http://www.dhegana.com',
       address:'Jalan wastu kencana no 100 blok Z',
       phone:'081346758765',
       description:'Gana Game dev adalah pengembang game konsol dan web',
@@ -292,4 +292,30 @@ describe('tes routing company',function(){
     done()
     })
   })
+  it('should not create letter/message if message left blank when put api/company/:id/:otherId/:requestId/message',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/${tampung2}/${tampung3}/message`).send({
+      title:"reply to - Menawarkan jasa game developer",
+      requestTitle:"Menawarkan jasa game developer",
+      message:'',
+    })
+    .end(function (err, res) {
+    res.text.should.equal('"message required"')
+    done()
+    })
+  })
+  it('should create letter/message when put api/company/:id/:otherId/:requestId/message',function(done){
+    chai.request('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com').put(`/api/company/${tampung}/${tampung2}/${tampung3}/message`).send({
+      title:"reply to - Menawarkan jasa game developer",
+      requestTitle:"Menawarkan jasa game developer",
+      message:'saya tertarik dengan penawaran anda, berminat berkomunikasi lebih lanjut untuk bekerjasama dengan anda',
+    })
+    console.log(res.body);
+    console.log(res.text);
+    .end(function (err, res) {
+    res.body.should.not.equal("")
+    done()
+    })
+  })
+
+
 })

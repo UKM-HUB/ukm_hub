@@ -35,7 +35,7 @@ export const searchOtherCompanyRequest = (data) => {
 
 export const searchRequestByClick = (data) => {
   return {
-    type: 'SEARCH_REQUEST_CLICK',
+    type: 'SEARCH',
     payload:data,
   }
 }
@@ -83,7 +83,7 @@ export const fetchProfile = (id) => {
   return (dispatch) => {
     fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
       .then(res => res.json())
-      .then(profile => dispatch(fetchingCompanyProfile(profile)))
+      .then(todos => dispatch(fetchingCompanyProfile(todos)))
   }
 }
 
@@ -119,31 +119,10 @@ export const fetchCompanyByCategory = (id) => {
   }
 }
 
-export const fetchCompanyByCategoryGmaps = (id, cb) => {
-  return (dispatch) => {
-    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/searchByCategory')
-      .then(res => res.json())
-      .then(company => dispatch(searchCompanyByCategory(company)))
-      .then(function(result){
-        fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
-          .then(res => res.json())
-          .then(comp => dispatch(fetchingCompanyProfile(comp)))
-          .then(result2 => cb(result.payload,result2.payload))
-      })
-  }
-}
-
-export const fetchProfileGmaps = (id, cb, that) => {
-  return (dispatch) => {
-    fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id)
-      .then(res => res.json())
-      .then(comp => dispatch(fetchingCompanyProfile(comp)))
-      .then(result => cb(result.payload, that))
-  }
-}
-
 export const createBuyRequestFetch = (data,id) => {
+
   return (dispatch) => {
+
       fetch('http://ukmhub-api-prod.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/buyRequest',
       {
         method: 'PUT',
@@ -157,6 +136,7 @@ export const createBuyRequestFetch = (data,id) => {
       })
       .then(res => res.json())
       // .then(edited => dispatch(loginCompany(edited)))
+
   }
 }
 
