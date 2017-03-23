@@ -38,7 +38,7 @@ class MapView extends Component {
       for (let i = 0; i < otherCompany.length; i++) {
         let requestList = '';
         let categoryList = '';
-        let website = otherCompany[i].website
+        let website = ''
 
         otherCompany[i].request.filter((x)=> x.open === true).map(function(data){
           return requestList +=
@@ -52,7 +52,9 @@ class MapView extends Component {
         }
 
         if (otherCompany[i].website === '') {
-          website = "No Website"
+          website = "<span>No Website</span>"
+        } else {
+          website = `<a href=${otherCompany[i].website} target="_blank">${otherCompany[i].website}</a>`
         }
 
         otherCompany[i].category.map(function(data,index){
@@ -88,7 +90,7 @@ class MapView extends Component {
                   <p><b>Address : </b>${otherCompany[i].address}</p>
                   <p><b>Phone : </b>${otherCompany[i].phone}</p>
                   <p><b>Category : </b>${categoryList}</p>
-                  <p><b>Website : </b><a href=${website} target="_blank">${website}</a></p>
+                  <p><b>Website : </b>${website}</p>
                 </div>
               </div>
               <hr />
