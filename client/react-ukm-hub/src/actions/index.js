@@ -1,3 +1,5 @@
+const host = 'http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com'
+
 export const loginCompany = (token) => {
   return {
     type: 'LOGIN_COMPANY',
@@ -80,8 +82,7 @@ export const fetchProfile = (id) => {
 export const updateCompanyProfile = (data,id,img) => {
   if(!img){
     return (dispatch) => {
-      console.log('ACTION : ' + data);
-      fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id, {
+      fetch(host + '/api/company/'+id, {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -102,8 +103,7 @@ export const updateCompanyProfile = (data,id,img) => {
     }
   } else {
     return (dispatch) => {
-      console.log('ACTION : ' + data);
-      fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id, {
+      fetch(host + '/api/company/'+id, {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -154,7 +154,6 @@ export const fetchProfileGmaps = (id, cb, that) => {
   }
 }
 export const createBuyRequestFetch = (data,id, img) => {
-  console.log(img);
   if(!img) {
     return (dispatch) => {
         fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/'+id+'/buyRequest',
@@ -188,7 +187,6 @@ export const createBuyRequestFetch = (data,id, img) => {
         // .then(edited => dispatch(loginCompany(edited)))
     }
   }
-
 }
 export const createSellRequestFetch = (data,id, img) => {
   if(!img){
