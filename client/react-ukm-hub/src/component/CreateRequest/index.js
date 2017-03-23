@@ -7,6 +7,22 @@ import defaultImageRequest from '../../../public/assets/img/box-outline-filled.p
 const compId = localStorage.getItem('companyId')
 import $ from 'jquery'
 
+// image upload
+import Dropzone from 'react-dropzone'
+import upload from 'superagent'
+import superagent from 'superagent'
+
+// generateRandomString
+function generateRandomString() {
+    var length = 5,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+}
+
 let requestInfo = {
   showTitleMessage: function (from, align) {
     $.notify({
@@ -73,7 +89,8 @@ class CreateRequest extends Component {
         title: '',
         price: '',
         image: defaultImageRequest
-      }
+      },
+      files: []
     }
   }
 
@@ -114,6 +131,26 @@ class CreateRequest extends Component {
     newState[e.target.name] = e.target.value
     const newData = Object.assign({}, this.state.requestData, newState);
     this.setState({requestData: newData})
+  }
+
+  /*
+    image upload
+  */
+  onDrop(acceptedFiles) {
+    const that = this
+
+    let randomString = generateRandomString()
+    let newState = {
+      image: 'https://s3-ap-southeast-1.amazonaws.com/ukm-hub/images/'+randomString + acceptedFiles[0].name
+    }
+    const newImage = Object.assign({}, this.state.data, newState);
+
+    setTimeout(function(){
+      that.setState({
+        files: acceptedFiles,
+        randomImageKey: randomString
+      });
+    }, 1000)
   }
 
   render () {
@@ -169,13 +206,17 @@ class CreateRequest extends Component {
                               <label>
                                 Image (Optional)
                               </label>
-                              <input
-                                type='text'
-                                className='form-control'
-                                name='image'
-                                value={this.state.requestData.image}
-                                placeholder='Request image URL'
-                                onChange={this.onHandleChange.bind(this)} />
+                              {/* file upload */}
+                              <Dropzone style={{width:'100%', border:'1px dotted rgb(50,50,50)', height:200, cursor:'pointer', display:'flex',justifyContent:'center',alignItems:'center',fontFamily:'open sans'}} ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
+                                  <div style={{}}>Try dropping some files here, or click to select files to upload.</div>
+                              </Dropzone>
+                              {
+                                this.state.files.length > 0 ? <div>
+                                <h2>Uploading {this.state.files.length} files...</h2>
+                                <div>{this.state.files.map((file,index) => <img src={file.preview} key={index} /> )}</div>
+                                </div> : null
+                              }
+                              {/* file upload */}
                             </div>
                           </div>
                           <div className='col-md-6'>
