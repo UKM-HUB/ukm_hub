@@ -101,14 +101,11 @@ class CreateRequest extends Component {
 
 
   onHandleSubmitRequest(data,id,companyType){
-    console.log(data,id,companyType);
     if (this.state.requestData.title === '') {
       requestInfo.showTitleMessage('top','center')
     } else if (this.state.requestData.request === '') {
       requestInfo.showRequestMessage('top','center')
     } else {
-      console.log(this.state.files[0].name);
-      console.log(this.state.randomImageKey);
       superagent.post('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/upload/editProfile/'+this.state.randomImageKey)
       .attach('filePic', this.state.files[0])
       .end((err, data) => {

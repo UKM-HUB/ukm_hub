@@ -81,7 +81,6 @@ class ListOfRequest extends Component {
   }
 
   handleOpenMessage(title,id,seller){
-    console.log('a');
     this.setState({
       requestTitle:title,
       requestId:id,

@@ -120,7 +120,7 @@ class Login extends Component {
         email: this.state.forgetPassword
       })
     })
-    .then(res => console.log(res))
+    .then(res => res.json())
   }
 
   handleChange(e){

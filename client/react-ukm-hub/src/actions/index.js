@@ -253,7 +253,7 @@ export const acceptMessageFetch = (id,acceptedMessagesId) => {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
       })
-      .then(res => console.log(res))
+      .then(res => res.json())
   }
 }
 export const rejectMessageFetch = (id,rejectedMessagesId) => {
@@ -263,6 +263,6 @@ export const rejectMessageFetch = (id,rejectedMessagesId) => {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
       })
-      .then(res => console.log(res))
+      .then(res => res.json())
   }
 }
