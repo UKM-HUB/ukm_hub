@@ -4,7 +4,7 @@ import '../../../public/assets/js/jquery.dataTables.min.js'
 import '../../../public/assets/js/dataTables.bootstrap.min.js'
 import {acceptMessageFetch,rejectMessageFetch} from '../../actions/index.js'
 import {connect} from 'react-redux'
-const compId = localStorage.getItem('companyId')
+
 
 let messageInfo = {
   showAcceptMessage: function (from, align) {
@@ -98,7 +98,7 @@ class MessageList extends Component {
                       style={{marginRight: 20}}
                       onClick={(e) => {
                         e.preventDefault()
-                        this.handleAccept(compId,message._id)}}>
+                        this.handleAccept(localStorage.getItem('companyId'),message._id)}}>
                       Accept
                     </button>
                     <button
@@ -107,7 +107,7 @@ class MessageList extends Component {
                       style={{marginRight: 20}}
                       onClick={(e) => {
                         e.preventDefault()
-                        this.handleReject(compId,message._id)}}>
+                        this.handleReject(localStorage.getItem('companyId'),message._id)}}>
                       Decline
                     </button>
                   </td>

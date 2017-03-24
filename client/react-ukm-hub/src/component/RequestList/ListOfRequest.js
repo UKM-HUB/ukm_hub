@@ -4,7 +4,7 @@ import '../../../public/assets/js/jquery.dataTables.min.js'
 import '../../../public/assets/js/dataTables.bootstrap.min.js'
 import {connect} from 'react-redux'
 import {createMessageFetch} from '../../actions/index.js'
-const compId = localStorage.getItem('companyId')
+
 
 let requestListInfo = {
   showReplyMessage: function (from, align) {
@@ -186,7 +186,7 @@ class ListOfRequest extends Component {
                     className="btn btn-primary"
                     onClick={(e)=> {
                       e.preventDefault()
-                      this.onHandleSubmitMessage(this.state.title,this.state.message,this.state.requestTitle,compId,this.state.otherId,this.state.requestId)
+                      this.onHandleSubmitMessage(this.state.title,this.state.message,this.state.requestTitle,localStorage.getItem('companyId'),this.state.otherId,this.state.requestId)
                     }}>Save changes
                   </button>
                 </div>

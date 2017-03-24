@@ -1,5 +1,5 @@
 import React from 'react';
-import App from './App.js';
+import listOfRequest from './ListOfRequest.js';
 import renderer from 'react-test-renderer';
 import { Provider } from 'react-redux'
 import configureStore from 'redux-mock-store'
@@ -11,7 +11,7 @@ const mockStore = configureStore(middlewares)
 it('renders correctly', () => {
   const tree = renderer.create(
     <Provider store={mockStore([])}>
-      <App />
+      <listOfRequest />
     </Provider>
   ).toJSON();
   expect(tree).toMatchSnapshot();
