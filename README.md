@@ -104,4 +104,4 @@ Company can see the request that has been made and the user can reply the messag
 Company can accept or decline message of the replied message and will be sent to the corresponding company email.
 ![Message Page](screenshot/message.png?raw=true "Request List Page")
 
-Note: Still have a problem in the email because our AWS account has just been disbanded. We will try to fix as soon as possible.
+Note: Still have a problem in the email and photo upload because our AWS account has just been disbanded. We will try to fix as soon as possible.
