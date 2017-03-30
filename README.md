@@ -2,8 +2,7 @@
 ![UKMHUB](ukmhub.png?raw=true "Optional Title")
 
 UKMHUB web app create a bridge between corporate and SME's (Small & Medium Enterprises) with the same category in google map view.
-Corporate can see the details of UKM and vice versa. Create buy request and sell request to integrate both of them for Indonesia's UKM
-better future
+Corporate can see the details of UKM (SME's) and vice versa. Create buy request and sell request to integrate both of them for Indonesia's UKM better future
 
 # END POINT
 
@@ -37,9 +36,9 @@ better future
 
 ## Corporate
 
-1.  Corporate must first register using their company email and password, after registration the user will redirected to the update company profile page. If the update succeeded then the user must be verified first by the coop before using the app (assuming the user has been approved by admin cooperative)
+1.  Corporate must first register using their company email and password, after registration the user will be redirected to the update company profile page. If the update succeeded then the user must be verified first by the admin cooperatives before using the app (assuming the user has been approved by admin cooperative)
 
-2. Corporate verified by admin cooperatives can use the search feature of SMEs about the same in accordance with the corporate category. SMEs are listed in map view and a list view which enables corporate to see the details of SMEs
+2. Corporate verified by the admin cooperatives can use the search feature of SMEs about the same in accordance with the corporate category. SMEs are listed in map view and a list view which enables corporate to see the details of SMEs
 
 3. Corporate can create request that is to demand to make purchases or anything that can be seen by SMEs around them, the request can be responded by SMEs by sending a letter of offer.
 
@@ -47,9 +46,9 @@ better future
 
 ## SME's (Small & Medium Enterprises)
 
-1. User (SMEs) must first register using their company email and password, after registration the user will be redirected to the update company profile page. If the update succeeded then the user must be verified first by the coop before using the app (assuming the user has been approved by admin cooperative). These step is similar to corporate only the difference in type of company.
+1. User (SMEs) must first register using their company email and password, after registration the user will be redirected to the update company profile page. If the update succeeded then the company must be verified first by the admin cooperatives before using the app (assuming the company has been approved by admin cooperative). These step is similar to corporate only the difference in type of company.
 
-2. SMEs that have been verified by admin cooperative can use the search feature approximately the same in accordance with the SME category. Search map view and list view helping SMEs to see the detail of corporate
+2. SMEs that have been verified by admin cooperative can use the search feature approximately the same in accordance with the SME category. Search map view and list view helping SMEs to see the details of the corporate
 
 3. SMEs can create requests that can be seen by the surrounding corporate with the same category, request can be responded by the corporate by sending a reply message.
 
@@ -57,7 +56,7 @@ better future
 
 ## Cooperation
 
-1. Ccooperatives can log in to enter the main page and can see the list of listed company (whether Corporate or SME) as well as the details.
+1. Cooperatives can log in to enter the main page and can see the list of listed company (whether Corporate or SME) as well as the details.
 
 2. To verify registered company.
 
