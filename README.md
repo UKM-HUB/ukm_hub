@@ -4,6 +4,20 @@
 UKMHUB web app create a bridge between corporate and SME's (Small & Medium Enterprises) with the same category in google map view.
 Corporate can see the details of UKM (SME's) and vice versa. Create buy request and sell request to integrate both of them for Indonesia's UKM better future
 
+## Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+**Installing**
+```
+$ cd react-ukm-hub
+$ npm install
+```
+
+**Usage**
+```
+$ npm start
+```
+
 # END POINT
 
 ## Corporate
