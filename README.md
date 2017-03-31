@@ -1,8 +1,8 @@
 # UKM HUB
 ![UKMHUB](https://github.com/UKM-HUB/ukm_hub/blob/master/ukmhub.png)
 
-UKMHUB web app create a bridge between corporate and UKM (Small & Medium Companies) with the same category in google map view.
-Corporate can see the details of UKM and vice versa. Create buy request and sell request to integrate both of them for Indonesia's UKM
+UKMHUB web app create a bridge between corporate and SME's (Small & Medium Enterprises) with the same category in a Google Map View.
+Corporate can see the details of UKM and vice versa. Create request between companies to integrate both of them for Indonesia's SME's
 better future
 
 # END POINT
