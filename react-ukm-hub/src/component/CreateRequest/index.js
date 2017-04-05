@@ -6,6 +6,7 @@ import Topbar from '../Topbar'
 import defaultImageRequest from '../../../public/assets/img/box-outline-filled.png'
 const compId = localStorage.getItem('companyId')
 import $ from 'jquery'
+import requestInfo from '../../../public/assets/js/profileInfoMessageBox.js'
 
 // image upload
 import Dropzone from 'react-dropzone'
@@ -20,61 +21,6 @@ function generateRandomString() {
         retVal += charset.charAt(Math.floor(Math.random() * n));
     }
     return retVal;
-}
-
-let requestInfo = {
-  showTitleMessage: function (from, align) {
-    $.notify({
-      icon: 'pe-7s-close',
-      message: '<p style="margin-top:8px">Please input the title</p>'
-    }, {
-      type: 'danger',
-      timer: 4000,
-      placement: {
-        from: from,
-        align: align
-      }
-    })
-  },
-  showRequestMessage: function (from, align) {
-    $.notify({
-      icon: 'pe-7s-close',
-      message: '<p style="margin-top:8px">Request message is required</p>'
-    }, {
-      type: 'danger',
-      timer: 4000,
-      placement: {
-        from: from,
-        align: align
-      }
-    })
-  },
-  showTypeMessage: function (from, align) {
-    $.notify({
-      icon: 'pe-7s-close',
-      message: '<p style="margin-top:8px">Please update your company profile type</p>'
-    }, {
-      type: 'danger',
-      timer: 4000,
-      placement: {
-        from: from,
-        align: align
-      }
-    })
-  },
-  showSubmitMessage: function (from, align) {
-    $.notify({
-      icon: 'pe-7s-cloud-download',
-      message: '<p style="margin-top:8px">Request has been sent</p>'
-    }, {
-      type: 'info',
-      timer: 4000,
-      placement: {
-        from: from,
-        align: align
-      }
-    })
-  }
 }
 
 class CreateRequest extends Component {
@@ -97,7 +43,6 @@ class CreateRequest extends Component {
   componentDidMount(){
     this.props.fetchProfile(compId)
   }
-
 
   onHandleSubmitRequest(data,id,companyType){
     if (this.state.requestData.title === '') {
