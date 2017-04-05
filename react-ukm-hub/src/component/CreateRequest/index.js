@@ -6,7 +6,7 @@ import Topbar from '../Topbar'
 import defaultImageRequest from '../../../public/assets/img/box-outline-filled.png'
 const compId = localStorage.getItem('companyId')
 import $ from 'jquery'
-import requestInfo from '../../../public/assets/js/profileInfoMessageBox.js'
+import requestInfo from '../../../public/assets/js/createRequestMessageBox.js'
 
 // image upload
 import Dropzone from 'react-dropzone'

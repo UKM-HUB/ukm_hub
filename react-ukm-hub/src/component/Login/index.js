@@ -6,49 +6,7 @@ import '../../../public/assets/js/login'
 import '../../../public/assets/js/bootstrap-notify.js'
 import {registerCompanyFetch, loginCompanyFetch} from '../../actions/index.js'
 import $ from 'jquery'
-
-let loginInfo = {
-  showRegisterInvalid: function (from, align) {
-    $.notify({
-      icon: 'pe-7s-delete-user',
-      message: '<p style="margin-top:8px">Please input valid email</p>'
-
-    }, {
-      type: 'danger',
-      timer: 4000,
-      placement: {
-        from: from,
-        align: align
-      }
-    })
-  },
-  showPasswordInvalid: function (from, align) {
-    $.notify({
-      icon: 'pe-7s-delete-user',
-      message: '<p style="margin-top:8px">Password must be more than 5 character</p>'
-    }, {
-      type: 'danger',
-      timer: 4000,
-      placement: {
-        from: from,
-        align: align
-      }
-    })
-  },
-  showErrorLogin: function (from, align) {
-    $.notify({
-      icon: 'pe-7s-delete-user',
-      message: '<p style="margin-top:8px">Invalid email/password</p>'
-    }, {
-      type: 'danger',
-      timer: 4000,
-      placement: {
-        from: from,
-        align: align
-      }
-    })
-  }
-}
+import loginInfo from '../../../public/assets/js/loginMessageBox.js'
 
 const emailRegex = /\S+@\S+\.\S+/
 
@@ -113,7 +71,7 @@ class Login extends Component {
 
   handleForgetPassword(e){
     e.preventDefault()
-    fetch('http://ukmhub-api-dev.ap-southeast-1.elasticbeanstalk.com/api/company/resetPassword', {
+    fetch('http://localhost:3001/api/company/resetPassword', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
