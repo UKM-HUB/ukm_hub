@@ -9,13 +9,6 @@ const CompanyList = (props) => {
     padding: 15
   }
 
-  const distanceStyle = {
-    float: 'right',
-    position: 'absolute',
-    bottom: 0,
-    right: 25
-  }
-
   const companyDetailStyle = {
     display: 'inline-block',
     width: 120,
