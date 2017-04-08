@@ -58,17 +58,14 @@ class ListOfRequest extends Component {
     $(document).ready(function() {
         var table = $('#requestTable').DataTable();
         table.search(that.props.searchKey).draw()
-
     });
-
-
   }
 
-  onHandleSubmitMessage(title,message,requestTitle,id,otherId,requestId){
+  onHandleSubmitMessage(title, message, requestTitle, id, otherId, requestId){
     if (this.state.message === '') {
       requestListInfo.showReplyMessage('top','center')
     } else {
-      this.props.createMessageFetch(title,message,requestTitle,id,otherId,requestId)
+      this.props.createMessageFetch(title, message, requestTitle, id, otherId, requestId)
       requestListInfo.showSubmitMessage('top','center')
       this.setState({
           title: '',
@@ -81,7 +78,6 @@ class ListOfRequest extends Component {
   }
 
   handleOpenMessage(title,id,seller){
-    console.log('a');
     this.setState({
       requestTitle:title,
       requestId:id,
@@ -186,7 +182,7 @@ class ListOfRequest extends Component {
                     className="btn btn-primary"
                     onClick={(e)=> {
                       e.preventDefault()
-                      this.onHandleSubmitMessage(this.state.title,this.state.message,this.state.requestTitle,compId,this.state.otherId,this.state.requestId)
+                      this.onHandleSubmitMessage(this.state.title, this.state.message, this.state.requestTitle, compId, this.state.otherId, this.state.requestId)
                     }}>Save changes
                   </button>
                 </div>
@@ -208,7 +204,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createMessageFetch: (title,message,requestTitle,id,otherId,requestId) => dispatch(createMessageFetch(title,message,requestTitle,id,otherId,requestId))
+    createMessageFetch: (title, message, requestTitle, id, otherId, requestId) => dispatch(createMessageFetch(title, message, requestTitle, id, otherId, requestId))
   }
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {fetchProfile,createBuyRequestFetch,createSellRequestFetch} from '../../actions/index.js'
+import { fetchProfile,createBuyRequestFetch,createSellRequestFetch } from '../../actions/index.js'
 import Sidebar from '../Sidebar'
 import Topbar from '../Topbar'
 import defaultImageRequest from '../../../public/assets/img/box-outline-filled.png'
@@ -101,10 +101,10 @@ class CreateRequest extends Component {
 
   }
 
-  onHandleChange (e) {
+  onHandleChange = (e) => {
     let newState = {}
     newState[e.target.name] = e.target.value
-    const newData = Object.assign({}, this.state.requestData, newState);
+    let newData = Object.assign({}, this.state.requestData, newState);
     this.setState({requestData: newData})
   }
 
@@ -149,7 +149,7 @@ class CreateRequest extends Component {
                                 name='title'
                                 value={this.state.requestData.title}
                                 placeholder='Request title'
-                                onChange={this.onHandleChange.bind(this)} />
+                                onChange={this.onHandleChange} />
                             </div>
                           </div>
                         </div>
@@ -166,7 +166,7 @@ class CreateRequest extends Component {
                                 className='form-control'
                                 value={this.state.requestData.request}
                                 placeholder='Request message goes in here. Post a message to all companies within your category'
-                                onChange={this.onHandleChange.bind(this)} />
+                                onChange={this.onHandleChange} />
                             </div>
                           </div>
                         </div>
@@ -183,7 +183,7 @@ class CreateRequest extends Component {
                                 name='price'
                                 value={this.state.requestData.price}
                                 placeholder='Price Range'
-                                onChange={this.onHandleChange.bind(this)} />
+                                onChange={this.onHandleChange} />
                             </div>
                           </div>
                           <div className='col-md-6'>
@@ -206,15 +206,15 @@ class CreateRequest extends Component {
                           </div>
 
                         </div>
-
                         <hr />
                         <button
                           type='submit'
                           className='btn btn-primary btn-fill'
                           style={{marginRight: 20}}
                           onClick={(e) => {
-                                     e.preventDefault()
-                                     this.onHandleSubmitRequest(this.state.requestData,compId,this.props.profile.type)}}>
+                            e.preventDefault()
+                            this.onHandleSubmitRequest(this.state.requestData,compId,this.props.profile.type)}
+                          }>
                           Submit Request
                         </button>
                         <div className='clearfix'></div>

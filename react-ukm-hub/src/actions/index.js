@@ -224,6 +224,7 @@ export const createSellRequestFetch = (data,id, img) => {
   }
 
 }
+
 export const otherCompanyRequestFetch = (id) => {
   return (dispatch) => {
     fetch('http://localhost:3001/api/company/'+id+'/searchRequest')
@@ -231,22 +232,24 @@ export const otherCompanyRequestFetch = (id) => {
       .then(company => dispatch(searchOtherCompanyRequest(company)))
   }
 }
-export const createMessageFetch = (title,message,requestTitle,id,otherId,requestId) => {
+
+export const createMessageFetch = (title, message, requestTitle, id, otherId, requestId) => {
   return (dispatch) => {
-      fetch('http://localhost:3001/api/company/'+id+'/'+otherId+'/'+requestId+'/message',
+      fetch(`http://localhost:3001/api/company/${id}/${otherId}/${requestId}/message`,
       {
         method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          title:title,
-          message:message,
-          requestTitle:requestTitle
+          title: title,
+          message: message,
+          requestTitle: requestTitle
         })
       })
       .then(res => res.json())
   }
 }
-export const acceptMessageFetch = (id,acceptedMessagesId) => {
+
+export const acceptMessageFetch = (id, acceptedMessagesId) => {
   return (dispatch) => {
       fetch('http://localhost:3001/api/company/'+id+'/'+acceptedMessagesId+'/acceptMessage',
       {
@@ -256,7 +259,8 @@ export const acceptMessageFetch = (id,acceptedMessagesId) => {
       .then(res => console.log(res))
   }
 }
-export const rejectMessageFetch = (id,rejectedMessagesId) => {
+
+export const rejectMessageFetch = (id, rejectedMessagesId) => {
   return (dispatch) => {
       fetch('http://localhost:3001/api/company/'+id+'/'+rejectedMessagesId+'/rejectMessage',
       {
