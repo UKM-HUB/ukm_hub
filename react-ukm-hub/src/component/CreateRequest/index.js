@@ -125,6 +125,17 @@ class CreateRequest extends Component {
   }
 
   render () {
+    const photoBoxStyle = {
+      width: '100%',
+      border: '1px dotted rgb(50,50,50)',
+      height: 80,
+      cursor: 'pointer',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontFamily: 'open sans',
+      padding: '15px'
+    }
     return (
       <div className="wrapper">
         <Sidebar activeNavigation={this.state.activeNavigation} />
@@ -191,8 +202,7 @@ class CreateRequest extends Component {
                               <label>
                                 Image (Optional)
                               </label>
-                              {/* file upload */}
-                              <Dropzone style={{width:'100%', border:'1px dotted rgb(50,50,50)', height:80, cursor:'pointer', display:'flex',justifyContent:'center',alignItems:'center',fontFamily:'open sans'}} ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
+                              <Dropzone style={photoBoxStyle} ref={(node) => { this.dropzone = node; }} onDrop={this.onDrop.bind(this)}>
                                   <div>Try dropping some files here, or click to select files to upload.</div>
                               </Dropzone>
                               {
