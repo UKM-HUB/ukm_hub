@@ -35,6 +35,18 @@ const CompanyList = (props) => {
     width: 150
   }
 
+  const requestListStyle = {
+    display: 'inline-block',
+    paddingLeft: 16,
+    listStyleType: 'square'
+  }
+
+  const requestItemStyle = {
+    color: '#0062ff',
+    fontSize: 15,
+    textDecoration: 'underline'
+  }
+
   return (
     <div>
       <div className="panel panel-default" style={panelStyle}>
@@ -57,10 +69,10 @@ const CompanyList = (props) => {
                 <span>{props.email}</span>
               </li>
               <li className="list-group-item" ><span style={companyDetailStyle}>Request List</span>
-                  <ul style={{display:'inline-block', paddingLeft:16, listStyleType: 'square'}}>
+                  <ul style={requestListStyle}>
                     {
-                      props.request.length === 0 ? <p></p> :
-                      props.request.filter((y)=> y.open === true ).map((x,index)=>{return(<li key={index}><Link to='/request-list' onClick={()=> props.searchRequestByClick(x.title)} style={{color:'rgb(30,30,30)',fontSize:15,textDecoration:'underline'}}>{x.title}</Link></li>)})
+                      props.request.filter((status)=> status.open === true ).length === 0 ? <p style={{margin:-16}}>-</p> :
+                      props.request.filter((status)=> status.open === true ).map((item,index)=>{return(<li key={index}><Link to='/request-list' onClick={()=> props.searchRequestByClick(item.title)} style={requestItemStyle}>{item.title}</Link></li>)})
                     }
                   </ul>
               </li>
@@ -68,7 +80,7 @@ const CompanyList = (props) => {
                 <span>
                   {
                     props.website === '' ? <p>-</p> :
-                    <a href={props.website} target="_blank">{props.website}</a>
+                    <a href={props.website} style={{color:'#0062ff'}} target="_blank">{props.website}</a>
                   }
 
                 </span>

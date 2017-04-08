@@ -8,6 +8,7 @@ import corporateIcon from '../../../public/assets/icon/corporate_small.png'
 import ukmIcon from '../../../public/assets/icon/ukm_small.png'
 const compId = localStorage.getItem('companyId')
 
+import mapInfo from '../../../public/assets/js/mapViewMessageBox.js'
 
 class MapView extends Component {
   constructor(){
@@ -20,7 +21,7 @@ class MapView extends Component {
   }
 
   createGmapsMarkers(otherCompany, company){
-    let temp = []
+    let otherCompanyMarker = []
     let pathTemp = []
     let otherCompanyIcon = corporateIcon
     let companyIcon = ukmIcon
@@ -68,7 +69,7 @@ class MapView extends Component {
 
         })
 
-        temp[temp.length] =
+        otherCompanyMarker[otherCompanyMarker.length] =
         {
           title: otherCompany[i].name,
           icon: otherCompanyIcon,
@@ -132,10 +133,13 @@ class MapView extends Component {
         icon: companyIcon,
         lat: company.location.lat,
         lng: company.location.lng,
-        details: company.name
+        details: company.name,
+        click: function(){
+          mapInfo.showCompanyMessage('top','center')
+        }
       }])
 
-      map.addMarkers(temp)
+      map.addMarkers(otherCompanyMarker)
 
       map.drawPolyline({
         path: pathTemp,
@@ -163,14 +167,6 @@ class MapView extends Component {
     )
   }
 }
-
-// <p><b>Request : </b>
-//   <div class="card">
-//     <ul class="list-group list-group-flush">
-//       ${requestList}
-//     </ul>
-//   </div>
-// </p>
 
 const mapStateToProps = (state) => {
   return {

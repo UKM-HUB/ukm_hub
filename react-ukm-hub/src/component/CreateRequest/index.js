@@ -211,7 +211,6 @@ class CreateRequest extends Component {
                                 <div>{this.state.files.map((file,index) => <img src={file.preview} key={index} alt="" /> )}</div>
                                 </div> : null
                               }
-                              {/* file upload */}
                             </div>
                           </div>
 

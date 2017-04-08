@@ -20,7 +20,6 @@ class ListView extends Component {
     this.props.fetchCompanyByCategory(compId)
   }
   render () {
-    console.log(this.props.otherCompany.length);
     return (
       <div className="wrapper">
         <Sidebar activeNavigation={this.state.activeNavigation} />
