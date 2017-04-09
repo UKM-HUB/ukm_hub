@@ -20,7 +20,7 @@ import Message from './component/Message'
 import Login from './component/Login'
 import Profile from './component/Profile'
 
-var key = localStorage.getItem('token')
+var key = localStorage.getItem('jwtToken')
 
 function authentication(){
   if(key !== null){

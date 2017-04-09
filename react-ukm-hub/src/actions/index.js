@@ -1,8 +1,8 @@
 const host = 'http://localhost:3001'
 import axios from 'axios'
+import loginInfo from '../../public/assets/js/loginMessageBox.js'
 
 export const loginCompany = (token) => {
-  console.log(token);
   return {
     type: 'LOGIN_COMPANY',
     payload: token,
@@ -44,36 +44,35 @@ export const searchRequestByClick = (data) => {
   }
 }
 
-export const dispatchRegisterCompany = (email, password) => {
+export const dispatchCompanyRegister = (email, password) => {
   return (dispatch) => {
     return axios.post(`${host}/api/company/auth/register/`, {
       email: email,
       password: password
     })
     .then(registered => {
-      console.log(registered);
-      localStorage.setItem('token', registered.token)
+      localStorage.setItem('jwtToken', registered.token)
       localStorage.setItem('companyId', registered.companyId)
       return dispatch(loginCompany(registered))
     })
   }
 }
 
-export const loginCompanyFetch = (email,password) => {
+export const dispatchCompanyLogin = (email,password) => {
   return (dispatch) => {
-    fetch('http://localhost:3001/api/company/auth/login/', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        email:email,
-        password: password
-      })
+    return axios.post(`${host}/api/company/auth/login/`, {
+      email: email,
+      password: password
     })
-    .then(res => res.json())
     .then(logged => {
-      localStorage.setItem('token',logged.token)
-      localStorage.setItem('companyId',logged.companyId)
-      return dispatch(loginCompany(logged))})
+      localStorage.setItem('jwtToken', logged.data.token)
+      localStorage.setItem('companyId',logged.data.companyId)
+      return dispatch(loginCompany(logged.data.token))
+      this.setState({ loggedIn: true })
+    })
+    .catch(err => {
+      loginInfo.showErrorLogin('top','center')
+    })
   }
 }
 export const fetchProfile = (id) => {
