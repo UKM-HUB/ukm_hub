@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import logo from '../../../public/assets/logo/ukmhub.png'
 import '../../../public/assets/js/login'
 import '../../../public/assets/js/bootstrap-notify.js'
-import {registerCompanyFetch, loginCompanyFetch} from '../../actions/index.js'
+import { dispatchRegisterCompany, loginCompanyFetch } from '../../actions/index.js'
 import $ from 'jquery'
 import loginInfo from '../../../public/assets/js/loginMessageBox.js'
 
@@ -15,26 +15,27 @@ class Login extends Component {
     super()
     this.state = {
       formTitle: 'Login Form',
-      emailRegister:'',
-      passwordRegister:'',
-      emailLogin:'',
-      passwordLogin:'',
-      forgetPassword:''
+      emailRegister: '',
+      passwordRegister: '',
+      emailLogin: '',
+      passwordLogin: '',
+      forgetPassword: ''
     }
   }
 
-  registerClick(){
+  registerClick = () => {
     $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
     $('#form_id').attr( "style", "max-width: 700px;" );
     this.setState({formTitle: 'Register Form'})
   }
 
-  loginClick(){
+  loginClick = () => {
     $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
     $('#form_id').attr( "style", "max-width: 400px;" );
+    this.setState({formTitle: 'Login Form'})
   }
 
-  handleRegister(e){
+  handleRegister = (e) => {
     if(!emailRegex.test(this.state.emailRegister)){
       e.preventDefault()
       loginInfo.showRegisterInvalid('top','center')
@@ -42,7 +43,7 @@ class Login extends Component {
       e.preventDefault()
       loginInfo.showPasswordInvalid('top','center')
     } else {
-      this.props.registerCompanyFetch(this.state.emailRegister,this.state.passwordRegister)
+      this.props.dispatchRegisterCompany(this.state.emailRegister, this.state.passwordRegister)
       this.setState({
         emailRegister: '',
         passwordRegister: ''
@@ -53,9 +54,9 @@ class Login extends Component {
     }
   }
 
-  handleLogin(e){
+  handleLogin = (e) => {
     e.preventDefault()
-    this.props.loginCompanyFetch(this.state.emailLogin,this.state.passwordLogin)
+    this.props.loginCompanyFetch(this.state.emailLogin, this.state.passwordLogin)
     this.setState({
       emailLogin: '',
       passwordLogin: ''
@@ -69,7 +70,7 @@ class Login extends Component {
     },500)
   }
 
-  handleForgetPassword(e){
+  handleForgetPassword = (e) => {
     e.preventDefault()
     fetch('http://localhost:3001/api/company/resetPassword', {
       method: 'POST',
@@ -81,10 +82,8 @@ class Login extends Component {
     .then(res => console.log(res))
   }
 
-  handleChange(e){
-    let newState = {}
-    newState[e.target.name] = e.target.value
-    this.setState(newState)
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   render () {
@@ -103,14 +102,14 @@ class Login extends Component {
           <div className="thumbnail" style={{background: 'white'}}><img src={logo} alt='ukmhub logo' /></div>
 
           <form className="login-form">
-            <input type="email" placeholder="Email" name="emailLogin" value={this.state.emailLogin} onChange={this.handleChange.bind(this)}/>
-            <input type="password" placeholder="Password" name="passwordLogin" value={this.state.passwordLogin} onChange={this.handleChange.bind(this)}/>
+            <input type="email" placeholder="Email" name="emailLogin" value={this.state.emailLogin} onChange={this.handleChange}/>
+            <input type="password" placeholder="Password" name="passwordLogin" value={this.state.passwordLogin} onChange={this.handleChange}/>
               <Link to='/map'>
-                <button onClick={this.handleLogin.bind(this)} style={buttonTextStyle}>Login</button>
+                <button onClick={this.handleLogin} style={buttonTextStyle}>Login</button>
               </Link>
             <p className="message">Not registered?
               <a href="#"
-                onClick={ this.registerClick.bind(this) }> Create an account
+                onClick={this.registerClick}> Create an account
               </a>
             </p>
           </form>
@@ -120,20 +119,20 @@ class Login extends Component {
               <form className="register-form">
                 <p>Register your company to get started in connecting with other companies</p>
                 <br />
-                <input type="email" placeholder="Register your company email" name="emailRegister" value={this.state.emailRegister} onChange={this.handleChange.bind(this)}/>
-                <input type="password" placeholder="Password" name="passwordRegister" value={this.state.passwordRegister} onChange={this.handleChange.bind(this)}/>
+                <input type="email" placeholder="Register your company email" name="emailRegister" value={this.state.emailRegister} onChange={this.handleChange}/>
+                <input type="password" placeholder="Password" name="passwordRegister" value={this.state.passwordRegister} onChange={this.handleChange}/>
                   <Link to='/profile' >
-                    <button style={buttonTextStyle} onClick={this.handleRegister.bind(this)}>Register</button>
+                    <button style={buttonTextStyle} onClick={this.handleRegister}>Register</button>
                   </Link>
-                <p className="message">Already registered? <a href="#" onClick={this.loginClick.bind(this)}>Sign In</a></p>
+                <p className="message">Already registered? <a href="#" onClick={this.loginClick}>Sign In</a></p>
               </form>
             </div>
             <div className="col-md-offset-1 col-md-10">
               <form className="forget-password-form">
                 <p className="message" data-toggle="collapse" data-target="#demo" style={{marginBottom:25,marginTop:3}}>Forget Password?<a href="#"> Click here</a></p>
                 <div id="demo" className="collapse">
-                  <input type="email" style={{padding:'10px 15px', marginBottom: 10}} placeholder="Input your company email" name="forgetPassword" value={this.state.forgetPassword} onChange={this.handleChange.bind(this)}/>
-                    <button id='register' onClick={this.handleForgetPassword.bind(this)}>Reset Password</button>
+                  <input type="email" style={{padding:'10px 15px', marginBottom: 10}} placeholder="Input your company email" name="forgetPassword" value={this.state.forgetPassword} onChange={this.handleChange}/>
+                    <button id='register' onClick={this.handleForgetPassword}>Reset Password</button>
                 </div>
               </form>
             </div>
@@ -152,7 +151,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    registerCompanyFetch: (email,password) => dispatch(registerCompanyFetch(email,password)),
+    dispatchRegisterCompany: (email, password) => dispatch(dispatchRegisterCompany(email, password)),
     loginCompanyFetch: (email,password) => dispatch(loginCompanyFetch(email,password))
   }
   //return bindActionCreators({addTodo},dispatch)

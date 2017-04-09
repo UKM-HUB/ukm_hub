@@ -1,59 +1,64 @@
 const host = 'http://localhost:3001'
+import axios from 'axios'
 
 export const loginCompany = (token) => {
+  console.log(token);
   return {
     type: 'LOGIN_COMPANY',
     payload: token,
   }
 }
+
 export const updateCompanyProfileSuccess = data => {
   return {
     type: 'UPDATE_COMPANY_PROFILE_SUCCESS',
     payload: data,
   }
 }
+
 export const fetchingCompanyProfile = (data) => {
   return {
     type: 'FETCH_COMPANY_PROFILE',
     payload: data,
   }
 }
+
 export const searchCompanyByCategory = (data) => {
   return {
     type: 'FETCH_COMPANY_BY_CATEGORY',
-    payload:data,
+    payload: data,
   }
 }
+
 export const searchOtherCompanyRequest = (data) => {
   return {
     type: 'FETCH_OTHER_COMPANY_REQUEST',
-    payload:data,
+    payload: data,
   }
 }
+
 export const searchRequestByClick = (data) => {
   return {
     type: 'SEARCH_REQUEST_CLICK',
-    payload:data,
+    payload: data,
   }
 }
-export const registerCompanyFetch = (email,password) => {
+
+export const dispatchRegisterCompany = (email, password) => {
   return (dispatch) => {
-    fetch('http://localhost:3001/api/company/auth/register/', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
+    return axios.post(`${host}/api/company/auth/register/`, {
+      email: email,
+      password: password
     })
-    .then(res => res.json())
     .then(registered => {
+      console.log(registered);
       localStorage.setItem('token', registered.token)
       localStorage.setItem('companyId', registered.companyId)
       return dispatch(loginCompany(registered))
     })
   }
 }
+
 export const loginCompanyFetch = (email,password) => {
   return (dispatch) => {
     fetch('http://localhost:3001/api/company/auth/login/', {
